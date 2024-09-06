@@ -1,12 +1,15 @@
-import { getCompanies } from "@/actions/companies";
+// import { getCompanies } from "@/actions/companies";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import SvgPlus from "@/components/common/Loader/svg/plus";
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
-import Image from "next/image";
 import Link from "next/link";
+import  Company  from "@/models/companies"
+import { deleteCompanyAction } from "@/actions/companies";
+import { CompanyDeleteButton } from "./delete-button";
 
 const CompanyTable = async() => {
-  const companies = await getCompanies()
+  const companies = await Company.find({})
+    // const companies : [] = []
     return (
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="px-4 py-6 md:px-6 xl:px-7.5">
@@ -34,8 +37,11 @@ const CompanyTable = async() => {
           <div className="col-span-1 flex items-center">
             <p className="font-medium">Alternative Address</p>
           </div>
-          <div className="col-span-3 hidden items-center sm:flex">
+          <div className="col-span-2 hidden items-center sm:flex">
             <p className="font-medium">Description</p>
+          </div>
+          <div className="col-span-1 hidden items-center sm:flex">
+            <p className="font-medium">Action</p>
           </div>
         </div>
   
@@ -67,10 +73,13 @@ const CompanyTable = async() => {
                 {company.address2}
               </p>
             </div>
-            <div className="col-span-3 flex items-center">
+            <div className="col-span-2 flex items-center">
               <p className="text-sm text-black dark:text-white">
                 {company.description}
                </p>
+            </div>
+            <div className="col-span-1 flex items-center">
+              <CompanyDeleteButton companyId={JSON.parse(JSON.stringify(company._id))}/>
             </div>
           </div>
         ))}

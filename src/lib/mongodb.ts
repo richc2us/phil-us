@@ -54,11 +54,11 @@ async function dbConnect() {
   }
   if (!cached.promise) {
     const opts = {
-      bufferCommands: false,
+      bufferCommands: true,
       dbName : process.env.MONGODB_DATABASE
     };
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      return mongoose;
+    return mongoose;
     });
   }
   try {

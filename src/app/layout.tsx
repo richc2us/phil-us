@@ -1,29 +1,17 @@
-"use client";
-import "jsvectormap/dist/jsvectormap.css";
-import "flatpickr/dist/flatpickr.min.css";
-import "@/css/satoshi.css";
-import "@/css/style.css";
-import React, { useEffect, useState } from "react";
-import Loader from "@/components/common/Loader";
-export default function RootLayout({
+import dbConnect from "@/lib/mongodb";
+import ClientLayout from "./client-layout";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode,
 }>) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  // const pathname = usePathname();
-
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 100);
-  }, []);
-
+  await dbConnect()
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
           <div className="dark:bg-boxdark-2 dark:text-bodydark">
-            {loading ? <Loader /> : children}
+            <ClientLayout>{children}</ClientLayout>
           </div>
       </body>
     </html>

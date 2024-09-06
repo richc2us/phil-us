@@ -1,8 +1,6 @@
 "use client"
-
-import { redirect } from "next/navigation";
+import { saveCompanyAction } from "@/actions/companies";
 import { useState } from "react";
-
 const NewCompanyForm = () => {
       const [form, setForm] = useState({
         name: "",
@@ -17,23 +15,23 @@ const NewCompanyForm = () => {
         });
       }
 
-      async function onSubmit(e:any) {
-        e.preventDefault()
-        try{
-            await fetch('/api/companies',{
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(form),
-            }).then(r => r.json()).then((r) => {
-                redirect("/companies")
-            })
-        }
-        catch(e) {
+      // async function onSubmit(e:any) {
+      //   e.preventDefault()
+      //   try{
+      //       await fetch('/api/companies',{
+      //         method: "POST",
+      //         headers: {
+      //           "Content-Type": "application/json",
+      //         },
+      //         body: JSON.stringify(form),
+      //       }).then(r => r.json()).then((r) => {
+      //           redirect("/companies")
+      //       })
+      //   }
+      //   catch(e) {
 
-        }
-      }
+      //   }
+      // }
 
       return (
         <div className="grid grid-cols-5 gap-8">
@@ -45,7 +43,12 @@ const NewCompanyForm = () => {
                 </h3>
             </div>
             <div className="p-7">
-                <form action="#" onSubmit={onSubmit}>
+                <form 
+                action={ async() => {
+                  saveCompanyAction(form)
+                 }} 
+                // onSubmit={onSubmit}
+                >
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/1">
                         <label
