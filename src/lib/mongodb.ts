@@ -57,6 +57,12 @@ async function dbConnect() {
       bufferCommands: true,
       dbName : process.env.MONGODB_DATABASE
     };
+    mongoose.connection.on('connected', () => console.dir('connected'));
+    mongoose.connection.on('open', () => console.dir('open'));
+    mongoose.connection.on('disconnected', () => console.dir('disconnected'));
+    mongoose.connection.on('reconnected', () => console.dir('reconnected'));
+    mongoose.connection.on('disconnecting', () => console.dir('disconnecting'));
+    mongoose.connection.on('close', () => console.dir('close'));
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
     return mongoose;
     });

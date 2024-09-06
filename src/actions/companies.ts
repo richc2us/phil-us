@@ -1,4 +1,5 @@
 'use server';
+import dbConnect from "@/lib/mongodb";
 import  Company  from "@/models/companies"
 import { revalidatePath } from "next/cache";
 
@@ -7,6 +8,7 @@ export const getCompanies = async() => {
 }
 
 export const saveCompanyAction = async(form: any) => {
+    await dbConnect()
     try {
         const newCompany = await Company.create(form)
         revalidatePath("/companies");
@@ -19,6 +21,7 @@ export const saveCompanyAction = async(form: any) => {
 }
 
 export const deleteCompanyAction = async(id: any) => {
+    await dbConnect()
     try {
         await Company.deleteOne({_id: id})
         revalidatePath("/");
