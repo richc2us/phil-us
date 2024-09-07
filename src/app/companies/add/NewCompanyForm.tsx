@@ -42,7 +42,7 @@ const NewCompanyForm = () => {
                     !reply?.success && reply?.message && <AlertError message={reply?.message} description={reply?.errors}/>
                 }
                 <form 
-                className={ requesting ? "invisible" : "" }
+                // className={ requesting ? "invisible" : "" }
                 // action={ action } 
                 action={ async() => {
                     setRequesting(true)
@@ -171,6 +171,13 @@ const NewCompanyForm = () => {
                       <button
                       className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
                       type="submit"
+                      {...{disabled: requesting || form.name.length == 0 || form.address.length == 0}}
+                      onClick={(e:any) => {
+                        console.dir(e)
+                        e.preventDefault()
+                        setRequesting(true)
+                        e.target?.form?.requestSubmit()
+                      }}
                       >
                       Save
                       </button>
