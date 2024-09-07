@@ -9,12 +9,12 @@ import FacebookButton from "../facebook-button";
 export default function SigInForm() {
 
     const [form, setForm] = useState({
-        first_name: "asds",
+        first_name: "",
         middle_name: "",
-        last_name: "asda",
+        last_name: "",
         password: "",
         email: "",
-        phone: "asddsa"
+        phone: ""
     })
 
     const [error, setError] = useState("")
@@ -27,29 +27,7 @@ export default function SigInForm() {
         });
     }
 
-  async function onSubmit(e:any) {
-    // setRequesting(true)
-    // e.preventDefault();
-    // try {
-    //   let response;
-    //     response = await addUser(form)
-    //   if (!response.ok) {
-    //     throw new Error(`HTTP error! status: ${response.status}`);
-    //   }
-    //   response = await response.json()
-    //   if(response.error) {
-    //     setError(response.error)
-    //   } else {
-    //     setSuccess(response)
-    //   }
-    // } catch (error) {
-    //   console.error('A problem occurred adding or updating a record: ', error);
-    // } finally {
-    //   setRequesting(false)
-    // }
-  }
-
-    return (
+   return (
       <>
       {requesting && <Loader /> }
         <form onSubmit={ (e) => {

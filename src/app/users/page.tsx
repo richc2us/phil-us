@@ -73,7 +73,7 @@ const ProjectTable = () => {
               <p className="text-sm text-black dark:text-white">{user.createdAt}</p>
             </div>
           </div>
-        )) : <Loader/> }
+        )) : <Loader isFormLoading={true} /> }
       </div>
     );
   };

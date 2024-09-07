@@ -1,37 +1,28 @@
 "use client"
 import { saveCompanyAction } from "@/actions/companies";
-import { useState } from "react";
+import {  useState } from "react";
+import Loader from "@/components/common/Loader";
+import { AlertError, AlertSuccess } from "@/app/ui/alerts/alerts";
+import { ServerActionResponse } from "@/types/server-action-reply";
+
+ const defaultState = {
+    name: "",
+    address: "",
+    address2: "",
+    description: ""
+  }
+
 const NewCompanyForm = () => {
-      const [form, setForm] = useState({
-        name: "",
-        address: "",
-        address2: "",
-        description: ""
-      })
+
+      const [form, setForm] = useState(defaultState)
+      const [requesting, setRequesting] = useState(false)
+      const [reply, setReply] = useState<ServerActionResponse>()
 
       function updateForm(value : any) {
         return setForm((prev: any) => {
             return { ...prev, ...value };
         });
       }
-
-      // async function onSubmit(e:any) {
-      //   e.preventDefault()
-      //   try{
-      //       await fetch('/api/companies',{
-      //         method: "POST",
-      //         headers: {
-      //           "Content-Type": "application/json",
-      //         },
-      //         body: JSON.stringify(form),
-      //       }).then(r => r.json()).then((r) => {
-      //           redirect("/companies")
-      //       })
-      //   }
-      //   catch(e) {
-
-      //   }
-      // }
 
       return (
         <div className="grid grid-cols-5 gap-8">
@@ -43,17 +34,33 @@ const NewCompanyForm = () => {
                 </h3>
             </div>
             <div className="p-7">
+                { requesting && <Loader isFormLoading={true} /> }
+                {
+                    reply?.success && <AlertSuccess message={reply?.message}/>
+                }
+                {
+                    !reply?.success && reply?.message && <AlertError message={reply?.message} description={reply?.errors}/>
+                }
                 <form 
+                className={ requesting ? "invisible" : "" }
+                // action={ action } 
                 action={ async() => {
-                  saveCompanyAction(form)
-                 }} 
-                // onSubmit={onSubmit}
+                    setRequesting(true)
+                    let response  =  await saveCompanyAction(form)
+                    console.dir(response)
+                    setReply(response)
+                    if(response.success) {
+                        setForm(defaultState)
+                    }
+                    setRequesting(false)
+                }
+            } 
                 >
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/1">
                         <label
                             className="mb-3 block text-sm font-medium text-black dark:text-white"
-                            htmlFor="fullName"
+                            htmlFor="name"
                         >
                             Name
                         </label>
@@ -89,6 +96,8 @@ const NewCompanyForm = () => {
                             name="name"
                             id="name"
                             placeholder="Company Name"
+                            autoComplete="off"
+                            required
                             value={form.name}
                             onChange={(e) => updateForm({ name: e.target.value })}
                             />
@@ -109,7 +118,9 @@ const NewCompanyForm = () => {
                                 type="text"
                                 name="address"
                                 id="address"
+                                autoComplete="off"
                                 placeholder="Address"
+                                required
                                 value={form.address}
                                 onChange={(e) => updateForm({ address: e.target.value })}
                             />
@@ -126,6 +137,7 @@ const NewCompanyForm = () => {
                                 type="text"
                                 name="address2"
                                 id="address2"
+                                autoComplete="off"
                                 placeholder="Alternative Address"
                                 value={form.address2}
                                 onChange={(e) => updateForm({ address2: e.target.value })}
@@ -135,9 +147,11 @@ const NewCompanyForm = () => {
 
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/1">
-                    <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="region">Description</label>
+                    <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="description">Description</label>
                       <textarea
                         rows={6}
+                        name="description"
+                        id="description"
                         placeholder="Type your message"
                         className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                         value={form.description}
