@@ -6,6 +6,7 @@ import { ServerActionResponse } from "@/types/server-action-reply";
 
 export const getCompanies = async() => {
     await dbConnect()
+    revalidatePath('/companies')
     return await Company.find({})
 }
 
