@@ -1,15 +1,12 @@
-// import { getCompanies } from "@/actions/companies";
+import { getCompanies } from "@/actions/companies";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import SvgPlus from "@/components/common/Loader/svg/plus";
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Link from "next/link";
-import  Company  from "@/models/companies"
-import { deleteCompanyAction } from "@/actions/companies";
 import { CompanyDeleteButton } from "./delete-button";
 
 const CompanyTable = async() => {
-  const companies = await Company.find({})
-    // const companies : [] = []
+  const companies = await getCompanies()
     return (
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="px-4 py-6 md:px-6 xl:px-7.5">

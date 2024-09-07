@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { ServerActionResponse } from "@/types/server-action-reply";
 
 export const getCompanies = async() => {
+    await dbConnect()
     return await Company.find({})
 }
 

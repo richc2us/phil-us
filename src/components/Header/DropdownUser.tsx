@@ -24,6 +24,7 @@ const DropdownUser = () => {
         </span>
 
         <span className="h-12 w-12 rounded-full">
+        {session?.user?.email && 
           <Image
             width={112}
             height={112}
@@ -33,7 +34,7 @@ const DropdownUser = () => {
               height: "auto",
             }}
             alt="User"
-          />
+          /> }
         </span>
 
         <svg
