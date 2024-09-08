@@ -4,30 +4,31 @@ import mongoose, { Schema, Document } from "mongoose"
 export interface Project extends Document {
     company_id: Schema.Types.ObjectId,
     name: string,
-    address1: string,
-    address2: string,
-    region: string,
-    province: string,
-    city: string,
-    barangay: string,
-    zip: string
-    landmark: string,
-    latitude: string,
-    longitude: string,
-    original_owners: Schema.Types.ObjectId, // linked to users
-    purchase_scheme: string,
-    title_information: string,
-    legal_documentation: string,
-    restrictions: string,
-    terrane_information: string,
-    total_number_of_lots: Number, 
-    date_bought: Date, 
-    date_begin_selling: Date, 
-    date_begin_grading: Date, 
-    investment_amount: Number, 
-    geographic_layer_file: string,
-    bulk_discount_scheme: Number,
-    LTS: string
+    address1?: string,
+    address2?: string,
+    region?: string,
+    province?: string,
+    city?: string,
+    barangay?: string,
+    zip?: string
+    landmark?: string,
+    latitude?: string,
+    longitude?: string,
+    original_owners?: Schema.Types.ObjectId, // linked to users
+    purchase_scheme?: string,
+    title_information?: string,
+    legal_documentation?: string,
+    restrictions?: string,
+    terrane_information?: string,
+    total_number_of_lots?: Number,
+    date_bought?: Date,
+    date_begin_selling?: Date,
+    date_begin_grading?: Date,
+    investment_amount?: Number,
+    geographic_layer_file?: string,
+    bulk_discount_scheme?: Number,
+    LTS?: string,
+    legends?: []
 }
 
 const projectSchema = new Schema<Project>({
@@ -39,7 +40,7 @@ const projectSchema = new Schema<Project>({
     },
     address1 : {
         type: String,
-        required: [true, "Please provide an address"],
+        // required: [true, "Please provide an address"],
         maxlength:[255, "Address cannot be more than 255 characters"]
     },
     address2 : {
@@ -87,7 +88,7 @@ const projectSchema = new Schema<Project>({
         // required: [true, "Please provide a longitude"],
         maxlength:[255, "Longitude cannot be more than 255 characters"]
     },
-    original_owners : [{ type : Schema.Types.ObjectId, ref: 'User', required : [true, "Please provide an original owner"] }],
+    original_owners : [{ type : Schema.Types.ObjectId, ref: 'User'}],
     purchase_scheme: {
         type: String,
         // required: [true, "Please provide a purchase scheme"],
@@ -115,19 +116,19 @@ const projectSchema = new Schema<Project>({
     total_number_of_lots: {
         type: Number,
         // required: [true, "Please provide a number of lots"],
-    }, 
+    },
     date_bought: {
         type: Date,
-    }, 
+    },
     date_begin_selling: {
         type: Date,
-    }, 
+    },
     date_begin_grading: {
         type: Date,
-    }, 
+    },
     investment_amount: {
         type: Number,
-    }, 
+    },
     geographic_layer_file: {
         type: String,
     },
@@ -136,8 +137,10 @@ const projectSchema = new Schema<Project>({
     },
     LTS: {
         type: String,
-    }
-
+    },
+    legends:[
+        {type: String,}
+    ]
 }, {
     timestamps : true
 })

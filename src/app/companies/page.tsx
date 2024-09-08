@@ -3,8 +3,9 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import SvgPlus from "@/components/common/Loader/svg/plus";
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Link from "next/link";
-import { CompanyDeleteButton } from "./delete-button";
+import { CompanyDeleteButton } from "./CompanyDeleteButton";
 import { BSON } from "mongodb"
+import { DEFAULT_COMPANY } from "@/actions/const";
 
 const CompanyTable = async() => {
   const companies = await getCompanies()
@@ -77,7 +78,7 @@ const CompanyTable = async() => {
                </p>
             </div>
             <div className="col-span-1 flex items-center">
-            { new BSON.ObjectId("66da989213b8e3d6f81346d3").equals(company._id) ? "" : <CompanyDeleteButton companyId={JSON.parse(JSON.stringify(company._id))}/>  }
+            { new BSON.ObjectId(DEFAULT_COMPANY).equals(company._id) ? "" : <CompanyDeleteButton companyId={JSON.parse(JSON.stringify(company._id))}/>  }
             </div>
           </div>
         ))}

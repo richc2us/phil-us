@@ -12,7 +12,7 @@ const options: ApexOptions = {
     type: "donut",
   },
   colors: ["#3C50E0", "#6577F3", "#8FD0EF", "#0FADCF"],
-  labels: ["Desktop", "Tablet", "Mobile", "Unknown"],
+  labels: ["Reserved", "On Hold", "Available", "Pending"],
   legend: {
     show: false,
     position: "bottom",

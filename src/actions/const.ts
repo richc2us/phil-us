@@ -1,0 +1,1 @@
+export const DEFAULT_COMPANY = "66da989213b8e3d6f81346d3"

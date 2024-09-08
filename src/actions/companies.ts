@@ -3,6 +3,7 @@ import dbConnect from "@/lib/mongodb";
 import  Company  from "@/models/companies"
 import { revalidatePath } from "next/cache";
 import { ServerActionResponse } from "@/types/server-action-reply";
+import { DEFAULT_COMPANY } from "./const";
 
 export const getCompanies = async() => {
     await dbConnect()
@@ -29,7 +30,7 @@ export const saveCompanyAction = async(form: any) : Promise<ServerActionResponse
 export const deleteCompanyAction = async(id: any) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {
-        if(id !== "66da989213b8e3d6f81346d3") {
+        if(id !== DEFAULT_COMPANY) {
             await Company.deleteOne({_id: id})
             revalidatePath("/");
             return {success: true, message: 'company deleted', document: null}

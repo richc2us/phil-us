@@ -1,6 +1,6 @@
 export type  ServerActionResponse = {
     success: boolean,
     message: string,
-    document: any,
+    document?: any,
     errors?: any[]
 }

@@ -22,7 +22,7 @@ const nextAuthOptions : AuthOptions = {
             },
             authorize : async(credentials) => {
                 await dbConnect()
-                console.dir({credentials, asd : 'asd'})
+                // console.dir({credentials, asd : 'asd'})
                 const user = await User.findOne({
                     email: credentials?.email,
                 }).select("+password")
@@ -49,18 +49,18 @@ const nextAuthOptions : AuthOptions = {
     },
     callbacks: {
         async jwt({token, account}) {
-            console.dir({'jwt callbacks' : 'jwt',token, account})
+            // console.dir({'jwt callbacks' : 'jwt',token, account})
             if(account?.provider === "google") {
                 const registerIfNotExists = await registerAfterSignIn(token)
             }
             return token ?? account?.access_token
         },
         async session({session, token, user}) {
-            console.dir({'sessions callbacks' : 'sessions',session, token, user})
+            // console.dir({'sessions callbacks' : 'sessions',session, token, user})
             return session
         },
         async signIn({ user,  profile}) {
-            console.dir({'signIn callbacks' : 'signIn',user, profile})
+            // console.dir({'signIn callbacks' : 'signIn',user, profile})
             // if(account?.provider == "google") {
             //     return profile?.email && profile.email?.endsWith("@gmail.com")
             // }
@@ -73,22 +73,22 @@ const nextAuthOptions : AuthOptions = {
     },
     events : {
         async signIn(message) {
-            console.dir({'signin events':'signin', message})
+            // console.dir({'signin events':'signin', message})
         },
         async signOut(message) {
-            console.dir({'signOut events':'signOut', message})
+            // console.dir({'signOut events':'signOut', message})
         },
         async createUser(message) {
-            console.dir({'createUser events':'createUser', message})
+            // console.dir({'createUser events':'createUser', message})
         },
         async updateUser(message) {
-            console.dir({'updateUser events':'updateUser', message})
+            // console.dir({'updateUser events':'updateUser', message})
         },
         async linkAccount(message){
-            console.dir({'linkAccount events':'linkAccount', message})
+            // console.dir({'linkAccount events':'linkAccount', message})
         },
         async session(message) {
-            console.dir({'session events':'session', message})
+            // console.dir({'session events':'session', message})
         }
     },
     // pages: {
@@ -100,19 +100,19 @@ const nextAuthOptions : AuthOptions = {
     // },
     logger : {
         error(code, metadata){
-            console.dir({
-                'error' : 'error', code, metadata
-            })
+            // console.dir({
+            //     'error' : 'error', code, metadata
+            // })
         },
         warn(code) {
-            console.dir({
-                'warn' : 'warn', code
-            })
+            // console.dir({
+            //     'warn' : 'warn', code
+            // })
         },
         debug(code, metadata) {
-            console.dir({
-                'debug' : 'debug', code, metadata
-            })
+            // console.dir({
+            //     'debug' : 'debug', code, metadata
+            // })
         }
     }
 }

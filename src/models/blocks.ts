@@ -5,6 +5,7 @@ export interface Block extends Document {
     company_id: Schema.Types.ObjectId,
     project_id : Schema.Types.ObjectId,
     name: string,
+    area?: Number,
     description?: string
 }
 
@@ -18,6 +19,9 @@ const blockSchema = new Schema<Block>({
     },
     description: {
         type: String,
+    },
+    area: {
+        type: Number,
     }
 }, {
     timestamps : true

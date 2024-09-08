@@ -8,19 +8,23 @@ import {
   } from "tw-elements";
 import CardDataStats from "@/components/CardDataStats";
 import dynamic from "next/dynamic";
+import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import { useParams } from "next/navigation";
   
 
 const ChartThree = dynamic(() => import("@/components/Charts/ChartThree"), {
     ssr: false,
   });
 
-export default function ProjectDetailTabs() {
+export default function ProjectDetailTabs({ id , project} : {id: string, project:any}) {
 
 useEffect(() => {
     initTWE({ Tab });
-    }, []);
+}, []);
+
 
   return (<>
+
 <ul
   className="mb-5 flex list-none flex-row flex-wrap border-b-0 ps-0"
   role="tablist"
