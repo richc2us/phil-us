@@ -1,10 +1,10 @@
 "use client"
 import Link from "next/link";
-import GoogleButton from "../google-signin";
+import GoogleButton from "../GoogleButton";
 import { useState } from "react";
 import Loader from "@/components/common/Loader";
 import { signIn } from "next-auth/react";
-import FacebookButton from "../facebook-button";
+import FacebookButton from "../FacebookButton";
 
 export default function SigInForm() {
 

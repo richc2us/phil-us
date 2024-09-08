@@ -8,6 +8,7 @@ export interface User extends Document {
     password : string,
     email: string,
     phone: string,
+    account_type: string,
     created_at: Date,
     updated_at: Date
 }
@@ -20,14 +21,12 @@ const userSchema = new Schema<User>({
     email: { type: String,
         unique: true,
         required: [true, "Email is required"],
-        match: [
-          /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-          "Email is invalid",
-        ]},
-    phone: {type : String}
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,"Email is invalid"]
+    },
+    phone: {type : String},
+    account_type:{type : String, default: 'admin'}
 },{
     timestamps : true
 });
 
-// export default mongoose.models.User || mongoose.model<Users>("User",userSchema)
 export default mongoose.models?.User || mongoose.model<User>("User",userSchema)

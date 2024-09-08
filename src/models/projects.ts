@@ -44,77 +44,77 @@ const projectSchema = new Schema<Project>({
     },
     address2 : {
         type: String,
-        required: [false, "Please provide an address2"],
+        // required: [false, "Please provide an address2"],
         maxlength:[255, "Address2 cannot be more than 255 characters"]
     },
     region : {
         type: String,
-        required: [true, "Please provide an region"],
+        // required: [true, "Please provide an region"],
         maxlength:[255, "Region cannot be more than 255 characters"]
     },
     province : {
         type: String,
-        required: [true, "Please provide a province"],
+        // required: [true, "Please provide a province"],
         maxlength:[255, "Province cannot be more than 255 characters"]
     },
     city: {
         type: String,
-        required: [true, "Please provide a city"],
+        // required: [true, "Please provide a city"],
         maxlength:[255, "City cannot be more than 255 characters"]
     },
     barangay:  {
         type: String,
-        required: [true, "Please provide a barangay"],
+        // required: [true, "Please provide a barangay"],
         maxlength:[255, "Barangay cannot be more than 255 characters"]
     },
     zip: {
         type: String,
-        required: [true, "Please provide a zip"],
+        // required: [true, "Please provide a zip"],
         maxlength:[255, "Zip cannot be more than 255 characters"]
     },
     landmark: {
         type: String,
-        required: [true, "Please provide a landmark"],
+        // required: [true, "Please provide a landmark"],
         maxlength:[255, "Landmark cannot be more than 255 characters"]
     },
     latitude: {
         type: String,
-        required: [true, "Please provide a latitude"],
+        // required: [true, "Please provide a latitude"],
         maxlength:[255, "Latitude cannot be more than 255 characters"]
     },
     longitude: {
         type: String,
-        required: [true, "Please provide a longitude"],
+        // required: [true, "Please provide a longitude"],
         maxlength:[255, "Longitude cannot be more than 255 characters"]
     },
-    original_owners : [{ type : Schema.Types.ObjectId, ref: 'User' }],
+    original_owners : [{ type : Schema.Types.ObjectId, ref: 'User', required : [true, "Please provide an original owner"] }],
     purchase_scheme: {
         type: String,
-        required: [true, "Please provide a purchase scheme"],
+        // required: [true, "Please provide a purchase scheme"],
         maxlength:[255, "Purchase Scheme cannot be more than 255 characters"]
     },
     title_information: {
         type: String,
-        required: [true, "Please provide a purchase scheme"],
+        // required: [true, "Please provide a purchase scheme"],
         maxlength:[255, "Purchase Scheme cannot be more than 255 characters"]
     },
     legal_documentation: {
         type: String,
-        required: [false, "Please provide a purchase scheme"],
+        // required: [false, "Please provide a purchase scheme"],
         maxlength:[255, "Purchase Scheme cannot be more than 255 characters"]
     },
     restrictions: {
         type: String,
-        required: [false, "Please provide a purchase scheme"],
+        // required: [false, "Please provide a purchase scheme"],
     },
     terrane_information: {
         type: String,
-        required: [false, "Please provide a Terrane Information"],
+        // required: [false, "Please provide a Terrane Information"],
         maxlength:[255, "Terrane information Scheme cannot be more than 255 characters"]
     },
     total_number_of_lots: {
         type: Number,
-        required: [true, "Please provide a number of lots"],
+        // required: [true, "Please provide a number of lots"],
     }, 
     date_bought: {
         type: Date,

@@ -4,6 +4,7 @@ import SvgPlus from "@/components/common/Loader/svg/plus";
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Link from "next/link";
 import { CompanyDeleteButton } from "./delete-button";
+import { BSON } from "mongodb"
 
 const CompanyTable = async() => {
   const companies = await getCompanies()
@@ -18,7 +19,7 @@ const CompanyTable = async() => {
                 </h4>
             </div>
         </div>
-  
+
         <div className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
           <div className="col-span-1 flex items-center">
               <p className="font-medium">Id</p>
@@ -41,7 +42,7 @@ const CompanyTable = async() => {
             <p className="font-medium">Action</p>
           </div>
         </div>
-  
+
         {companies.map((company:any, key) => (
           <div
             className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5"
@@ -76,7 +77,7 @@ const CompanyTable = async() => {
                </p>
             </div>
             <div className="col-span-1 flex items-center">
-              <CompanyDeleteButton companyId={JSON.parse(JSON.stringify(company._id))}/>
+            { new BSON.ObjectId("66da989213b8e3d6f81346d3").equals(company._id) ? "" : <CompanyDeleteButton companyId={JSON.parse(JSON.stringify(company._id))}/>  }
             </div>
           </div>
         ))}

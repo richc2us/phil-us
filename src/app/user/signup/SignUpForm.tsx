@@ -1,7 +1,7 @@
 import Link from "next/link";
-import GoogleButton from "../google-signin";
+import GoogleButton from "../GoogleButton";
 import { useState } from "react";
-import FacebookButton from "../facebook-button";
+import FacebookButton from "../FacebookButton";
 
 export default  function SigUpForm() {
 
