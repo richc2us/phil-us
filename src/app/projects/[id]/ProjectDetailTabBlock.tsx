@@ -1,6 +1,11 @@
 "use client"
 
 import SvgPlus from "@/components/common/Loader/svg/plus"
+import { useState } from "react"
+import ProjectDetailTabBlockNewBlock from "./ProjectDetailTabBlockNewBlock"
+import ProjectDetailTabBlockNewLot from "./ProjectDetailTabBlockNewLot"
+import ProjectDetailTabBlockUpdateBlock from "./ProjectDetailTabBlockUpdateBlock"
+import ProjectDetailTabBlockUpdateLot from "./ProjectDetailTabBlockUpdateLot"
 
 // import { getProject } from "@/actions/projects"
 
@@ -15,15 +20,38 @@ const lots = [
     "100 sqm" ,
     "100 sqm" ,
 ]
+
+type defaultState = {
+    isAddingBlock:boolean,
+    isAddingLot:boolean,
+    isEditingBlock: boolean,
+    isEditingLot: boolean
+}
+
 export default function ProjectDetailTabBlock() {
     // const project = await getProject(projectID)
+    const [state, setBlock] = useState<defaultState>({
+        isAddingBlock:false,
+        isAddingLot:false,
+        isEditingBlock: false,
+        isEditingLot: false
+    })
+
+    function updateState(prev:any) { return setBlock({ ...state, ...prev})}
+
+    function toggle(selector:any = "isAddingLot", force: boolean = false) {
+        let t = !state[selector as keyof defaultState]
+        let oldState:defaultState = state
+        Object.keys(oldState).map( (val:string) => oldState[val as keyof defaultState] = false )
+        updateState({ ...oldState , [selector] :  force ? force : t })
+    }
     return(
         <>
         <div className="grid grid-cols-5 gap-8">
         <div className="col-span-5 xl:col-span-3">
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
-                    <h3 className="font-medium text-black dark:text-white">
+                    {/* <h3 className="font-medium text-black dark:text-white"> */}
                     <div id="accordionExample">
                         <div
                             className="rounded-t-lg border border-neutral-200 bg-white dark:border-neutral-600 dark:bg-body-dark">
@@ -34,7 +62,8 @@ export default function ProjectDetailTabBlock() {
                                 data-twe-collapse-init
                                 data-twe-target="#collapseOne"
                                 aria-expanded="true"
-                                aria-controls="collapseOne">
+                                aria-controls="collapseOne"
+                                >
                                 BLOCK #1
                                 <span
                                 className="-me-1 ms-auto h-5 w-5 shrink-0 rotate-[-180deg] transition-transform duration-200 ease-in-out group-data-[twe-collapse-collapsed]:me-0 group-data-[twe-collapse-collapsed]:rotate-0 motion-reduce:transition-none [&>svg]:h-6 [&>svg]:w-6">
@@ -59,11 +88,21 @@ export default function ProjectDetailTabBlock() {
                             data-twe-collapse-show
                             aria-labelledby="headingOne"
                             data-twe-parent="#accordionExample">
-                            <div className="px-5 py-4">
+                            <div className="px-5">
+                                <div className="flex justify-end gap-4.5 mb-4">
+                                    <button
+                                        className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
+                                        type="button"
+                                        onClick={() => toggle('isEditingBlock')}
+                                        >
+                                        Update Block
+                                    </button>
+                                </div>
                                 <div className="grid grid-cols-3 gap-3">
+
                                     {
                                         lots.map( (lot, key) => {
-                                            return (<div className="rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark" key={key}>
+                                            return (<div onClick={() => toggle('isEditingLot', true)} className="cursor-pointer rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark" key={key}>
                                                 <div className="mt-4 flex items-end justify-between">
                                                     <div>
                                                         <h4 className="text-title-md font-bold text-black dark:text-white">{lot}</h4>
@@ -74,7 +113,7 @@ export default function ProjectDetailTabBlock() {
                                             }
                                         )
                                     }
-                                    <div className="rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+                                    <div  onClick={(e) => toggle("isAddingLot") } className="cursor-pointer rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
                                         <div className="flex h-12.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
                                             <SvgPlus/>
                                         </div>
@@ -199,99 +238,16 @@ export default function ProjectDetailTabBlock() {
                             </div>
                             </div>
                         </div>
-                        </div>
-                    </h3>
+                    </div>
+                    {/* </h3> */}
                 </div>
             </div>
         </div>
-        <div className="col-span-4 xl:col-span-2">
-            <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
-                    <form action="">
-                        <h4 className="text-title-md font-bold text-black dark:text-white mb-5.5">Create New Lot</h4>
-                            <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                                <div className="w-full sm:w-1/1">
-                                    <label
-                                        className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                        htmlFor="block_name"
-                                    >
-                                        Block
-                                    </label>
-                                    <div className="relative">
-                                        {/* <span className="absolute left-4.5 top-4">
-                                        </span> */}
-                                        <input
-                                        className="w-full rounded border border-stroke bg-gray py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                        type="text"
-                                        name="block_name"
-                                        id="block_name"
-                                        placeholder="Block Name"
-                                        autoComplete="off"
-                                        required
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                                <div className="w-full sm:w-1/1">
-                                    <label
-                                        className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                        htmlFor="lot_name"
-                                    >
-                                        Lot Name
-                                    </label>
-                                    <div className="relative">
-                                        {/* <span className="absolute left-4.5 top-4">
-                                        </span> */}
-                                        <input
-                                        className="w-full rounded border border-stroke bg-gray py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                        type="text"
-                                        name="lot_name"
-                                        id="lot_name"
-                                        placeholder="Lot Name"
-                                        autoComplete="off"
-                                        required
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                                <div className="w-full sm:w-1/1">
-                                    <label
-                                        className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                        htmlFor="lot_area"
-                                    >
-                                        Lot Area
-                                    </label>
-                                    <div className="relative">
-                                        {/* <span className="absolute left-4.5 top-4">
-                                        </span> */}
-                                        <input
-                                        className="w-full rounded border border-stroke bg-gray py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                        type="number"
-                                        min="1"
-                                        name="lot_area"
-                                        id="lot_area"
-                                        placeholder="Lot Area"
-                                        autoComplete="off"
-                                        required
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex justify-end gap-4.5">
-                                <button
-                                    className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
-                                    type="submit"
-                                    >
-                                    Save
-                                </button>
-                            </div>
-                            
-                    </form>
-                </div>
-            </div>
-        </div>
+
+        {state.isAddingBlock && <ProjectDetailTabBlockNewBlock/>}
+        {state.isAddingLot && <ProjectDetailTabBlockNewLot/>}
+        {state.isEditingBlock && <ProjectDetailTabBlockUpdateBlock/>}
+        {state.isEditingLot && <ProjectDetailTabBlockUpdateLot/>}
     </div>
         </>
     )
