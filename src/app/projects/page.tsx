@@ -2,10 +2,8 @@ import { getProjects } from "@/actions/projects";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import SvgPlus from "@/components/common/Loader/svg/plus";
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
-import Image from "next/image";
 import Link from "next/link";
 import { ProjectDeleteButton } from "./ProjectDeleteButton";
-
 
 const ProjectTable = async() => {
   const projects = await getProjects()
@@ -41,7 +39,7 @@ const ProjectTable = async() => {
             <p className="font-medium">Total Lots</p>
           </div>
           <div className="col-span-1 flex items-center">
-            <p className="font-medium">Discount Scheme</p>
+            <p className="font-medium">Created</p>
           </div>
           <div className="col-span-1 flex items-center">
             <p className="font-medium">Action</p>
@@ -77,7 +75,9 @@ const ProjectTable = async() => {
               <p className="text-sm text-black dark:text-white">{project.investment_amount}</p>
             </div>
             <div className="col-span-1 flex items-center">
-              <p className="text-sm text-meta-3">{project.bulk_discount_scheme ? project.bulk_discount_scheme +"%"  :""}</p>
+              <p className="text-sm dark:text-white">
+                  { (project.createdAt.getMonth() + 1) + "/" +  project.createdAt.getDate() + "/" + project.createdAt.getFullYear() + " " + project.createdAt.getHours() + ":" + project.createdAt.getMinutes()}
+              </p>
             </div>
             <div className="col-span-1 flex items-center">
              <ProjectDeleteButton id={JSON.parse(JSON.stringify(project._id))}/>

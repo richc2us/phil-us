@@ -5,21 +5,21 @@ import Image from "next/image"
 import {
     Tab,
     initTWE,
+    Collapse
   } from "tw-elements";
 import CardDataStats from "@/components/CardDataStats";
 import dynamic from "next/dynamic";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { useParams } from "next/navigation";
+import ProjectDetailTabBlock from "./ProjectDetailTabBlock";
   
 
 const ChartThree = dynamic(() => import("@/components/Charts/ChartThree"), {
     ssr: false,
   });
 
-export default function ProjectDetailTabs({ id , project} : {id: string, project:any}) {
+export default function ProjectDetailTabs({ id, } : {id: string}) {
 
 useEffect(() => {
-    initTWE({ Tab });
+    initTWE({ Tab, Collapse });
 }, []);
 
 
@@ -811,17 +811,7 @@ useEffect(() => {
     id="tabs-messages"
     role="tabpanel"
     aria-labelledby="tabs-profile-tab">
-        <div className="grid grid-cols-5 gap-8">
-        <div className="col-span-5 xl:col-span-3">
-            <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
-                    <h3 className="font-medium text-black dark:text-white">
-                    Tab 3 content
-                    </h3>
-                </div>
-            </div>
-        </div>
-    </div>
+        <ProjectDetailTabBlock/>
   </div>
   <div
     className="hidden opacity-0 transition-opacity duration-150 ease-linear data-[twe-tab-active]:block"
