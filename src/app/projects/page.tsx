@@ -8,7 +8,7 @@ const ProjectTable = async() => {
   const projects = await getProjects()
     return (
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-4">
-        <div className="px-4 py-2 md:px-6 xl:px-7.5">
+        <div className="px-4 py-4 md:px-6 xl:px-7.5">
             <div className="grid grid-cols-2">
                 <h4 className="text-xl font-semibold text-black dark:text-white">
                     Recent Projects

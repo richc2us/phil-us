@@ -17,12 +17,7 @@ export const addUser = async(data : any) => {
 }
 
 export const getUsers = async() => {
-  return await fetch("/api/users", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      }
-  });
+  return await User.find({})
 }
 
 export const registerAfterSignIn = async(user: any) => {
