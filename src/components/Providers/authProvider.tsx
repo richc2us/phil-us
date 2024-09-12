@@ -1,24 +1,15 @@
-"use client"
-import { SessionProvider } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import React, { useEffect, useState } from "react"
+import  { auth } from "@/lib/nextAuthOptions"
+import React  from "react"
+import { AuthSessionProvider } from "./authSessionProvider"
+import { redirect } from "next/navigation"
 
 export interface AuthProviderProps {
     children: React.ReactNode
 }
-export const AuthProvider = ({children} : AuthProviderProps) => {
-    const [session , setSession] = useState()
-    const router = useRouter()
-
-    useEffect( () => {
-        fetch('/api/auth/session').then(r => r.json()).then( (r) => {
-            if(Object.keys(r).length > 0) {
-                setSession(r)
-            } else {
-                router.push("/user/signin")
-            }
-        })
-    } , [] )
-
-    return (<SessionProvider session={session} refetchOnWindowFocus={true} refetchWhenOffline={false} refetchInterval={0} >{children}</SessionProvider>)
+export const AuthProvider = async({children} : AuthProviderProps) => {
+    const session = await auth()
+    if(!session) {
+        redirect("/user/signin")
+    }
+    return (<AuthSessionProvider session={session}>{children}</AuthSessionProvider>)
 }

@@ -1,10 +1,11 @@
-import { AuthOptions } from "next-auth"
+import { AuthOptions, getServerSession } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 import dbConnect from "./mongodb"
 import User from "@/models/users"
 import bcrypt from "bcryptjs";
 import { registerAfterSignIn } from "@/actions/actions"
+import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next"
 
 const nextAuthOptions : AuthOptions = {
     // useSecureCookies:true,
@@ -121,3 +122,9 @@ const nextAuthOptions : AuthOptions = {
 // export const { handlers, auth, signIn, signOut } =  b
 
 export default nextAuthOptions
+
+export function auth(...args :  [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
+    | [NextApiRequest, NextApiResponse]
+    | []) {
+    return getServerSession(...args, nextAuthOptions)
+}

@@ -1,5 +1,6 @@
 import { DEFAULT_COMPANY } from "@/actions/const";
-import mongoose, { Schema, Document } from "mongoose"
+import { get } from "http";
+import mongoose, { Schema, Document, SchemaTypeOptions } from "mongoose"
 
 
 export interface User extends Document {
@@ -37,5 +38,5 @@ const userSchema = new Schema<User>({
 },{
     timestamps : true
 });
-
+userSchema.virtual('fullName').get(function(){ return this.first_name + ' ' + this.middle_name+ ' ' + this.last_name })
 export default mongoose.models?.User || mongoose.model<User>("User",userSchema)

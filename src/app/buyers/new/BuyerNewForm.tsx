@@ -445,6 +445,7 @@ export default function BuyerNewForm() {
                                     type="text"
                                     name="spouse_tin_issuance"
                                     id="spouse_tin_issuance"
+                                    autoComplete="off"
                                     value={form.spouse.tin_issuance}
                                     onChange={(e) => updateForm({ spouse : { ...form.spouse, tin_issuance: e.target.value }})}
                                 />
