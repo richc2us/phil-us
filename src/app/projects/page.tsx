@@ -1,6 +1,5 @@
 import { getProjects } from "@/actions/projects";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
-import SvgPlus from "@/components/common/Loader/svg/plus";
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Link from "next/link";
 import { ProjectDeleteButton } from "./ProjectDeleteButton";
@@ -8,21 +7,26 @@ import { ProjectDeleteButton } from "./ProjectDeleteButton";
 const ProjectTable = async() => {
   const projects = await getProjects()
     return (
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <div className="px-4 py-6 md:px-6 xl:px-7.5">
-            <div className="">
+      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-4">
+        <div className="px-4 py-2 md:px-6 xl:px-7.5">
+            <div className="grid grid-cols-2">
                 <h4 className="text-xl font-semibold text-black dark:text-white">
                     Recent Projects
                 </h4>
-                <h4 className="pt-2">
-                <Link href="/projects/add" className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
-                    <SvgPlus/>
-                </Link>
-                </h4>
+                <div className="flex justify-end gap-4.5">
+                    <Link href="/projects/add" className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+                    <button
+                        className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
+                        type="submit"
+                        >
+                        New Project
+                    </button>
+                    </Link>
+                </div>
             </div>
         </div>
   
-        <div className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
+      <div className="grid grid-cols-7 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
         <div className="col-span-1 flex items-center">
             <p className="font-medium">ID</p>
           </div>
