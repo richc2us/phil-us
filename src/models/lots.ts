@@ -1,3 +1,4 @@
+import { DEFAULT_COMPANY } from "@/actions/const"
 import mongoose, { Schema, Document } from "mongoose"
 
 // {
@@ -34,7 +35,7 @@ export interface Lot extends Document {
 }
 
 const lotSchema = new Schema<Lot>({
-    company_id : { type : Schema.Types.ObjectId, ref: "Company" },
+    company_id : { type : Schema.Types.ObjectId, ref: "Company", default: DEFAULT_COMPANY },
     project_id : { type : Schema.Types.ObjectId, ref: "Project" },
     block_id : { type : Schema.Types.ObjectId, ref: "Block" },
     buyer_id : { type : Schema.Types.ObjectId, ref: "User" },

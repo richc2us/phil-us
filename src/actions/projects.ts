@@ -20,8 +20,7 @@ export const getProject = async(id: string) => {
 export async function saveProjectAction(state: any) {
     await dbConnect()
     try {
-        console.dir(state)
-        const newDocument = await Project.create( {...state , company_id : DEFAULT_COMPANY } )
+        const newDocument = await Project.create( {...state } )
         revalidatePath("/")
         return {success: true, message: newDocument.name + ' created', document : {id: newDocument._id.toString()}}
     } catch (e: any) {

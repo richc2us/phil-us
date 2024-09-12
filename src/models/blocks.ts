@@ -1,3 +1,4 @@
+import { DEFAULT_COMPANY } from "@/actions/const"
 import mongoose, { Schema, Document } from "mongoose"
 
 
@@ -10,7 +11,7 @@ export interface Block extends Document {
 }
 
 const blockSchema = new Schema<Block>({
-    company_id : { type : Schema.Types.ObjectId, ref: "Company" },
+    company_id : { type : Schema.Types.ObjectId, ref: "Company", default: DEFAULT_COMPANY },
     project_id : { type : Schema.Types.ObjectId, ref: "Project" },
     name : {
         type: String,

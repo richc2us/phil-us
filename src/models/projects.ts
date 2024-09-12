@@ -1,3 +1,4 @@
+import { DEFAULT_COMPANY } from "@/actions/const"
 import mongoose, { Schema, Document } from "mongoose"
 
 
@@ -32,7 +33,7 @@ export interface Project extends Document {
 }
 
 const projectSchema = new Schema<Project>({
-    company_id : { type : Schema.Types.ObjectId, ref: "Company" },
+    company_id : { type : Schema.Types.ObjectId, ref: "Company", default: DEFAULT_COMPANY },
     name : {
         type: String,
         required: [true, "Please provide a name"],
