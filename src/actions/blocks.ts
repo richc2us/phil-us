@@ -1,41 +1,44 @@
 'use server';
 import dbConnect from "@/lib/mongodb";
-import  Project  from "@/models/projects"
+import  Block  from "@/models/blocks"
 import { revalidatePath } from "next/cache";
 import { ServerActionResponse } from "@/types/server-action-reply";
 
-export const getProjects = async() => {
+export const getProjectBlocks = async(project_id : string) => {
     await dbConnect()
     revalidatePath('/')
-    return await Project.find({})
+    return await Block.find({project_id:project_id})
 }
 
-export const getProject = async(id: string) => {
+export const getBlock = async(id: string) => {
     await dbConnect()
     revalidatePath('/')
-    return await Project.findById(id)
+    return await Block.findById(id)
 }
-
-export async function saveProjectAction(state: any) {
+export async function saveBlockAction(state: any) {
     await dbConnect()
     try {
-        const newDocument = await Project.create( {...state } )
+        const document = await Block.create({...state})
         revalidatePath("/")
-        return {success: true, message: newDocument.name + ' created', document : {id: newDocument._id.toString()}}
+        return {success: true, message: document.name + ' created', document : { id: document._id }}
     } catch (e: any) {
         let errors = []
         for(let field in e.errors) {
             errors.push(e.errors[field].message)
         }
+        if(errors.length == 0) {
+            errors.push(e.toString())
+        }
         console.dir(errors);
-        return {success: false, message: 'Error creating', document: null, errors : errors}
+        return {success: false, message: 'Error creating' , document: null, errors : errors}
     }
 }
 
-export const deleteProjectAction = async(id: any) : Promise <ServerActionResponse> => {
+
+export const deleteBuyerAction = async(id: any) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {
-        await Project.deleteOne({_id: id})
+        await Block.deleteOne({_id: id})
         revalidatePath("/");
         return {success: true, message: 'deleted', document: null}
     } catch (e:any) {

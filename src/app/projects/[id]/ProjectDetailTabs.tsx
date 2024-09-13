@@ -1,5 +1,5 @@
 "use client"
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import Image from "next/image"
 
 import {
@@ -9,14 +9,14 @@ import {
   } from "tw-elements";
 import CardDataStats from "@/components/CardDataStats";
 import dynamic from "next/dynamic";
-import ProjectDetailTabBlock from "./ProjectDetailTabBlock";
-  
+import ProjectDetailTabBlock from "./(tab-blocks)/ProjectDetailTabBlock";
+
 
 const ChartThree = dynamic(() => import("@/components/Charts/ChartThree"), {
     ssr: false,
   });
 
-export default function ProjectDetailTabs({ id, } : {id: string}) {
+export default function ProjectDetailTabs({ id = ""} : {id: string}) {
 
 useEffect(() => {
     initTWE({ Tab, Collapse });
@@ -31,46 +31,46 @@ useEffect(() => {
   data-twe-nav-ref>
   <li role="presentation">
     <a
-      href="#tabs-home"
+      href="#tabs-overview"
       className="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[twe-nav-active]:border-primary data-[twe-nav-active]:text-primary dark:text-white/50 dark:hover:bg-neutral-700/60 dark:data-[twe-nav-active]:text-primary"
       data-twe-toggle="pill"
-      data-twe-target="#tabs-home"
+      data-twe-target="#tabs-overview"
       data-twe-nav-active
       role="tab"
-      aria-controls="tabs-home"
+      aria-controls="tabs-overview"
       aria-selected="true"
       >Overview</a>
   </li>
   <li role="presentation">
     <a
-      href="#tabs-profile"
+      href="#tabs-details"
       className="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[twe-nav-active]:border-primary data-[twe-nav-active]:text-primary dark:text-white/50 dark:hover:bg-neutral-700/60 dark:data-[twe-nav-active]:text-primary"
       data-twe-toggle="pill"
-      data-twe-target="#tabs-profile"
+      data-twe-target="#tabs-details"
       role="tab"
-      aria-controls="tabs-profile"
+      aria-controls="tabs-details"
       aria-selected="false"
       >Details</a>
   </li>
   <li role="presentation">
     <a
-      href="#tabs-messages"
+      href="#tabs-blocks"
       className="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[twe-nav-active]:border-primary data-[twe-nav-active]:text-primary dark:text-white/50 dark:hover:bg-neutral-700/60 dark:data-[twe-nav-active]:text-primary"
       data-twe-toggle="pill"
-      data-twe-target="#tabs-messages"
+      data-twe-target="#tabs-blocks"
       role="tab"
-      aria-controls="tabs-messages"
+      aria-controls="tabs-blocks"
       aria-selected="false"
       >Blocks/Lots</a>
   </li>
   <li role="presentation">
     <a
-      href="#tabs-contact"
+      href="#tabs-media"
       className="my-2 block border-x-0 border-b-2 border-t-0 border-transparent bg-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-400 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent dark:text-neutral-600"
       data-twe-toggle="pill"
-      data-twe-target="#tabs-contact"
+      data-twe-target="#tabs-media"
       role="tab"
-      aria-controls="tabs-contact"
+      aria-controls="tabs-media"
       aria-selected="false"
       >Media</a>
   </li>
@@ -79,9 +79,9 @@ useEffect(() => {
 <div className="mb-6">
   <div
     className="hidden opacity-100 transition-opacity duration-150 ease-linear data-[twe-tab-active]:block"
-    id="tabs-home"
+    id="tabs-overview"
     role="tabpanel"
-    aria-labelledby="tabs-home-tab"
+    aria-labelledby="tabs-overview-tab"
     data-twe-tab-active>
 
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
@@ -178,9 +178,9 @@ useEffect(() => {
   </div>
   <div
     className="hidden opacity-0 transition-opacity duration-150 ease-linear data-[twe-tab-active]:block"
-    id="tabs-profile"
+    id="tabs-details"
     role="tabpanel"
-    aria-labelledby="tabs-profile-tab">
+    aria-labelledby="tabs-details-tab">
 
       
 
@@ -808,16 +808,16 @@ useEffect(() => {
   </div>
   <div
     className="hidden opacity-0 transition-opacity duration-150 ease-linear data-[twe-tab-active]:block"
-    id="tabs-messages"
+    id="tabs-blocks"
     role="tabpanel"
-    aria-labelledby="tabs-profile-tab">
-        <ProjectDetailTabBlock/>
+    aria-labelledby="tabs-details-tab">
+        { id.length && <ProjectDetailTabBlock id={id} />}
   </div>
   <div
     className="hidden opacity-0 transition-opacity duration-150 ease-linear data-[twe-tab-active]:block"
-    id="tabs-contact"
+    id="tabs-media"
     role="tabpanel"
-    aria-labelledby="tabs-contact-tab">
+    aria-labelledby="tabs-media-tab">
         <div className="grid grid-cols-5 gap-8">
         <div className="col-span-5 xl:col-span-3">
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">

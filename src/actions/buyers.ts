@@ -4,8 +4,6 @@ import  User  from "@/models/users"
 import  Spouse  from "@/models/spouses"
 import { revalidatePath } from "next/cache";
 import { ServerActionResponse } from "@/types/server-action-reply";
-import { DEFAULT_COMPANY } from "./const";
-
 export const getBuyers = async() => {
     await dbConnect()
     revalidatePath('/')
