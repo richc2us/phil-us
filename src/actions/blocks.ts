@@ -35,7 +35,7 @@ export async function saveBlockAction(state: any) {
 }
 
 
-export const deleteBuyerAction = async(id: any) : Promise <ServerActionResponse> => {
+export const deleteBlockAction = async(id: any) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {
         await Block.deleteOne({_id: id})
