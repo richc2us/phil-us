@@ -1,11 +1,14 @@
-import { useEffect, useReducer, useState } from "react"
+import { useEffect, useReducer } from "react"
 import { BlocksContext, BlocksDispatchContext,  initialBlocks } from "./BlocksContext";
+import { useProject } from "../ProjectContext";
 
 
 
-const ProjectDetailTabBlockProvider = ({projectID=null, parentBlocks  , refreshBlocks = {} ,children}:any) => {
-
+const ProjectDetailTabBlockProvider = ({ parentBlocks  , refreshBlocks = {} ,children}:any) => {
+    
+    const {projectID} = useProject()
     const [blocks, blockDispatch] = useReducer( blocksReducer, {...initialBlocks, projectID})
+
     useEffect(() => {
         blockDispatch({type:'updateList', blocks: parentBlocks})
     }, [parentBlocks])

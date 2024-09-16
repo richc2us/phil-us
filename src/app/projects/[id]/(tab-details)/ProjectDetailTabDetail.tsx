@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useBlocks } from "../(tab-blocks)/BlocksContext";
+import { useProject } from "../ProjectContext";
 
 const initialState : any = {
     name: "",
@@ -22,22 +23,24 @@ const initialState : any = {
     restrictions: "",
     terrane_information: "",
     total_number_of_lots: 0,
-    date_bought: null,
-    date_begin_selling: null,
-    date_begin_grading: null,
+    date_bought: "",
+    date_begin_selling: "",
+    date_begin_grading: "",
     investment_amount: 0,
     geographic_layer_file: "",
     bulk_discount_scheme: 0,
     LTS: "",
 }
 
-export default function ProjectDetailTabDetail({projectID = ""}: {projectID: string}) {
+export default function ProjectDetailTabDetail() {
+
+    const {projectID} = useProject()
     const [form, setForm] = useState(initialState)
     useEffect(() => {
-            fetch('/api/projects/' + projectID ).then( (res) => res.json()).then((project) => {
-                setForm(project)
-            })
-    }, [])
+        fetch('/api/projects/' + projectID ).then( (res) => res.json()).then((project) => {
+            setForm(project)
+        })
+    }, [projectID])
 
     const updateForm = (value : any) =>  setForm( (prev: any) =>  { return {...prev, ...value} }  )
 
@@ -395,7 +398,7 @@ export default function ProjectDetailTabDetail({projectID = ""}: {projectID: str
                                             name="date_bought"
                                             id="date_bought"
                                             placeholder="Date Bought"
-                                            value={form.date_bought}
+                                            value={form.date_bought ?? ""}
                                             onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                         />
                                 </div>
@@ -412,7 +415,7 @@ export default function ProjectDetailTabDetail({projectID = ""}: {projectID: str
                                             name="date_begin_selling"
                                             id="date_begin_selling"
                                             placeholder="Date Begin Selling"
-                                            value={form.date_begin_selling}
+                                            value={form.date_begin_selling ?? ""}
                                             onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                         />
                                 </div>
@@ -430,7 +433,7 @@ export default function ProjectDetailTabDetail({projectID = ""}: {projectID: str
                                             name="date_begin_grading"
                                             id="date_begin_grading"
                                             placeholder="Date Begin Grading"
-                                            value={form.date_begin_grading}
+                                            value={form.date_begin_grading ?? ""}
                                             onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                         />
                                 </div>

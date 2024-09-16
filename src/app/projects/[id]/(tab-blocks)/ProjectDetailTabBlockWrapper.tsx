@@ -1,22 +1,12 @@
 import { useState } from "react"
-import ProjectDetailTabBlockNewBlock from "./ProjectDetailTabBlockNewBlock"
-import ProjectDetailTabBlockNewLot from "./(new-lot)/ProjectDetailTabBlockNewLot"
-import ProjectDetailTabBlockUpdateBlock from "./(update-block)/ProjectDetailTabBlockUpdateBlock"
-import ProjectDetailTabBlockUpdateLot from "./ProjectDetailTabBlockUpdateLot"
+import ProjectDetailTabBlockNewBlock from "./(block)/ProjectDetailTabBlockNewBlock"
+import ProjectDetailTabBlockNewLot from "./(lot)/ProjectDetailTabBlockNewLot"
+import ProjectDetailTabBlockUpdateBlock from "./(block)/ProjectDetailTabBlockUpdateBlock"
+import ProjectDetailTabBlockUpdateLot from "./(lot)/ProjectDetailTabBlockUpdateLot"
 import SvgPlus from "@/components/common/Loader/svg/plus"
 import Loader from "@/components/common/Loader"
 import { initialLot, useBlocks, useBlocksDispatchContext } from "./BlocksContext"
 
-const lots = [
-    "105 sqm" ,
-    "115 sqm" ,
-    "205 sqm" ,
-    "100 sqm" ,
-    "200 sqm" ,
-    "400 sqm" ,
-    "100 sqm" ,
-    "100 sqm" ,
-]
 
 type defaultState = {
     isAddingBlock:boolean,

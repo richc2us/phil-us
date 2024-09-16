@@ -3,18 +3,16 @@ import { useEffect, useState } from "react"
 import { initTWE, Collapse } from "tw-elements";
 import ProjectDetailTabBlockProvider from "./ProjectDetailTabBlockProvider"
 import ProjectDetailTabBlockWrapper from "./ProjectDetailTabBlockWrapper"
+import { useProject } from "../ProjectContext";
 
-export default function ProjectDetailTabBlock({projectID = ""}: {projectID: string}) {
-
-    // const [loading, setLoading] = useState(true)
+export default function ProjectDetailTabBlock() {
+    const {projectID} = useProject()
     const r : any[] = []
     const [blocks, setBlocks] = useState(r)
 
     async function getBlocks() {
-        // setLoading(true)
         const b = await (await fetch('/api/projects/blocks/'+ projectID)).json()
         setBlocks(b)
-        // setLoading(false)
         initTWE({ Collapse });
     }
 
@@ -23,8 +21,8 @@ export default function ProjectDetailTabBlock({projectID = ""}: {projectID: stri
     }, [])
 
     return(
-        <ProjectDetailTabBlockProvider projectID={projectID} parentBlocks={blocks} refreshBlocks={() => { getBlocks() } }>
-            <ProjectDetailTabBlockWrapper projectID={projectID}></ProjectDetailTabBlockWrapper>
+        <ProjectDetailTabBlockProvider parentBlocks={blocks} refreshBlocks={() => { getBlocks() } }>
+            <ProjectDetailTabBlockWrapper ></ProjectDetailTabBlockWrapper>
         </ProjectDetailTabBlockProvider>
     )
 }

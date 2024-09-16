@@ -67,16 +67,16 @@ const ProjectTable = async() => {
             </div>
             <div className="col-span-1 hidden items-center sm:flex">
               <p className="text-sm text-black dark:text-white">
-                {project.address}
+                {project.description}
               </p>
             </div>
             <div className="col-span-1 flex items-center">
               <p className="text-sm text-black dark:text-white">
-                {project.address2}
+                {project.investment_amount}
               </p>
             </div>
             <div className="col-span-1 flex items-center">
-              <p className="text-sm text-black dark:text-white">{project.investment_amount}</p>
+              <p className="text-sm text-black dark:text-white">{project.total_number_of_lots}</p>
             </div>
             <div className="col-span-1 flex items-center">
               <p className="text-sm dark:text-white">

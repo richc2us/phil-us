@@ -17,7 +17,7 @@ const initialLot = {
 const initialBlocks = {
     currentBlock:initialBlock,
     currentLot: initialLot,
-    projectID: null,
+    projectID: "",
     blocks:[]
 }
 
