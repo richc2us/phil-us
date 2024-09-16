@@ -1,12 +1,6 @@
-"use client"
-import { saveProjectAction } from "@/actions/projects"
-import Image from "next/image"
-import NewProjectSubmit from "./NewProjectSubmit";
-import { useState } from "react";
-import { ServerActionResponse } from "@/types/server-action-reply";
-import { useRouter } from "next/navigation";
-import { AlertError, AlertSuccess } from "@/app/ui/alerts/alerts";
-
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useBlocks } from "../(tab-blocks)/BlocksContext";
 
 const initialState : any = {
     name: "",
@@ -37,26 +31,20 @@ const initialState : any = {
     LTS: "",
 }
 
-export default  function NewProjectForm() {
+export default function ProjectDetailTabDetail({projectID = ""}: {projectID: string}) {
     const [form, setForm] = useState(initialState)
-    const [resp, setResp] = useState<ServerActionResponse>()
+    useEffect(() => {
+            fetch('/api/projects/' + projectID ).then( (res) => res.json()).then((project) => {
+                setForm(project)
+            })
+    }, [])
+
     const updateForm = (value : any) =>  setForm( (prev: any) =>  { return {...prev, ...value} }  )
-    const router = useRouter()
-    return (
-        <>
-        <form action={ async() => {
-                const response : ServerActionResponse = await saveProjectAction(form)
-                setResp(response)
-                if(response.success && response?.document.id) {
-                    router.push("/projects/"+ response?.document.id)
-                }
-            }
-            }>
 
-            { resp?.success ? <AlertSuccess message={resp?.message}  /> : "" }
-            { !resp?.success && resp?.message ? <AlertError message={resp?.message} description={resp?.errors} /> : "" }
 
-            <div className="grid grid-cols-2 gap-2">
+        return (
+            <div className="grid grid-cols-5 gap-8">
+                <div className="col-span-5 xl:col-span-3">
                     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
                             <h3 className="font-medium text-black dark:text-white">
@@ -548,6 +536,9 @@ export default  function NewProjectForm() {
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div className="col-span-5 xl:col-span-2">
                     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
                             <h3 className="font-medium text-black dark:text-white">
@@ -696,7 +687,7 @@ export default  function NewProjectForm() {
                                     </div>
                                 </div>
 
-                                <div className="flex justify-end gap-4.5">
+                                {/* <div className="flex justify-end gap-4.5">
                                     <button
                                     className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                                     type="submit"
@@ -704,11 +695,12 @@ export default  function NewProjectForm() {
                                     Cancel
                                     </button>
                                 <NewProjectSubmit/>
-                                </div>
+                                </div> */}
                         </div>
                     </div>
-            </div>
-        </form>
-        </>
-    )
-}
+                </div>
+
+
+    </div>
+      )
+    }
