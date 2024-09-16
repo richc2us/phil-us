@@ -2,14 +2,21 @@
 
 import { saveBlockAction } from "@/actions/blocks"
 import { useState } from "react"
+import { useBlocks, useBlocksDispatchContext } from "./BlocksContext"
 
-export default function ProjectDetailTabBlockNewBlock({id = "", refreshBlocks = () => {} }: {id: string, refreshBlocks : any}) {
+export default function ProjectDetailTabBlockNewBlock() {
 
-    const [block, setBlock] = useState({
+    const {projectID} = useBlocks()
+
+    const initialState = {
         name: "",
         description: "",
-        project_id : id
-    })
+        project_id : projectID
+    }
+
+    const [block, setBlock] = useState(initialState)
+
+    const dispatch = useBlocksDispatchContext()
 
     function updateState(prev:any) { return setBlock({ ...block, ...prev})}
 
@@ -17,8 +24,9 @@ export default function ProjectDetailTabBlockNewBlock({id = "", refreshBlocks = 
         <form
         className="col-span-4 xl:col-span-2"
         action={ async()  => {
-            await saveBlockAction(block)
-            await refreshBlocks()
+                await saveBlockAction(block)
+                await dispatch({type:'refresh'})
+                setBlock(initialState)
             }
         }>
         <div className="">

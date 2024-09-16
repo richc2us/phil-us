@@ -15,12 +15,13 @@ export const getBlock = async(id: string) => {
     revalidatePath('/')
     return await Block.findById(id)
 }
+
 export async function saveBlockAction(state: any) {
     await dbConnect()
     try {
         const document = await Block.create({...state})
         revalidatePath("/")
-        return {success: true, message: document.name + ' created', document : { id: document._id }}
+        return {success: true, message: document.name + ' created', document : { id: document._id.toString() }}
     } catch (e: any) {
         let errors = []
         for(let field in e.errors) {
@@ -31,6 +32,30 @@ export async function saveBlockAction(state: any) {
         }
         console.dir(errors);
         return {success: false, message: 'Error creating' , document: null, errors : errors}
+    }
+}
+
+export async function updateBlockAction(state: any) {
+    await dbConnect()
+    try {
+        const document = await Block.findById(state.id)
+        if(document) {
+            document.name = state.name
+            document.description = state.description
+            document.save()
+        }
+        revalidatePath("/")
+        return {success: true, message: document.name + ' updated', document : { id: document._id.toString() }}
+    } catch (e: any) {
+        let errors = []
+        for(let field in e.errors) {
+            errors.push(e.errors[field].message)
+        }
+        if(errors.length == 0) {
+            errors.push(e.toString())
+        }
+        console.dir(errors);
+        return {success: false, message: 'Error updating' , document: null, errors : errors}
     }
 }
 

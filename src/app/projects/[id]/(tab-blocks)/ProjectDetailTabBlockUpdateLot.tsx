@@ -1,4 +1,4 @@
-export default function ProjectDetailTabBlockUpdateLot({id = "", refreshBlocks = () => {} }: {id: string, refreshBlocks : any}) {
+export default function ProjectDetailTabBlockUpdateLot() {
     return (
         <form className="col-span-4 xl:col-span-2">
         <div className="">

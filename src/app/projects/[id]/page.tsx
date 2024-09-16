@@ -3,20 +3,18 @@ import ProjectDetailTabs from "./ProjectDetailTabs"
 import { getProject } from "@/actions/projects"
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 
-const ProjectDetailContent = async({id} : {id: string}) => {
-    const project = await getProject(id)
+const ProjectDetailContent = async({projectID} : {projectID: string}) => {
+    const project = await getProject(projectID)
     return (<div className="mx-auto">
             <Breadcrumb pageName={project.name} deepPages={["Project",project.name]} />
-            { id.length && <ProjectDetailTabs id={id} /> }
+            { projectID.length && <ProjectDetailTabs projectID={projectID} /> }
         </div>)
 }
+
 function ProjectDetail({ params }: { params: { id: string } }){
     return (
     <DefaultLayout>
-        {
-            params.id.length && <ProjectDetailContent id={params.id}/>
-        }
-        
+        { params.id.length && <ProjectDetailContent projectID={params.id}/>}
     </DefaultLayout>)
 }
 

@@ -16,7 +16,7 @@ const ChartThree = dynamic(() => import("@/components/Charts/ChartThree"), {
     ssr: false,
   });
 
-export default function ProjectDetailTabs({ id = ""} : {id: string}) {
+export default function ProjectDetailTabs({ projectID = ""} : {projectID: string}) {
 
 useEffect(() => {
     initTWE({ Tab, Collapse });
@@ -811,7 +811,7 @@ useEffect(() => {
     id="tabs-blocks"
     role="tabpanel"
     aria-labelledby="tabs-details-tab">
-        { id.length && <ProjectDetailTabBlock id={id} />}
+        { projectID.length && <ProjectDetailTabBlock projectID={projectID} />}
   </div>
   <div
     className="hidden opacity-0 transition-opacity duration-150 ease-linear data-[twe-tab-active]:block"
