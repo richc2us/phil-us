@@ -10,6 +10,7 @@ import CardDataStats from "@/components/CardDataStats";
 import dynamic from "next/dynamic";
 import ProjectDetailTabBlock from "./(tab-blocks)/ProjectDetailTabBlock";
 import ProjectDetailTabDetail from "./(tab-details)/ProjectDetailTabDetail";
+import VideoCarouselBasicExample from "./(tab-media)/VideoCarouselBasicExample";
 
 
 const ChartThree = dynamic(() => import("@/components/Charts/ChartThree"), {
@@ -195,17 +196,7 @@ useEffect(() => {
     id="tabs-media"
     role="tabpanel"
     aria-labelledby="tabs-media-tab">
-        <div className="grid grid-cols-5 gap-8">
-        <div className="col-span-5 xl:col-span-3">
-            <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
-                    <h3 className="font-medium text-black dark:text-white">
-                    Tab 4 content
-                    </h3>
-                </div>
-            </div>
-        </div>
-    </div>
+       <VideoCarouselBasicExample></VideoCarouselBasicExample>
   </div>
 </div>
 </>)
