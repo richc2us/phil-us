@@ -80,7 +80,7 @@ export default function ProjectDetailTabBlockUpdateBlock() {
                         className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
                         type="submit"
                         onClick={e => {
-                            dispatch({type:"setcurrentBlock", currentBlock: { ...currentBlock, ...block} })
+                            dispatch({type:"setCurrentBlock", currentBlock: { ...currentBlock, ...block} })
                         }}
                         >
                         Update

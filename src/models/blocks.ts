@@ -1,7 +1,6 @@
 import { DEFAULT_COMPANY } from "@/actions/const"
 import mongoose, { Schema, Document } from "mongoose"
 
-
 export interface Block extends Document {
     company_id: Schema.Types.ObjectId,
     project_id : Schema.Types.ObjectId,
@@ -25,7 +24,14 @@ const blockSchema = new Schema<Block>({
         type: Number,
     }
 }, {
-    timestamps : true
+    timestamps : true,
+    toJSON: { virtuals: true },
+})
+
+blockSchema.virtual('blockLots',{
+    ref:"Lot",
+    localField:"_id",
+    foreignField:"block_id"
 })
 
 export default mongoose.models?.Block || mongoose.model<Block>("Block", blockSchema )

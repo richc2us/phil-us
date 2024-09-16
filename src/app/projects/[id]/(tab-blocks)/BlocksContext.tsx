@@ -7,10 +7,16 @@ const initialBlock = {
     id: "",
     _id: ""
 }
-
+const initialLot = {
+    id:"",
+    _id:"",
+    block_id:"",
+    name:"",
+    area:0,
+}
 const initialBlocks = {
     currentBlock:initialBlock,
-    currentLot:{},
+    currentLot: initialLot,
     projectID: null,
     blocks:[]
 }
@@ -30,4 +36,4 @@ function useBlocksDispatchContext() {
     return dispatch
 }
 
-export {initialBlocks, BlocksContext, BlocksDispatchContext, useBlocks, useBlocksDispatchContext }
+export {initialBlocks, initialLot, BlocksContext, BlocksDispatchContext, useBlocks, useBlocksDispatchContext }

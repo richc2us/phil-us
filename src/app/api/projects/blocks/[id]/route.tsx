@@ -1,15 +1,15 @@
 import dbConnect from "@/lib/mongodb"
+import Lot from "@/models/lots"
 import Block from "@/models/blocks"
-import User from "@/models/users"
 import { NextRequest, NextResponse } from "next/server"
-import bcrypt from "bcryptjs"
 
 const getBlocks = async(
     req: NextRequest, { params } : {params: {id: string}}
 ) => {
     await dbConnect()
+    await Lot.findOne({})
     return NextResponse.json(
-        await Block.find({project_id : params.id})
+        await Block.find({project_id : params.id}).populate('blockLots')
     )
 }
 

@@ -1,11 +1,11 @@
 import { useState } from "react"
 import ProjectDetailTabBlockNewBlock from "./ProjectDetailTabBlockNewBlock"
-import ProjectDetailTabBlockNewLot from "./ProjectDetailTabBlockNewLot"
+import ProjectDetailTabBlockNewLot from "./(new-lot)/ProjectDetailTabBlockNewLot"
 import ProjectDetailTabBlockUpdateBlock from "./(update-block)/ProjectDetailTabBlockUpdateBlock"
 import ProjectDetailTabBlockUpdateLot from "./ProjectDetailTabBlockUpdateLot"
 import SvgPlus from "@/components/common/Loader/svg/plus"
 import Loader from "@/components/common/Loader"
-import { useBlocks, useBlocksDispatchContext } from "./BlocksContext"
+import { initialLot, useBlocks, useBlocksDispatchContext } from "./BlocksContext"
 
 const lots = [
     "105 sqm" ,
@@ -57,9 +57,7 @@ export default function ProjectDetailTabBlockWrapper({projectID = "", loading = 
                 { loading &&  <Loader/>}
                 {!loading && blocks.length > 0 && 
                     <div className="rounded-sm border border-stroke shadow-default dark:border-strokedark dark:bg-boxdark">
-
                         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
-                        
                             <div id="accordionBlock">
                                 {
                                     blocks.map((block:any, index:any) => {
@@ -104,7 +102,7 @@ export default function ProjectDetailTabBlockWrapper({projectID = "", loading = 
                                                             type="button"
                                                             onClick={() => {
                                                                     toggle('isEditingBlock')
-                                                                    dispatch({type:'setcurrentBlock', currentBlock : {...block, id: block._id} })
+                                                                    dispatch({type:'setCurrentBlock', currentBlock : {...block, id: block._id} })
                                                                 }
                                                             }
                                                             >
@@ -114,19 +112,31 @@ export default function ProjectDetailTabBlockWrapper({projectID = "", loading = 
                                                     <div className="grid grid-cols-3 gap-3">
             
                                                         {
-                                                            lots.map( (lot :any, key : any) => {
-                                                                return (<div onClick={() => toggle('isEditingLot', true)} className="cursor-pointer rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark" key={key}>
+                                                            block.blockLots && block.blockLots.map( (lot :any, key : any) => {
+                                                                return (<div 
+                                                                        onClick={(e) => {
+                                                                            toggle('isEditingLot', true)
+                                                                            dispatch({type:'setCurrentLot', currentLot : {...lot} })
+                                                                        }
+                                                                } className="cursor-pointer rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark" key={key}>
                                                                     <div className="mt-4 flex items-end justify-between">
                                                                         <div>
-                                                                            <h4 className="text-title-md font-bold text-black dark:text-white">{lot}</h4>
-                                                                            <span className="text-sm font-medium">Lot #{key+1}</span>
+                                                                            <h4 className="text-title-md font-bold text-black dark:text-white">{lot.area} sqm</h4>
+                                                                            <span className="text-sm font-medium">{lot.name}</span>
                                                                         </div>
                                                                     </div>
                                                                 </div>)
                                                                 }
                                                             )
                                                         }
-                                                        <div  onClick={(e) => toggle("isAddingLot") } className="cursor-pointer rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+                                                        <div
+                                                            onClick={
+                                                                (e) => {
+                                                                    toggle("isAddingLot")
+                                                                    dispatch({type:'setCurrentLot', currentLot : {...initialLot , id: "", block_id: block._id} })
+                                                                }
+                                                            }
+                                                            className="cursor-pointer rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
                                                             <div className="flex h-12.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
                                                                 <SvgPlus/>
                                                             </div>

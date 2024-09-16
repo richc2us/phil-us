@@ -14,9 +14,11 @@ const ProjectDetailTabBlockProvider = ({projectID=null, parentBlocks  , refreshB
         switch(action.type) {
             case "updateList":
                 return {...params, blocks : action.blocks}
-                
-            case "setcurrentBlock":
+
+            case "setCurrentBlock":
                 return {...params, currentBlock : action.currentBlock}
+            case "setCurrentLot":
+                return {...params, currentLot : action.currentLot}
             default:
                 refreshBlocks()
             break;

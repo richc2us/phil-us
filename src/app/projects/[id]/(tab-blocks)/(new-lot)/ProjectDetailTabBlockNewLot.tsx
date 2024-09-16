@@ -1,13 +1,16 @@
 import { useState } from "react";
-import { initialLot, useBlocks, useBlocksDispatchContext } from "./BlocksContext"
-import { updateLotAction } from "@/actions/blocks";
+import { useBlocks, useBlocksDispatchContext } from "../BlocksContext"
+import { saveLotAction } from "@/actions/blocks";
 
-export default function ProjectDetailTabBlockUpdateLot() {
+export default function ProjectDetailTabBlockNewLot() {
     const { blocks, currentLot, projectID } = useBlocks()
     const dispatch = useBlocksDispatchContext()
 
     const [selectedOption, setSelectedOption] = useState<string>(currentLot.block_id);
-    const [lot, setLot] = useState({...currentLot});
+    const [lot, setLot] = useState({
+        name:"",
+        area: ""
+    });
     const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
   
     const changeTextColor = () => {
@@ -19,21 +22,23 @@ export default function ProjectDetailTabBlockUpdateLot() {
         className="col-span-4 xl:col-span-2"
         action={
             async() => {
-                await updateLotAction({
+                await saveLotAction({
                     name: lot.name,
                     area: lot.area,
                     project_id:projectID,
-                    block_id: selectedOption,
-                    id: lot._id
+                    block_id: selectedOption
                 })
-                setLot(initialLot)
+                setLot({
+                    name:"",
+                    area: ""
+                })
                 dispatch({type:""})
             }
         }>
         <div className="">
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
-                <h4 className="text-title-md font-bold text-black dark:text-white mb-5.5">Update Lot</h4>
+                <h4 className="text-title-md font-bold text-black dark:text-white mb-5.5">New Lot</h4>
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/1">
                         <div>
@@ -163,7 +168,7 @@ export default function ProjectDetailTabBlockUpdateLot() {
                             autoComplete="off"
                             value={lot.area}
                             onChange={(e) => {
-                                setLot({...lot, area: parseInt( e.target.value )})
+                                setLot({...lot, area: e.target.value})
                             }}
                             required
                             />
@@ -175,7 +180,7 @@ export default function ProjectDetailTabBlockUpdateLot() {
                         className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
                         type="submit"
                         >
-                        Update Lot
+                        Save
                     </button>
                 </div>
                 </div>
