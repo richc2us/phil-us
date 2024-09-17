@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { initTWE, Collapse } from "tw-elements";
 import ProjectDetailTabBlockProvider from "./ProjectDetailTabBlockProvider"
 import ProjectDetailTabBlockWrapper from "./ProjectDetailTabBlockWrapper"
-import { useProject } from "../ProjectContext";
+import { useProject } from "../../../../context/ProjectContext";
 
 export default function ProjectDetailTabBlock() {
     const {projectID} = useProject()

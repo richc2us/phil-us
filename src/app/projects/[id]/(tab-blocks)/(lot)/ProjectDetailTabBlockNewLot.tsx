@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useBlocks, useBlocksDispatchContext } from "../BlocksContext"
+import { useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext"
 import { saveLotAction } from "@/actions/blocks";
 
 export default function ProjectDetailTabBlockNewLot() {

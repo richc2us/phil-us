@@ -3,6 +3,13 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Link from "next/link"
 import { BuyerDeleteButton } from "./BuyerDeleteButton"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title:
+      "List of Buyers",
+    description: "Buyers",
+  };
 
 const BuyerIndex = async() => {
 

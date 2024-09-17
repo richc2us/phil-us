@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useBlocks } from "../(tab-blocks)/BlocksContext";
-import { useProject } from "../ProjectContext";
+import { useBlocks } from "../../../../context/BlocksContext";
+import { useProject } from "../../../../context/ProjectContext";
 
 const initialState : any = {
     name: "",

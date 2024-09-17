@@ -11,7 +11,7 @@ import dynamic from "next/dynamic";
 import ProjectDetailTabBlock from "./(tab-blocks)/ProjectDetailTabBlock";
 import ProjectDetailTabDetail from "./(tab-details)/ProjectDetailTabDetail";
 import VideoCarouselBasicExample from "./(tab-media)/VideoCarouselBasicExample";
-import { ProjectContext, useProject } from "./ProjectContext";
+import { ProjectContext, useProject } from "../../../context/ProjectContext";
 
 
 const ChartThree = dynamic(() => import("@/components/Charts/ChartThree"), {

@@ -6,6 +6,14 @@ import { CompanyDeleteButton } from "./CompanyDeleteButton";
 import { BSON } from "mongodb"
 import { DEFAULT_COMPANY } from "@/actions/const";
 
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title:
+      "List of Companies",
+    description: "Companies",
+};
+
 const CompanyTable = async() => {
   const companies = await getCompanies()
     return (
@@ -83,7 +91,15 @@ const CompanyTable = async() => {
                </p>
             </div>
             <div className="col-span-1 flex items-center">
-            { new BSON.ObjectId(DEFAULT_COMPANY).equals(company._id) ? "" : <CompanyDeleteButton companyId={JSON.parse(JSON.stringify(company._id))}/>  }
+              { new BSON.ObjectId(DEFAULT_COMPANY).equals(company._id) ? "" : <CompanyDeleteButton companyId={JSON.parse(JSON.stringify(company._id))}/>  }
+              <Link key={company._id} href={"/companies/" + company._id} className="mx-2" >
+                <button
+                  className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
+                  type="submit"
+                  >
+                  View
+                  </button>
+                </Link>
             </div>
           </div>
         ))}

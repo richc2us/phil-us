@@ -13,7 +13,6 @@ export default function BuyerDetailTabs({ id } : {id: string}) {
     //     initTWE({ Tab, Collapse });
     // }, []);
     return(<>
-            <Breadcrumb pageName="Buyer Profile" deepPages={["Buyer"]} />
             {id}
     </>)
 }

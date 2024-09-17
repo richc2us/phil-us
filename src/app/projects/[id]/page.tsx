@@ -3,9 +3,16 @@ import ProjectDetailTabs from "./ProjectDetailTabs"
 import { getProject } from "@/actions/projects"
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 
-const ProjectDetailContent = async({projectID = ""} : { projectID : string}) => {
+import { Metadata } from "next"
 
-    const project = await getProject(projectID)
+export const metadata: Metadata = {
+    title:
+      "View Project",
+    description: "Project",
+};
+
+const ProjectDetailContent = async({projectID = ""} : { projectID : string}) => {
+const project = await getProject(projectID)
 
 return (<div className="mx-auto">
             <Breadcrumb pageName={project.name} deepPages={["Project",project.name]} />

@@ -6,7 +6,6 @@ export interface Company extends mongoose.Document {
     address: string,
     address2: string,
     description: string,
-    projects:[Schema.Types.ObjectId]
 }
 
 const companySchema = new mongoose.Schema<Company>({
@@ -28,10 +27,7 @@ const companySchema = new mongoose.Schema<Company>({
         type: String,
         required: [true, "Please provide a company description"],
         maxlength:[1000, "Description cannot be more than 1000 characters"]
-    },
-    projects: [{
-        type: Schema.Types.ObjectId , ref: "Project"
-    }]
+    }
 }, {
     timestamps : true
 })

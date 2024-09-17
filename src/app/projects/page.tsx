@@ -4,6 +4,16 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Link from "next/link";
 import { ProjectDeleteButton } from "./ProjectDeleteButton";
 
+
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title:
+      "List of Projects",
+    description: "Projects",
+};
+
+
 const ProjectTable = async() => {
   const projects = await getProjects()
     return (

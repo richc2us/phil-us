@@ -3,6 +3,14 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import NewCompanyForm from "./NewCompanyForm";
 
 
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title:
+      "New Companies",
+    description: "Companies",
+};
+
 const NewCompany = () => {
     return (
         <DefaultLayout>

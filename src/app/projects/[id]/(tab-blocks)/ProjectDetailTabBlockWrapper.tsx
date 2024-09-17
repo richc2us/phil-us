@@ -5,7 +5,7 @@ import ProjectDetailTabBlockUpdateBlock from "./(block)/ProjectDetailTabBlockUpd
 import ProjectDetailTabBlockUpdateLot from "./(lot)/ProjectDetailTabBlockUpdateLot"
 import SvgPlus from "@/components/common/Loader/svg/plus"
 import Loader from "@/components/common/Loader"
-import { initialLot, useBlocks, useBlocksDispatchContext } from "./BlocksContext"
+import { initialLot, useBlocks, useBlocksDispatchContext } from "../../../../context/BlocksContext"
 
 
 type defaultState = {

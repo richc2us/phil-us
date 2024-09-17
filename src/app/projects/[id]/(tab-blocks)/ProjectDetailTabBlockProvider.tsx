@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react"
-import { BlocksContext, BlocksDispatchContext,  initialBlocks } from "./BlocksContext";
-import { useProject } from "../ProjectContext";
+import { BlocksContext, BlocksDispatchContext,  initialBlocks } from "../../../../context/BlocksContext";
+import { useProject } from "../../../../context/ProjectContext";
 
 
 

@@ -3,6 +3,15 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import Loader from "@/components/common/Loader";
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 
+
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title:
+      "List of Users",
+    description: "Users",
+};
+
 const UsersTable = async() => {
     const users = await getUsers()
     return (

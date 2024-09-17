@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useBlocks, useBlocksDispatchContext } from "../BlocksContext";
+import { useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext";
 import DeleteBlockSubmit from "./DeleteBlockSubmit";
 import { updateBlockAction } from "@/actions/blocks";
 

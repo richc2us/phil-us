@@ -1,7 +1,7 @@
 "use client"
 import { deleteBlockAction } from "@/actions/blocks"
 import { useFormStatus } from "react-dom"
-import { useBlocks, useBlocksDispatchContext } from "../BlocksContext"
+import { useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext"
 import { useState } from "react"
 
 export default function DeleteBlockSubmit() {

@@ -2,7 +2,7 @@
 
 import { saveBlockAction } from "@/actions/blocks"
 import { useState } from "react"
-import { useBlocks, useBlocksDispatchContext } from "../BlocksContext"
+import { useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext"
 
 export default function ProjectDetailTabBlockNewBlock() {
 
