@@ -1,6 +1,5 @@
 "use client"
 import { saveProjectAction } from "@/actions/projects"
-import Image from "next/image"
 import NewProjectSubmit from "./NewProjectSubmit";
 import { useState } from "react";
 import { ServerActionResponse } from "@/types/server-action-reply";
@@ -9,6 +8,8 @@ import { AlertError, AlertSuccess } from "@/app/ui/alerts/alerts";
 import { initialStateProject } from "@/actions/state";
 import InputTextField from "@/components/FormElements/Fields/InputTextField";
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel";
+import SvgPlus from "@/components/common/svg/plus";
+import SvgDelete from "@/components/common/svg/svg-delete";
 
 
 export default  function NewProjectForm() {
