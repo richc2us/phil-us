@@ -32,6 +32,30 @@ export async function saveProjectAction(state: any) {
     }
 }
 
+export const updateProject = async(form:any) => {
+    await dbConnect()
+    try {
+        const document = await Project.findByIdAndUpdate( form.id , { ...form })
+        console.dir(document)
+        if(document) {
+            revalidatePath("/")
+            return {success: true, message:'updated', document : {} }
+        }
+        return {success: false, message: 'error updating', document : {} }
+    } catch (e: any) {
+        console.dir(e);
+        let errors = []
+        for(let field in e.errors) {
+            errors.push(e.errors[field].message)
+        }
+
+        if(errors.length == 0) {
+            errors.push(e.toString())
+        }
+        return {success: false, message: 'Error updating project', document: null, errors : errors}
+    }
+}
+
 export const deleteProjectAction = async(id: any) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {

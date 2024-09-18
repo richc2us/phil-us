@@ -50,7 +50,7 @@ export default function DetailsTab({company} : any) {
                             <input
                             type="text"
                             placeholder="Default Input"
-                            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             name="name"
                             value={form.name}
                             onChange={(e) => setForm({ ...form, [e.target.name]: e.target.value })}
@@ -66,7 +66,7 @@ export default function DetailsTab({company} : any) {
                             <input
                             type="text"
                             placeholder="Default Input"
-                            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             name="address"
                             value={form.address}
                             onChange={(e) => setForm({ ...form, [e.target.name]: e.target.value })}
@@ -82,7 +82,7 @@ export default function DetailsTab({company} : any) {
                             <input
                             type="text"
                             placeholder="Default Input"
-                            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             name="address2"
                             value={form.address2}
                             onChange={(e) => setForm({ ...form, [e.target.name] : e.target.value })}

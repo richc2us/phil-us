@@ -3,7 +3,7 @@ import ProjectDetailTabBlockNewBlock from "./(block)/ProjectDetailTabBlockNewBlo
 import ProjectDetailTabBlockNewLot from "./(lot)/ProjectDetailTabBlockNewLot"
 import ProjectDetailTabBlockUpdateBlock from "./(block)/ProjectDetailTabBlockUpdateBlock"
 import ProjectDetailTabBlockUpdateLot from "./(lot)/ProjectDetailTabBlockUpdateLot"
-import SvgPlus from "@/components/common/Loader/svg/plus"
+import SvgPlus from "@/components/common/svg/plus"
 import Loader from "@/components/common/Loader"
 import { initialLot, useBlocks, useBlocksDispatchContext } from "../../../../context/BlocksContext"
 

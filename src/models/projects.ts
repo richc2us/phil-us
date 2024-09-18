@@ -15,7 +15,7 @@ export interface Project extends Document {
     landmark?: string,
     latitude?: string,
     longitude?: string,
-    original_owners?: Schema.Types.ObjectId, // linked to users
+    original_owners?: [], // linked to users
     purchase_scheme?: string,
     title_information?: string,
     legal_documentation?: string,
@@ -89,7 +89,7 @@ const projectSchema = new Schema<Project>({
         // required: [true, "Please provide a longitude"],
         maxlength:[255, "Longitude cannot be more than 255 characters"]
     },
-    original_owners : [{ type : Schema.Types.ObjectId, ref: 'User'}],
+    original_owners : [{}],
     purchase_scheme: {
         type: String,
         // required: [true, "Please provide a purchase scheme"],

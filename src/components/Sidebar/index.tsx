@@ -7,11 +7,11 @@ import Image from "next/image";
 import SidebarItem from "@/components/Sidebar/SidebarItem";
 import ClickOutside from "@/components/ClickOutside";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import SvgCompany from "../common/Loader/svg/svg-company";
-import SvgProject from "../common/Loader/svg/svg-project";
-import SvgLand from "../common/Loader/svg/svg-land";
-import SvgReservation from "../common/Loader/svg/svg-reservation";
-import SvgExpense from "../common/Loader/svg/svg-expenses";
+import SvgCompany from "../common/svg/svg-company";
+import SvgProject from "../common/svg/svg-project";
+import SvgLand from "../common/svg/svg-land";
+import SvgReservation from "../common/svg/svg-reservation";
+import SvgExpense from "../common/svg/svg-expenses";
 
 interface SidebarProps {
   sidebarOpen: boolean;

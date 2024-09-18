@@ -6,39 +6,11 @@ import { useState } from "react";
 import { ServerActionResponse } from "@/types/server-action-reply";
 import { useRouter } from "next/navigation";
 import { AlertError, AlertSuccess } from "@/app/ui/alerts/alerts";
+import { initialStateProject } from "@/actions/state";
 
-
-const initialState : any = {
-    name: "",
-    address1: "",
-    address2: "",
-    region: "",
-    province: "",
-    city: "",
-    barangay: "",
-    zip: "",
-    landmark: "",
-    latitude: "",
-    longitude: "",
-    original_owners: null, // linked to users
-    original_owners_first_name: "",
-    purchase_scheme: "",
-    title_information: "",
-    legal_documentation: "",
-    restrictions: "",
-    terrane_information: "",
-    total_number_of_lots: 0,
-    date_bought: null,
-    date_begin_selling: null,
-    date_begin_grading: null,
-    investment_amount: 0,
-    geographic_layer_file: "",
-    bulk_discount_scheme: 0,
-    LTS: "",
-}
 
 export default  function NewProjectForm() {
-    const [form, setForm] = useState(initialState)
+    const [form, setForm] = useState(initialStateProject)
     const [resp, setResp] = useState<ServerActionResponse>()
     const updateForm = (value : any) =>  setForm( (prev: any) =>  { return {...prev, ...value} }  )
     const router = useRouter()

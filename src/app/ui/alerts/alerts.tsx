@@ -1,4 +1,4 @@
-import SvgSuccess from "@/components/common/Loader/svg/svg-success"
+import SvgSuccess from "@/components/common/svg/svg-success"
 
 
 export const AlertSuccess = ({message = "", description = ""}) => {
