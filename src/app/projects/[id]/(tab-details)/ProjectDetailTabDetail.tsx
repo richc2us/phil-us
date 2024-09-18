@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useProject } from "../../../../context/ProjectContext";
 import { updateProject } from "@/actions/projects";
@@ -627,7 +626,7 @@ export default function ProjectDetailTabDetail() {
                                                 type="button"
                                                 onClick={ (e) => { 
                                                     if(confirm('Are you sure to remove this owner?')) {
-                                                        updateForm( { original_owners : form.original_owners.filter( (own,i) => i !== index  ) })
+                                                        updateForm( { original_owners : form.original_owners.filter( (own:any,i:any) => i !== index  ) })
                                                     }
                                                 } }
                                                 >
