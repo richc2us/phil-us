@@ -4,6 +4,10 @@ import { updateProject } from "@/actions/projects";
 import { initialStateProject } from "@/actions/state";
 import SvgPlus from "@/components/common/svg/plus";
 import SvgDelete from "@/components/common/svg/svg-delete";
+import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton";
+import NormalButton from "@/components/FormElements/Buttons/NormalButton";
+import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel";
+import InputTextField from "@/components/FormElements/Fields/InputTextField";
 
 
 
@@ -31,10 +35,10 @@ export default function ProjectDetailTabDetail() {
             <form action={
                 async() => {
                     await updateProject(form)
+                    updateForm({edit:false})
                 }
             }>
-                <div className="grid grid-cols-5 gap-8">
-
+                 <div className="grid grid-cols-5 gap-8">
                         <div className="col-span-5 xl:col-span-3">
                             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                                 <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
@@ -44,35 +48,24 @@ export default function ProjectDetailTabDetail() {
                                         </div>
                                         <div className="float-end">
                                             {
-                                                !form.edit && <button
-                                                    className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                                                    type="button"
-                                                    onClick={ (e) => updateForm({edit: true})}
-                                                >
-                                                Edit
-                                                </button>
-                                            }
-                                            {
-                                                form.edit && <button
-                                                className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                                                type="submit"
-                                                >
-                                                Save
-                                                </button>
+                                                !form.edit && <NormalButton
+                                                                type="button"
+                                                                onClick={ (e) => updateForm({edit: true})}
+                                                                >Edit</NormalButton>
                                             }
 
+                                            {
+                                                form.edit && <PrimarySaveButton/>
+                                            }
                                         </div>
                                     </h3>
                                 </div>
                                 <div className="p-7">
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                                         <div className="w-full sm:w-1/3">
-                                            <label
-                                                className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                htmlFor="name"
-                                            >
+                                            <InputTextLabel id="name">
                                                 Project Name
-                                            </label>
+                                            </InputTextLabel>
                                             <div className="relative">
                                                 <span className="absolute left-4.5 top-4">
                                                 <svg
@@ -99,50 +92,40 @@ export default function ProjectDetailTabDetail() {
                                                     </g>
                                                 </svg>
                                                 </span>
-                                                <input
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 pl-11.5 pr-4.5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                type="text"
-                                                name="name"
-                                                id="name"
-                                                placeholder="Project Name"
-                                                autoComplete="off"
-                                                required
-                                                disabled={!form.edit}
-                                                value={form.name}
-                                                onChange={(e) => updateForm({ name: e.target.value })}
+
+                                            <InputTextField
+                                                    id="name"
+                                                    placeholder="Project Name"
+                                                    autoComplete="off"
+                                                    disabled={!form.edit}
+                                                    required
+                                                    value={form.name}
+                                                    onChange={(e) => updateForm({ name: e.target.value })}
+                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 pl-11.5 pr-4.5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 />
                                             </div>
                                         </div>
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="address1"
-                                                >
+                                                <InputTextLabel id="address1">
                                                     Address
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="address1"
+                                                </InputTextLabel>
+                                               
+                                                <InputTextField
                                                     id="address1"
                                                     placeholder="Address"
+                                                    value={form.address1}
                                                     autoComplete="off"
                                                     disabled={!form.edit}
-                                                    value={form.address1}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                                    onChange={ (e:any) => updateForm({ [e.target.name]: e.target.value })}
+                                                    required
                                                 />
                                         </div>
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="address2"
-                                                >
+                                                <InputTextLabel id="address2">
                                                     Alternative Address
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="address2"
+                                                </InputTextLabel>
+                                               
+                                                <InputTextField
                                                     id="address2"
                                                     placeholder="Alternative Address"
                                                     autoComplete="off"
@@ -155,16 +138,11 @@ export default function ProjectDetailTabDetail() {
 
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="region"
-                                                >
+                                                <InputTextLabel id="region">
                                                     Region
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="region"
+                                                </InputTextLabel>
+
+                                                <InputTextField
                                                     id="region"
                                                     placeholder="Region"
                                                     autoComplete="off"
@@ -175,16 +153,11 @@ export default function ProjectDetailTabDetail() {
                                         </div>
 
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="province"
-                                                >
-                                                    Province
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="province"
+                                                <InputTextLabel id="province">
+                                                    Address
+                                                </InputTextLabel>
+                                               
+                                                <InputTextField
                                                     id="province"
                                                     placeholder="Province"
                                                     autoComplete="off"
@@ -193,17 +166,13 @@ export default function ProjectDetailTabDetail() {
                                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                                 />
                                         </div>
+
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="city"
-                                                >
+                                                <InputTextLabel id="city">
                                                     City
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="city"
+                                                </InputTextLabel>
+                                            
+                                                <InputTextField
                                                     id="city"
                                                     placeholder="City"
                                                     autoComplete="off"
@@ -217,16 +186,11 @@ export default function ProjectDetailTabDetail() {
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="barangay"
-                                                >
+                                                <InputTextLabel id="barangay">
                                                     Barangay
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="barangay"
+                                                </InputTextLabel>
+                                            
+                                                <InputTextField
                                                     id="barangay"
                                                     placeholder="Barangay"
                                                     autoComplete="off"
@@ -235,17 +199,13 @@ export default function ProjectDetailTabDetail() {
                                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                                 />
                                         </div>
+
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="zip"
-                                                >
+                                                <InputTextLabel id="Zip">
                                                     Zip
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="zip"
+                                                </InputTextLabel>
+                                            
+                                                <InputTextField
                                                     id="zip"
                                                     placeholder="Zip"
                                                     autoComplete="off"
@@ -256,16 +216,11 @@ export default function ProjectDetailTabDetail() {
                                         </div>
 
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="landmark"
-                                                >
+                                                <InputTextLabel id="landmark">
                                                     Landmark
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="landmark"
+                                                </InputTextLabel>
+                                            
+                                                <InputTextField
                                                     id="landmark"
                                                     placeholder="Landmark"
                                                     autoComplete="off"
@@ -280,16 +235,11 @@ export default function ProjectDetailTabDetail() {
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
                                         <div className="w-full sm:w-1/2">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="latitude"
-                                                >
+                                                <InputTextLabel id="Latitude">
                                                     Latitude
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="latitude"
+                                                </InputTextLabel>
+                                            
+                                                <InputTextField
                                                     id="latitude"
                                                     placeholder="Latitude"
                                                     autoComplete="off"
@@ -298,17 +248,13 @@ export default function ProjectDetailTabDetail() {
                                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                                 />
                                         </div>
+
                                         <div className="w-full sm:w-1/2">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="longitude"
-                                                >
+                                                <InputTextLabel id="longitude">
                                                     Longitude
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="longitude"
+                                                </InputTextLabel>
+                                            
+                                                <InputTextField
                                                     id="longitude"
                                                     placeholder="Longitude"
                                                     autoComplete="off"
@@ -323,16 +269,11 @@ export default function ProjectDetailTabDetail() {
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
                                         <div className="w-full sm:w-1/2">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="purchase_scheme"
-                                                >
+                                                <InputTextLabel id="longitude">
                                                     Purchase Scheme
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="purchase_scheme"
+                                                </InputTextLabel>
+                                            
+                                                <InputTextField
                                                     id="purchase_scheme"
                                                     placeholder="Purchase Scheme"
                                                     autoComplete="off"
@@ -341,17 +282,13 @@ export default function ProjectDetailTabDetail() {
                                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                                 />
                                         </div>
+
                                         <div className="w-full sm:w-1/2">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="title_information"
-                                                >
+                                                <InputTextLabel id="title_information">
                                                     Title Information
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="title_information"
+                                                </InputTextLabel>
+
+                                                <InputTextField
                                                     id="title_information"
                                                     placeholder="Title Information"
                                                     autoComplete="off"
@@ -365,16 +302,11 @@ export default function ProjectDetailTabDetail() {
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="legal_documentation"
-                                                >
+                                                <InputTextLabel id="legal_documentation">
                                                     Legal Documentation
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="legal_documentation"
+                                                </InputTextLabel>
+
+                                                <InputTextField
                                                     id="legal_documentation"
                                                     placeholder="Legal Documentation"
                                                     autoComplete="off"
@@ -384,16 +316,11 @@ export default function ProjectDetailTabDetail() {
                                                 />
                                         </div>
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="restrictions"
-                                                >
+                                                <InputTextLabel id="restrictions">
                                                     Restrictions
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="restrictions"
+                                                </InputTextLabel>
+
+                                                <InputTextField
                                                     id="restrictions"
                                                     placeholder="Restrictions"
                                                     autoComplete="off"
@@ -404,16 +331,11 @@ export default function ProjectDetailTabDetail() {
                                         </div>
 
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="terrane_information"
-                                                >
+                                                <InputTextLabel id="terrane_information">
                                                     Terrane Information
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="terrane_information"
+                                                </InputTextLabel>
+
+                                                <InputTextField
                                                     id="terrane_information"
                                                     placeholder="Terrane Information"
                                                     autoComplete="off"
@@ -428,16 +350,12 @@ export default function ProjectDetailTabDetail() {
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="date_bought"
-                                                >
+                                                <InputTextLabel id="date_bought">
                                                     Date Bought
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                </InputTextLabel>
+
+                                                <InputTextField
                                                     type="date"
-                                                    name="date_bought"
                                                     id="date_bought"
                                                     placeholder="Date Bought"
                                                     autoComplete="off"
@@ -447,16 +365,12 @@ export default function ProjectDetailTabDetail() {
                                                 />
                                         </div>
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="date_begin_selling"
-                                                >
+                                                <InputTextLabel id="date_begin_selling">
                                                     Date Begin Selling
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                </InputTextLabel>
+
+                                                <InputTextField
                                                     type="date"
-                                                    name="date_begin_selling"
                                                     id="date_begin_selling"
                                                     placeholder="Date Begin Selling"
                                                     autoComplete="off"
@@ -467,16 +381,12 @@ export default function ProjectDetailTabDetail() {
                                         </div>
 
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="date_begin_grading"
-                                                >
+                                                <InputTextLabel id="date_begin_grading">
                                                     Date Begin Grading
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                </InputTextLabel>
+
+                                                <InputTextField
                                                     type="date"
-                                                    name="date_begin_grading"
                                                     id="date_begin_grading"
                                                     placeholder="Date Begin Grading"
                                                     autoComplete="off"
@@ -491,14 +401,11 @@ export default function ProjectDetailTabDetail() {
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="total_number_of_lots"
-                                                >
-                                                    Total Lots
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                <InputTextLabel id="total_number_of_lots">
+                                                    Expected Total Lots
+                                                </InputTextLabel>
+
+                                                <InputTextField
                                                     type="number"
                                                     name="total_number_of_lots"
                                                     id="total_number_of_lots"
@@ -511,14 +418,11 @@ export default function ProjectDetailTabDetail() {
                                                 />
                                         </div>
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="investment_amount"
-                                                >
+                                                <InputTextLabel id="investment_amount">
                                                     Investment Amount
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                </InputTextLabel>
+
+                                                <InputTextField
                                                     type="number"
                                                     name="investment_amount"
                                                     id="investment_amount"
@@ -532,16 +436,11 @@ export default function ProjectDetailTabDetail() {
                                         </div>
 
                                         <div className="w-full sm:w-1/3">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="geographic_layer_file"
-                                                >
+                                                <InputTextLabel id="geographic_layer_file">
                                                     Geographic Layer File
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="geographic_layer_file"
+                                                </InputTextLabel>
+
+                                                <InputTextField
                                                     id="geographic_layer_file"
                                                     placeholder="Geographic Layer File"
                                                     autoComplete="off"
@@ -556,16 +455,11 @@ export default function ProjectDetailTabDetail() {
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
                                         <div className="w-full sm:w-1/2">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="bulk_discount_scheme"
-                                                >
+                                                <InputTextLabel id="bulk_discount_scheme">
                                                     Bulk Discount Scheme
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="bulk_discount_scheme"
+                                                </InputTextLabel>
+
+                                                <InputTextField
                                                     id="bulk_discount_scheme"
                                                     placeholder="Bulk Discount Scheme"
                                                     autoComplete="off"
@@ -574,17 +468,13 @@ export default function ProjectDetailTabDetail() {
                                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                                 />
                                         </div>
+
                                         <div className="w-full sm:w-1/2">
-                                                <label
-                                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                    htmlFor="LTS"
-                                                >
+                                                <InputTextLabel id="LTS">
                                                     License to Sell
-                                                </label>
-                                                <input
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    type="text"
-                                                    name="LTS"
+                                                </InputTextLabel>
+
+                                                <InputTextField
                                                     id="LTS"
                                                     placeholder="License to Sell"
                                                     autoComplete="off"
@@ -611,17 +501,17 @@ export default function ProjectDetailTabDetail() {
                                         </div>
                                         <div className="float-end flex flex-cols-2 gap-2">
                                             {
-                                                form.edit && <button
-                                                className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                                                type="button"
-                                                onClick={ (e) => updateForm( { original_owners : [...form.original_owners , {} ]} ) }
+                                                <button
+                                                    className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
+                                                    type="button"
+                                                    onClick={ (e) => updateForm( { original_owners : [...form.original_owners , {} ]} ) }
                                                 >
                                                 <SvgPlus/>
                                                 </button>
                                             }
 
-{
-                                                form.edit && <button
+                                            {
+                                            index > 0 && <button
                                                 className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                                                 type="button"
                                                 onClick={ (e) => { 
@@ -640,60 +530,45 @@ export default function ProjectDetailTabDetail() {
                                 <div className="p-7">
                                     <div className="mb-4 flex items-center gap-3">
                                             <div className="w-full sm:w-1/2">
-                                                        <label
-                                                            className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                            htmlFor="first_name"
-                                                        >
+                                                        <InputTextLabel id="first_name">
                                                             First Name
-                                                        </label>
-                                                        <input
-                                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                            type="text"
-                                                            name="first_name"
+                                                        </InputTextLabel>
+
+                                                        <InputTextField
                                                             id="first_name"
                                                             placeholder="First Name"
                                                             autoComplete="off"
-                                                            disabled={ !form.edit }
+                                                            disabled={!form.edit}
                                                             value={ owner.first_name }
                                                             onChange={ (e) =>  updateOwners(e, index) }
                                                         />
                                                 </div>
 
                                                 <div className="w-full sm:w-1/2">
-                                                        <label
-                                                            className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                            htmlFor="middle_name"
-                                                        >
+                                                        <InputTextLabel id="middle_name">
                                                             Middle Name
-                                                        </label>
-                                                        <input
-                                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                            type="text"
-                                                            name="middle_name"
+                                                        </InputTextLabel>
+
+                                                        <InputTextField
                                                             id="middle_name"
                                                             placeholder="Middle Name"
                                                             autoComplete="off"
-                                                            disabled={ !form.edit }
+                                                            disabled={!form.edit}
                                                             value={ owner.middle_name }
                                                             onChange={ (e) =>  updateOwners(e, index) }
                                                         />
                                                 </div>
 
                                                 <div className="w-full sm:w-1/2">
-                                                        <label
-                                                            className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                            htmlFor="last_name"
-                                                        >
+                                                        <InputTextLabel id="middle_name">
                                                             Last Name
-                                                        </label>
-                                                        <input
-                                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                            type="text"
-                                                            name="last_name"
+                                                        </InputTextLabel>
+
+                                                        <InputTextField
                                                             id="last_name"
                                                             placeholder="Last Name"
                                                             autoComplete="off"
-                                                            disabled={ !form.edit }
+                                                            disabled={!form.edit}
                                                             value={ owner.last_name }
                                                             onChange={ (e) =>  updateOwners(e, index) }
                                                         />
@@ -703,39 +578,30 @@ export default function ProjectDetailTabDetail() {
 
                                         <div className="mb-4 flex items-center gap-3">
                                                 <div className="w-full sm:w-1/2">
-                                                        <label
-                                                            className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                            htmlFor="email_address"
-                                                        >
+                                                        <InputTextLabel id="email_address">
                                                             Email
-                                                        </label>
-                                                        <input
-                                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                        </InputTextLabel>
+
+                                                        <InputTextField
                                                             type="email"
-                                                            name="email_address"
                                                             id="email_address"
                                                             placeholder="Email Address"
                                                             autoComplete="off"
-                                                            disabled={ !form.edit }
+                                                            disabled={!form.edit}
                                                             value={ owner.email_address }
                                                             onChange={ (e) =>  updateOwners(e, index) }
                                                         />
                                                 </div>
                                                 <div className="w-full sm:w-1/2">
-                                                        <label
-                                                            className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                                            htmlFor="email_address"
-                                                        >
+                                                        <InputTextLabel id="email_address">
                                                             Phone / Remarks
-                                                        </label>
-                                                        <input
-                                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                            type="text"
-                                                            name="phone_remark"
+                                                        </InputTextLabel>
+
+                                                        <InputTextField
                                                             id="phone_remark"
                                                             placeholder="Phone / Remarks"
                                                             autoComplete="off"
-                                                            disabled={ !form.edit }
+                                                            disabled={!form.edit}
                                                             value={ owner.phone_remark }
                                                             onChange={ (e) =>  updateOwners(e, index) }
                                                         />
@@ -743,13 +609,9 @@ export default function ProjectDetailTabDetail() {
                                         </div>
                                 </div>
                             </div>)
-
                                 })
                             }
-                            
-                            
                         </div>
-                        
                 </div>
             </form>
 

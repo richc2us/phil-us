@@ -1,5 +1,7 @@
 "use client"
 import { updateCompany } from "@/actions/companies"
+import NormalButton from "@/components/FormElements/Buttons/NormalButton"
+import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton"
 import { usePageID } from "@/context/IDContext"
 import { useState } from "react"
 
@@ -22,23 +24,11 @@ export default function DetailsTab({company} : any) {
                         </div>
                         <div className="float-end">
                             {
-                                !form.edit && <button
-                                    className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                                    type="button"
-                                    onClick={ (e) => setForm({...form, edit: true})}
-                                >
-                                Edit
-                                </button>
+                                !form.edit && <NormalButton onClick={ (e) => setForm({...form, edit: true})} > Edit </NormalButton>
                             }
                             {
-                                form.edit && <button
-                                className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                                type="submit"
-                                >
-                                Save
-                                </button>
+                                form.edit && <PrimarySaveButton/>
                             }
-
                         </div>
                     </h3>
                     </div>
