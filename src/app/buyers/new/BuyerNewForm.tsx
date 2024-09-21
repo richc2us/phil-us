@@ -4,37 +4,42 @@ import Link from "next/link"
 import { useState } from "react"
 import BuyerNewSubmit from "./BuyerNewSubmit"
 import { ServerActionResponse } from "@/types/server-action-reply"
+import { initialStateBuyer } from "@/actions/state"
+import InputTextField from "@/components/FormElements/Fields/InputTextField"
+import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel"
 
 export default function BuyerNewForm() {
 
     const updateForm = (value : any) =>  setForm( (prev: any) =>  { return {...prev, ...value} }  )
 
-    const [form, setForm] = useState({
-        first_name: "",
-        middle_name: "",
-        last_name: "",
-        tin: "",
-        tin_issuance: "",
-        address: "",
-        email: "",
-        phone: "",
-        spouse: {
-            first_name: "",
-            middle_name: "",
-            last_name:"",
-            address:"",
-            email: "",
-            phone: "",
-            tin: "",
-            tin_issuance: "",
-        },
-        create_spouse_user: false,
-        buyer_id: null,
-        spouse_id: null
-    })
+    const [form, setForm] = useState(initialStateBuyer)
+    const [emailBuyerExists, setEmailBuyerExists] = useState(false)
+    const [emailSpouseExists, setEmailSpouseExists] = useState(false)
     const [emailCheckBuyer, setEmailCheckBuyer] = useState<ServerActionResponse>()
+    const [emailCheckSpouse, setEmailCheckSpouse] = useState<ServerActionResponse>()
     const [resp, setResp] = useState<ServerActionResponse>()
 
+
+    async function checkSpouseEmail(email:any) {
+        const checker = await checkEmailExists(email)
+        setEmailCheckSpouse(checker)
+        setEmailSpouseExists(false)
+        if(checker.success) {
+            setEmailSpouseExists(true)
+        } else {
+            setEmailSpouseExists(false)
+        }
+    }
+
+    async function checkEmailBuyer(email:any) {
+        const checker = await checkEmailExists(email)
+        setEmailCheckBuyer(checker)
+        if(checker.success) {
+            setEmailBuyerExists(true)
+        } else {
+            setEmailBuyerExists(false)
+        }
+    }
 
 
     return (<>
@@ -48,12 +53,9 @@ export default function BuyerNewForm() {
             <div className="p-7">
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/3">
-                        <label
-                            className="mb-3 block text-sm font-medium text-black dark:text-white"
-                            htmlFor="first_name"
-                        >
-                            Buyer First Name
-                        </label>
+                        <InputTextLabel htmlFor="first_name">
+                        Buyer First Name
+                        </InputTextLabel>
                         <div className="relative">
                             <span className="absolute left-4.5 top-4">
                             <svg
@@ -80,153 +82,191 @@ export default function BuyerNewForm() {
                                 </g>
                             </svg>
                             </span>
-                            <input
-                            className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                            type="text"
-                            name="first_name"
-                            autoComplete="off"
-                            id="first_name"
-                            required
-                            value={form.first_name}
-                            onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                            />
+                                <InputTextField
+                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 pl-11.5 pr-4.5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                    autoComplete="off"
+                                    id="first_name"
+                                    placeholder="First Name"
+                                    required
+                                    value={form.first_name}
+                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                />
                         </div>
                     </div>
                     <div className="w-full sm:w-1/3">
-                            <label
-                                className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                htmlFor="middle_name"
-                            >
+                            <InputTextLabel htmlFor="middle_name">
                                 Middle Name
-                            </label>
-                            <input
-                                className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                type="text"
-                                name="middle_name"
-                                autoComplete="off"
+                            </InputTextLabel>
+                            <InputTextField
                                 id="middle_name"
+                                autoComplete="off"
+                                placeholder="Middle Name"
                                 value={form.middle_name}
                                 onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                             />
                     </div>
                     <div className="w-full sm:w-1/3">
-                            <label
-                                className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                htmlFor="last_name"
-                            >
-                                Last Name
-                            </label>
-                            <input
-                                className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                type="text"
-                                name="last_name"
-                                id="last_name"
-                                autoComplete="off"
-                                required
-                                value={form.last_name}
-                                onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                            />
+                                <InputTextLabel htmlFor="last_name">
+                                    Last Name
+                                </InputTextLabel>
+                                <InputTextField
+                                    id="last_name"
+                                    placeholder="Last Name"
+                                    autoComplete="off"
+                                    required
+                                    value={form.last_name}
+                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                />
                     </div>
                 </div>
 
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/3">
-                                <label
-                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                    htmlFor="email"
-                                >
+                                <InputTextLabel htmlFor="email">
                                     Email
-                                </label>
-                                <input
-                                    className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                                </InputTextLabel>
+                                <InputTextField
                                     type="email"
-                                    name="email"
                                     id="email"
                                     required
                                     autoComplete="off"
+                                    placeholder="Buyer Email"
                                     value={form.email}
                                     onChange={ async(e) => {
                                             updateForm({ [e.target.name]: e.target.value });
-                                            setEmailCheckBuyer(await checkEmailExists(e.target.value))
+                                            checkEmailBuyer(e.target.value)
                                         }
                                     }
                                 />
-                                { form.email.length > 0 && emailCheckBuyer?.success && emailCheckBuyer?.message && <p className="text-[#CD5D5D] text-sm">{emailCheckBuyer?.message}</p> }
+                                { form?.email?.length > 2 && emailCheckBuyer?.message && <p className={(!emailCheckBuyer?.success ? "text-success " : "text-[#CD5D5D] ") +"text-sm mt-1.5 px-2"}>{emailCheckBuyer?.message}</p> }
+                                { 
+                                   emailBuyerExists && <ol>
+                                        {emailCheckBuyer?.document && emailCheckBuyer?.document.map( (user:any, key:any) => {
+                                            return <li key={key} className="text-sm py-2"> {key + 1}. { user.first_name } { user.middle_name } { user.last_name } { user.email } </li>
+                                        })}
+                                    </ol>
+                                }
                     </div>
                     <div className="w-full sm:w-1/3">
-                                <label
-                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                    htmlFor="phone"
-                                >
+                                <InputTextLabel htmlFor="phone">
                                     Contact #
-                                </label>
-                                <input
-                                    className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                    type="text"
-                                    name="phone"
-                                    id="phone"
-                                    autoComplete="off"
-                                    value={form.phone}
-                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                </InputTextLabel>
+                                <InputTextField
+                                   id="phone"
+                                   value={form.phone}
+                                   autoComplete="off"
+                                   placeholder="Any Contact #"
+                                   onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                 />
                     </div>
 
-                    <div className="w-full sm:w-1/3">
+                    <div className="w-full sm:w-1/3 flex gap-2">
+                            <div className="w-full sm:w-1/2">
+                                <InputTextLabel htmlFor="tin">
+                                    TIN
+                                </InputTextLabel>
+                                <InputTextField
+                                   id="tin"
+                                   value={form.tin}
+                                   autoComplete="off"
+                                    placeholder="Tax Identification Number"
+                                   onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                />
+                            </div>
+                            <div className="w-full sm:w-1/2">
+                                <InputTextLabel htmlFor="tin_issuance">
+                                    Place of issuance of TIN
+                                </InputTextLabel>
+                                <InputTextField
+                                   id="tin_issuance"
+                                   value={form.tin_issuance}
+                                   autoComplete="off"
+                                   placeholder="Place of issuance of TIN"
+                                   onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                />
+                            </div>
                     </div>
                 </div>
 
 
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/3">
-                                <label
-                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                    htmlFor="Address"
-                                >
+                                <InputTextLabel htmlFor="address">
                                     Address
-                                </label>
-                                <input
-                                    className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                    type="text"
-                                    name="address"
+                                </InputTextLabel>
+                                <InputTextField
                                     id="address"
                                     value={form.address}
+                                    autoComplete="off"
+                                    placeholder="Address"
                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                 />
                     </div>
                     <div className="w-full sm:w-1/3">
-                                <label
-                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                    htmlFor="Address"
-                                >
-                                    TIN
-                                </label>
-                                <input
-                                    className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                    type="text"
-                                    name="tin"
-                                    id="tin"
-                                    value={form.tin}
+                                <InputTextLabel htmlFor="region">
+                                    Region
+                                </InputTextLabel>
+                                <InputTextField
+                                    id="region"
+                                    value={form.region}
+                                    autoComplete="off"
+                                    placeholder="Region"
                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                 />
                     </div>
 
                     <div className="w-full sm:w-1/3">
-                                <label
-                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                    htmlFor="Address"
-                                >
-                                    Place of issuance of TIN
-                                </label>
-                                <input
-                                    className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                    type="text"
-                                    name="tin_issuance"
-                                    id="tin_issuance"
-                                    value={form.tin_issuance}
+                                <InputTextLabel htmlFor="province">
+                                    Province
+                                </InputTextLabel>
+                                <InputTextField
+                                    id="province"
+                                    value={form.province}
+                                    autoComplete="off"
+                                    placeholder="Province"
+                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                />
+                    </div>
+                </div>
+                <div className="mb-5 5 flex flex-col gap-5.5 sm:flex-row">
+                    <div className="w-full sm:w-1/3">
+                                <InputTextLabel htmlFor="city">
+                                    City
+                                </InputTextLabel>
+                                <InputTextField
+                                    id="city"
+                                    value={form.city}
+                                    autoComplete="off"
+                                    placeholder="City"
                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                 />
                     </div>
 
+                    <div className="w-full sm:w-1/3">
+                                <InputTextLabel htmlFor="barangay">
+                                    Barangay
+                                </InputTextLabel>
+                                <InputTextField
+                                    id="barangay"
+                                    value={form.barangay}
+                                    autoComplete="off"
+                                    placeholder="Barangay"
+                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                />
+                    </div>
+
+                    <div className="w-full sm:w-1/3">
+                                <InputTextLabel htmlFor="zip">
+                                    Zip
+                                </InputTextLabel>
+                                <InputTextField
+                                    id="zip"
+                                    value={form.zip}
+                                    autoComplete="off"
+                                    placeholder="Zip"
+                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                />
+                    </div>
                 </div>
 
                 <div className="border-b border-stroke py-4 dark:border-strokedark">
@@ -242,8 +282,12 @@ export default function BuyerNewForm() {
                                 id="create_spouse_user"
                                 name="create_spouse_user"
                                 className="sr-only"
-                                disabled={form.spouse.email.length == 0 || form.spouse.first_name.length == 0}
-                                onChange={(e) => { updateForm({ [e.target.name] : !form.create_spouse_user}) } }
+                                disabled={form.spouse.email.length == 0}
+                                onChange={ async(e) => {
+                                    updateForm({ [e.target.name] : !form.create_spouse_user})
+                                    await checkSpouseEmail(form.spouse.email)
+                                }
+                            }
                             />
                             <div
                                 className={`mr-4 flex h-5 w-5 items-center justify-center rounded border ${
@@ -274,12 +318,10 @@ export default function BuyerNewForm() {
                 </div>
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row mt-4">
                     <div className="w-full sm:w-1/3">
-                        <label
-                            className="mb-3 block text-sm font-medium text-black dark:text-white"
-                            htmlFor="spouse_first_name"
-                        >
+
+                        <InputTextLabel htmlFor="spouse_first_name">
                             Spouse First Name
-                        </label>
+                        </InputTextLabel>
                         <div className="relative">
                             <span className="absolute left-4.5 top-4">
                             <svg
@@ -306,48 +348,37 @@ export default function BuyerNewForm() {
                                 </g>
                             </svg>
                             </span>
-                            <input
-                            className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                            type="text"
-                            name="spouse_first_name"
-                            id="spouse_first_name"
-                            required={ form.spouse.middle_name.length > 0 || form.spouse.last_name.length > 0}
-                            autoComplete="off"
-                            value={form.spouse.first_name}
-                            onChange={(e) => updateForm({ spouse : { ...form.spouse, first_name: e.target.value }})}
+                            <InputTextField
+                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 pl-11.5 pr-4.5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                id="spouse_first_name"
+                                required={ form.spouse.middle_name.length > 0 || form.spouse.last_name.length > 0}
+                                autoComplete="off"
+                                placeholder="First Name"
+                                value={form.spouse.first_name}
+                                onChange={(e) => updateForm({ spouse : { ...form.spouse, first_name: e.target.value }})}
                             />
                         </div>
                     </div>
                     <div className="w-full sm:w-1/3">
-                            <label
-                                className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                htmlFor="spouse_middle_name"
-                            >
-                                Spouse Middle Name
-                            </label>
-                            <input
-                                className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                type="text"
-                                name="spouse_middle_name"
-                                id="spouse_middle_name"
-                                autoComplete="off"
-                                value={form.spouse.middle_name}
-                                onChange={(e) => updateForm({ spouse : { ...form.spouse, middle_name: e.target.value }})}
-                            />
+                        <InputTextLabel htmlFor="spouse_middle_name">
+                            Spouse Middle Name
+                        </InputTextLabel>
+                        <InputTextField
+                            id="spouse_middle_name"
+                            autoComplete="off"
+                            placeholder="Middle Name"
+                            value={form.spouse.middle_name}
+                            onChange={(e) => updateForm({ spouse : { ...form.spouse, middle_name: e.target.value }})}
+                        />
                     </div>
                     <div className="w-full sm:w-1/3">
-                            <label
-                                className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                htmlFor="spouse_last_name"
-                            >
+                            <InputTextLabel htmlFor="spouse_last_name">
                                 Spouse Last Name
-                            </label>
-                            <input
-                                className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                type="text"
-                                name="spouse_last_name"
+                            </InputTextLabel>
+                            <InputTextField
                                 id="spouse_last_name"
                                 autoComplete="off"
+                                placeholder="Last Name"
                                 required={ form.spouse.middle_name.length > 0 || form.spouse.first_name.length > 0}
                                 value={form.spouse.last_name}
                                 onChange={(e) => updateForm({ spouse : { ...form.spouse, last_name: e.target.value }})}
@@ -357,111 +388,168 @@ export default function BuyerNewForm() {
 
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/3">
-                                <label
-                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                    htmlFor="spouse_email"
-                                >
+                                <InputTextLabel htmlFor="spouse_email">
                                     Spouse Email
-                                </label>
-                                <input
-                                    className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                                </InputTextLabel>
+                                <InputTextField
                                     type="email"
-                                    name="spouse_email"
                                     id="spouse_email"
                                     autoComplete="off"
+                                    placeholder="Spouse Email"
                                     required={form.create_spouse_user}
                                     value={form.spouse.email}
-                                    onChange={(e) => updateForm({ spouse : { ...form.spouse, email: e.target.value }})}
+                                    onChange={
+                                        async(e) => {
+                                                updateForm({ spouse : { ...form.spouse, email: e.target.value }})
+                                                if(form.create_spouse_user) {
+                                                    checkSpouseEmail(e.target.value)
+                                                }
+                                            }
+                                        }
                                 />
+
+                                 { form?.spouse.email?.length > 2 && emailCheckSpouse?.message && <p className={(!emailCheckSpouse?.success ? "text-success " : "text-[#CD5D5D] ") +"text-sm mt-1.5 px-2"}>{emailCheckSpouse?.message}</p> }
+                                { 
+                                   emailSpouseExists && <ol>
+                                        {emailCheckSpouse?.document && emailCheckSpouse?.document.map( (user:any, key:any) => {
+                                            return <li key={key} className="text-sm py-2"> {key + 1}. { user.first_name } { user.middle_name } { user.last_name } { user.email } </li>
+                                        })}
+                                    </ol>
+                                }
                     </div>
                     <div className="w-full sm:w-1/3">
-                                <label
-                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                    htmlFor="spouse_phone"
-                                >
+                                <InputTextLabel htmlFor="spouse_phone">
                                     Spouse Contact #
-                                </label>
-                                <input
-                                    className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                    type="text"
-                                    name="spouse_phone"
+                                </InputTextLabel>
+                                <InputTextField
                                     id="spouse_phone"
                                     autoComplete="off"
+                                    placeholder="Spouse Contact"
                                     value={form.spouse.phone}
                                     onChange={(e) => updateForm({ spouse : { ...form.spouse, phone: e.target.value }})}
                                 />
                     </div>
 
-                    <div className="w-full sm:w-1/3">
+                    <div className="w-full sm:w-1/3 gap-2 flex">
+                        <div className="w-full sm:w-1/2">
+                                    <InputTextLabel htmlFor="spouse_tin">
+                                        Spouse TIN
+                                    </InputTextLabel>
+                                    <InputTextField
+                                        id="spouse_tin"
+                                        autoComplete="off"
+                                        placeholder="Spouse Tin"
+                                        value={form.spouse.tin}
+                                        onChange={(e) => updateForm({ spouse : { ...form.spouse, tin: e.target.value }})}
+                                    />
+                        </div>
+
+                        <div className="w-full sm:w-1/2">
+                                    <InputTextLabel htmlFor="spouse_tin_issuance">
+                                        Spouse  Place of issuance of TIN
+                                    </InputTextLabel>
+                                    <InputTextField
+                                        id="spouse_tin_issuance"
+                                        autoComplete="off"
+                                        placeholder="Spouse Tin Issuance"
+                                        value={form.spouse.tin_issuance}
+                                        onChange={(e) => updateForm({ spouse : { ...form.spouse, tin_issuance: e.target.value }})}
+                                    />
+                        </div>
                     </div>
                 </div>
+
 
 
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/3">
-                                <label
-                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                    htmlFor="spouse_address"
-                                >
+                                <InputTextLabel htmlFor="spouse_address">
                                     Spouse Address
-                                </label>
-                                <input
-                                    className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                    type="text"
-                                    name="spouse_address"
+                                </InputTextLabel>
+                                <InputTextField
                                     id="spouse_address"
-                                    autoComplete="off"
                                     value={form.spouse.address}
+                                    autoComplete="off"
+                                    placeholder="Address"
                                     onChange={(e) => updateForm({ spouse : { ...form.spouse, address: e.target.value }})}
                                 />
                     </div>
                     <div className="w-full sm:w-1/3">
-                                <label
-                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                    htmlFor="spouse_tin"
-                                >
-                                    Spouse TIN
-                                </label>
-                                <input
-                                    className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                    type="text"
-                                    name="spouse_tin"
-                                    id="spouse_tin"
+                                <InputTextLabel htmlFor="spouse_region">
+                                    Region
+                                </InputTextLabel>
+                                <InputTextField
+                                    id="spouse_region"
+                                    value={form.spouse.region}
                                     autoComplete="off"
-                                    value={form.spouse.tin}
-                                    onChange={(e) => updateForm({ spouse : { ...form.spouse, tin: e.target.value }})}
+                                    placeholder="Region"
+                                    onChange={(e) => updateForm({ spouse : { ...form.spouse, region: e.target.value }})}
                                 />
                     </div>
 
                     <div className="w-full sm:w-1/3">
-                                <label
-                                    className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                    htmlFor="spouse_tin_issuance"
-                                >
-                                    Spouse  Place of issuance of TIN
-                                </label>
-                                <input
-                                    className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                    type="text"
-                                    name="spouse_tin_issuance"
-                                    id="spouse_tin_issuance"
+                                <InputTextLabel htmlFor="spouse_province">
+                                    Province
+                                </InputTextLabel>
+                                <InputTextField
+                                    id="spouse_province"
+                                    value={form.spouse.province}
                                     autoComplete="off"
-                                    value={form.spouse.tin_issuance}
-                                    onChange={(e) => updateForm({ spouse : { ...form.spouse, tin_issuance: e.target.value }})}
+                                    placeholder="Province"
+                                    onChange={(e) => updateForm({ spouse : { ...form.spouse, province: e.target.value }})}
+                                />
+                    </div>
+                </div>
+                <div className="mb-5 5 flex flex-col gap-5.5 sm:flex-row">
+                    <div className="w-full sm:w-1/3">
+                                <InputTextLabel htmlFor="spouse_city">
+                                    City
+                                </InputTextLabel>
+                                <InputTextField
+                                    id="spouse_city"
+                                    value={form.spouse.city}
+                                    autoComplete="off"
+                                    placeholder="City"
+                                    onChange={(e) => updateForm({ spouse : { ...form.spouse, city: e.target.value }})}
                                 />
                     </div>
 
+                    <div className="w-full sm:w-1/3">
+                                <InputTextLabel htmlFor="spouse_barangay">
+                                    Barangay
+                                </InputTextLabel>
+                                <InputTextField
+                                    id="spouse_barangay"
+                                    value={form.spouse.barangay}
+                                    autoComplete="off"
+                                    placeholder="Barangay"
+                                    onChange={(e) => updateForm({ spouse : { ...form.spouse, barangay: e.target.value }})}
+                                />
+                    </div>
+
+                    <div className="w-full sm:w-1/3">
+                                <InputTextLabel htmlFor="spouse_zip">
+                                    Zip
+                                </InputTextLabel>
+                                <InputTextField
+                                    id="spouse_zip"
+                                    value={form.spouse.zip}
+                                    autoComplete="off"
+                                    placeholder="Zip"
+                                    onChange={(e) => updateForm({ spouse : { ...form.spouse, zip: e.target.value }})}
+                                />
+                    </div>
                 </div>
                 <div className="flex justify-end gap-4.5">
                     <Link href="/buyers" className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
                         <button
-                            className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
+                            className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                             type="submit"
                             >
                             Cancel
                         </button>
                     </Link>
-                    <BuyerNewSubmit state={resp}/>
+                    <BuyerNewSubmit state={ {...resp, disabled: emailBuyerExists || emailSpouseExists} }/>
                 </div>
             </div>
         </form>

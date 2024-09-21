@@ -22,7 +22,7 @@ const BuyerIndex = async() => {
                             <div className="flex justify-end gap-4.5">
                                 <Link href="/buyers/new" className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
                                 <button
-                                    className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
+                                    className="flex justify-center rounded bg-primary px-6 py-1 font-medium text-gray hover:bg-opacity-90"
                                     type="submit"
                                     >
                                     New Buyer

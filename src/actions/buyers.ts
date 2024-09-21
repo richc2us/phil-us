@@ -17,8 +17,8 @@ export const getBuyer = async(id: string) => {
 }
 
 export const checkEmailExists = async(email:string) : Promise<ServerActionResponse> => {
-    const user  = await User.find({email: email})
-    return {success: user.length > 0 , message: user.length > 0 ? 'Email already in used' : "Email is unused"}
+    const user  = await User.findOne({email: email})
+    return {success: user && user.email.length > 0 , message: user && user.email.length > 0 ? 'Email already in used' : "Email is unused", document: [  user && user.email.length > 0 ?  { first_name: user.first_name, middle_name: user.middle_name, last_name : user.last_name ,email: user.email } : {} ] }
 }
 
 export async function saveBuyerAction(state: any) {

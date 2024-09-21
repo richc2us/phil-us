@@ -43,3 +43,37 @@ export const  initialStateRealty = {
     commission_percent: 10,
     contact_number: ""
 }
+
+export const initialStateBuyer = {
+    first_name: "",
+    middle_name: "",
+    last_name: "",
+    tin: "",
+    tin_issuance: "",
+    address: "",
+    region: "",
+    province: "",
+    city: "",
+    barangay: "",
+    zip: "",
+    email: "",
+    phone: "",
+    spouse: {
+        first_name: "",
+        middle_name: "",
+        last_name:"",
+        address:"",
+        region: "",
+        province: "",
+        city: "",
+        barangay: "",
+        zip: "",
+        email: "",
+        phone: "",
+        tin: "",
+        tin_issuance: "",
+    },
+    create_spouse_user: false,
+    buyer_id: null,
+    spouse_id: null
+}

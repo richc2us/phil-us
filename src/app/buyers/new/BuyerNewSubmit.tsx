@@ -13,8 +13,8 @@ export default function BuyerNewSubmit({state = {}} : any) {
     }, [pending])
     return (
         <button
-        disabled={pending}
-        className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
+        disabled={pending || state.disabled}
+        className="flex justify-center rounded bg-primary px-6 py-1 font-medium text-gray hover:bg-opacity-90"
         type="submit"
         >
         {pending ? 'Sending' : 'Save'}
