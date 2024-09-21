@@ -5,6 +5,10 @@ import { AlertError, AlertSuccess } from "@/app/ui/alerts/alerts";
 import { ServerActionResponse } from "@/types/server-action-reply";
 import { saveRealtyAction } from "@/actions/realties";
 import Link from "next/link";
+import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton";
+import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel";
+import InputTextField from "@/components/FormElements/Fields/InputTextField";
+import NormalButton from "@/components/FormElements/Buttons/NormalButton";
 
  const defaultState = {
     name: "",
@@ -45,8 +49,6 @@ const NewRealtyForm = () => {
                     !reply?.success && reply?.message && <AlertError message={reply?.message} description={reply?.errors}/>
                 }
                 <form 
-                // className={ requesting ? "invisible" : "" }
-                // action={ action } 
                 action={ async() => {
                     setRequesting(true)
                     let response  =  await saveRealtyAction(form)
@@ -60,12 +62,9 @@ const NewRealtyForm = () => {
                 >
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/1">
-                        <label
-                            className="mb-3 block text-sm font-medium text-black dark:text-white"
-                            htmlFor="name"
-                        >
-                            Realty Name
-                        </label>
+                    <InputTextLabel htmlFor="name" >
+                        Realty Name
+                    </InputTextLabel>
                         <div className="relative">
                             <span className="absolute left-4.5 top-4">
                             <svg
@@ -92,99 +91,74 @@ const NewRealtyForm = () => {
                                 </g>
                             </svg>
                             </span>
-                            <input
-                            className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                            type="text"
-                            name="name"
-                            id="name"
-                            placeholder="Realty Name"
-                            autoComplete="off"
-                            required
-                            value={form.name}
-                            onChange={(e) => updateForm({ name: e.target.value })}
+                            <InputTextField
+                                id="name"
+                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 pl-11.5 pr-4.5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                placeholder="Realty Name"
+                                autoComplete="off"
+                                required
+                                value={form.name}
+                                onChange={(e) => updateForm({ name: e.target.value })}
                             />
                         </div>
                     </div>
                 </div>
 
             <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                <div className="w-full sm:w-1/1">
-                            <label
-                                className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                htmlFor="address"
-                            >
-                                Address
-                            </label>
-                            <input
-                                className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                type="text"
-                                name="address"
-                                id="address"
-                                autoComplete="off"
-                                placeholder="Address"
-                                required
-                                value={form.address}
-                                onChange={(e) => updateForm({ address: e.target.value })}
-                            />
-                    </div>
                     <div className="w-full sm:w-1/1">
-                            <label
-                                className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                htmlFor="address2"
-                            >
+                            <InputTextLabel htmlFor="address" >
+                                Address
+                            </InputTextLabel>
+                            <InputTextField
+                                 id="address"
+                                 autoComplete="off"
+                                 placeholder="Address"
+                                 required
+                                 value={form.address}
+                                 onChange={(e) => updateForm({ address: e.target.value })}
+                             />
+                    </div>
+
+                    <div className="w-full sm:w-1/1">
+                            <InputTextLabel htmlFor="address2" >
                                 Alternative Address
-                            </label>
-                            <input
-                                className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                type="text"
-                                name="address2"
-                                id="address2"
-                                autoComplete="off"
-                                placeholder="Alternative Address"
-                                value={form.address2}
-                                onChange={(e) => updateForm({ address2: e.target.value })}
-                            />
+                            </InputTextLabel>
+                            <InputTextField
+                                 id="address2"
+                                 autoComplete="off"
+                                 placeholder="Alternative Address"
+                                 value={form.address2}
+                                 onChange={(e) => updateForm({ address2: e.target.value })}
+                             />
                     </div>
             </div>
 
             <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                 <div className="w-full sm:w-1/1">
-                            <label
-                                className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                htmlFor="contact_number"
-                            >
+                            <InputTextLabel htmlFor="contact_number" >
                                 Contact Number
-                            </label>
-                            <input
-                                className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                type="text"
-                                name="contact_number"
-                                id="contact_number"
-                                autoComplete="off"
-                                placeholder="Contact Number"
-                                required
-                                value={form.contact_number}
-                                onChange={(e) => updateForm({ contact_number: e.target.value })}
-                            />
+                            </InputTextLabel>
+                            <InputTextField
+                                 id="contact_number"
+                                 autoComplete="off"
+                                 placeholder="Contact Number"
+                                 required
+                                 value={form.contact_number}
+                                 onChange={(e) => updateForm({ contact_number: e.target.value })}
+                                />
                     </div>
                     <div className="w-full sm:w-1/1">
-                            <label
-                                className="mb-3 block text-sm font-medium text-black dark:text-white"
-                                htmlFor="tin"
-                            >
+                            <InputTextLabel htmlFor="tin" >
                                 Tin
-                            </label>
-                            <input
-                                className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                type="text"
-                                name="tin"
-                                id="tin"
-                                autoComplete="off"
-                                placeholder="Tin Number"
-                                required
-                                value={form.tin}
-                                onChange={(e) => updateForm({ tin: e.target.value })}
-                            />
+                            </InputTextLabel>
+                            <InputTextField
+                                 id="tin"
+                                 autoComplete="off"
+                                 placeholder="Tin Number"
+                                 required
+                                 value={form.tin}
+                                 onChange={(e) => updateForm({ tin: e.target.value })}
+                                />
                     </div>
             </div>
 
@@ -192,7 +166,9 @@ const NewRealtyForm = () => {
 
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/1">
-                    <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="description">Description</label>
+                    <InputTextLabel htmlFor="description" >
+                        Description
+                    </InputTextLabel>
                       <textarea
                         rows={6}
                         name="description"
@@ -209,27 +185,11 @@ const NewRealtyForm = () => {
                   <div className="flex justify-end gap-4.5">
                     <Link
                     href="/realties">
-                        <button
-                            className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                            type="button"
-                        >
-                        Cancel
-                        </button>
+                        <NormalButton>
+                            Cancel
+                        </NormalButton>
                     </Link>
-                      
-                      <button
-                      className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
-                      type="submit"
-                      {...{disabled: requesting || form.name.length == 0 || form.address.length == 0}}
-                      onClick={(e:any) => {
-                        console.dir(e)
-                        e.preventDefault()
-                        setRequesting(true)
-                        e.target?.form?.requestSubmit()
-                      }}
-                      >
-                      Save
-                      </button>
+                      <PrimarySaveButton/>
                   </div>
                 </div>
                 </form>

@@ -1,10 +1,13 @@
-export default function TabDetail({children, index = 0} : {children: any, index : number}) {
+export default function TabDetail({children, index = 0, active = false} : {children: any, index : number, active?: boolean}) {
+    const isActive = active ? {"data-twe-tab-active": true} : {}
 
     return (<div
-        className="hidden opacity-100 transition-opacity duration-150 ease-linear data-[twe-tab-active]:block"
+        className={"hidden " + ( active ? "opacity-100" : "opacity-0") + " transition-opacity duration-150 ease-linear data-[twe-tab-active]:block"}
         id={"tabs-"+index}
         role="tabpanel"
-        aria-labelledby={"tabs-"+ index +"-tab"}>
+        aria-labelledby={"tabs-"+ index +"-tab"}
+        {...isActive}
+        >
             {children}
         </div>)
 }
