@@ -18,7 +18,7 @@ const RealtyDetailContent = async({id = ""} : { id : string}) => {
 
 return (<div className="mx-auto">
             <Breadcrumb pageName={document.name} deepPages={[entity ,document.name]} />
-            { id && <RealtyDetailContentPage id={id} company={document.toJSON()} /> }
+            { id && <RealtyDetailContentPage id={id} document={document.toJSON()} /> }
         </div>)
 }
 

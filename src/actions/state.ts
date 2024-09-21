@@ -33,3 +33,13 @@ export const initialStateProject : any = {
     bulk_discount_scheme: 0,
     LTS: "",
 }
+
+export const  initialStateRealty = {
+    name: "",
+    address: "",
+    tin: "",
+    address2: "",
+    description: "",
+    commission_percent: 10,
+    contact_number: ""
+}

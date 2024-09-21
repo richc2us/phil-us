@@ -4,17 +4,14 @@ import  Company  from "@/models/companies"
 import { revalidatePath } from "next/cache";
 import { ServerActionResponse } from "@/types/server-action-reply";
 import { DEFAULT_COMPANY } from "./const";
+import { getAll, getSingleById, saveDocument } from "./cores";
 
 export const getCompanies = async() => {
-    await dbConnect()
-    revalidatePath('/companies')
-    return await Company.find({})
+    return await getAll(Company)
 }
 
 export const getCompany = async(id: string) => {
-    await dbConnect()
-    revalidatePath('/')
-    return await Company.findById(id)
+    return await getSingleById(Company, id)
 }
 
 export const updateCompany = async(form:any) => {
@@ -42,18 +39,21 @@ export const updateCompany = async(form:any) => {
 }
 
 export const saveCompanyAction = async(form: any) : Promise<ServerActionResponse> => {
+    // {success: true, message: newCompany.name + ' created', document: newCompany}
+    // const newCompany = await saveDocument(Company, form)
+    // return {success: newCompany?._id ?  true : false, message: newCompany?.message ? 'error' : 'created', document: newCompany}
     await dbConnect()
+    revalidatePath('/')
     try {
         const newCompany = await Company.create(form)
-        revalidatePath("/");
-        return {success: true, message: 'Company '+ newCompany.name + ' created', document: newCompany}
+        return {success: true, message: newCompany.name + ' created', document: newCompany}
     } catch (e: any) {
         console.dir(e);
         let errors = []
         for(let field in e.errors) {
             errors.push(e.errors[field].message)
         }
-        return {success: false, message: 'Error creating company ', document: null, errors : errors}
+        return {success: false, message: 'error', document: null, errors : errors}
     }
 }
 

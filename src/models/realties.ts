@@ -6,6 +6,7 @@ export interface Realty extends Document {
     name: string,
     address: string,
     tin: string,
+    commission_percent?: Number,
     description?: string,
     contact_number?: string
     address2?: string,
@@ -31,6 +32,7 @@ const realSchema = new Schema<Realty>({
     description: {
         type: String,
     },
+    commission_percent: {type: Number, default: 10},
     address2: {
         type: String,
     },

@@ -16,6 +16,34 @@ export const getRealty = async(id: string) => {
     return await Realty.findById(id)
 }
 
+export async function updateRealtyAction(form: any) {
+    await dbConnect()
+    try {
+        const document = await Realty.findById(form.id)
+        console.dir(document)
+        if(document) {
+            document.name = form.name
+            document.address = form.address
+            document.address2 = form.address2
+            document.description = form.description
+            document.contact_number = form.contact_number
+            document.tin = form.tin
+            document.commission_percent = form.commission_percent
+            document.save()
+            revalidatePath("/")
+            return {success: true, message: document.name + ' updated', document : { id: document?._id.toString() }}
+        }
+        return {success: false, message: 'error updating', document : { id: document?._id.toString() }}
+    } catch (e: any) {
+        console.dir(e);
+        let errors = []
+        for(let field in e.errors) {
+            errors.push(e.errors[field].message)
+        }
+        return {success: false, message: 'Error creating company ', document: null, errors : errors}
+    }
+}
+
 export async function saveRealtyAction(state: any) {
     await dbConnect()
     try {

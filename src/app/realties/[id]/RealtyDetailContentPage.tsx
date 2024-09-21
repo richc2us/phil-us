@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import ChartThree from "@/components/Charts/ChartThree";
 import CardDataStats from "@/components/CardDataStats";
 
-export default function RealtyDetailContentPage({id, company} : {id: string, company:any}) {
+export default function RealtyDetailContentPage({id, document} : {id: string, document:any}) {
     useEffect(() => {
         console.dir('effect called')
         return () => {
@@ -123,12 +123,12 @@ export default function RealtyDetailContentPage({id, company} : {id: string, com
                     </TabDetail>
 
                     <TabDetail index={1}>
-                            <DetailsTab company={company} />
+                            <DetailsTab document={document} />
                     </TabDetail>
 
                     <TabDetail index={2}>
                         <div className="grid grid-cols-5 gap-8">
-                            <p>Show list of affiliated agents</p>
+                            <p>Show list of affiliated agents and Team Leaders</p>
                         </div>
                     </TabDetail>
                 </TabDetailContainer>
