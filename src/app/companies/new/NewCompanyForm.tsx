@@ -4,6 +4,7 @@ import {  useState } from "react";
 import Loader from "@/components/common/Loader";
 import { AlertError, AlertSuccess } from "@/app/ui/alerts/alerts";
 import { ServerActionResponse } from "@/types/server-action-reply";
+import Link from "next/link";
 
  const defaultState = {
     name: "",
@@ -162,12 +163,14 @@ const NewCompanyForm = () => {
 
                 <div className="mb-4 flex items-center gap-3">
                   <div className="flex justify-end gap-4.5">
-                      <button
-                      className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                      type="submit"
-                      >
-                      Cancel
-                      </button>
+                    <Link href="/companies">
+                        <button
+                        className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
+                        type="button"
+                        >
+                        Cancel
+                        </button>
+                      </Link>
                       <button
                       className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
                       type="submit"
