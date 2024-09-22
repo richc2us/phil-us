@@ -68,6 +68,16 @@ const menuGroups = [
         icon: <SvgReservation/>
       },
       {
+        label: "Amortizations",
+        route: "/amortizations",
+        icon: <SvgReservation/>
+      },
+      {
+        label: "M.A Calculator",
+        route: "/calculator",
+        icon: <SvgReservation/>
+      },
+      {
         label: "Expenses",
         route: "/expenses",
         icon: <SvgExpense/>

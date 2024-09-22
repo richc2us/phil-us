@@ -172,7 +172,7 @@ export default function DetailsTab({document} : any) {
 
                                                 <InputSelectField
                                                     id="lead_id"
-                                                    onChange={(e) => {
+                                                    onChange={(e:any) => {
                                                         updateForm({ lead_id: e.target.value })
                                                     }}
                                                     disabled={!form.edit}

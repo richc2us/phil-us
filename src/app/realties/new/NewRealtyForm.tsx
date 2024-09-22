@@ -169,7 +169,7 @@ const NewRealtyForm = () => {
 
                                     <InputSelectField
                                         id="lead_id"
-                                        onChange={(e) => {
+                                        onChange={(e:any) => {
                                             updateForm({ lead_id: e.target.value })
                                         }}
                                         value={form.lead_id+""}
