@@ -1,4 +1,3 @@
-import { updateAgentAction, checkEmailExists } from "@/actions/agents"
 import { initialStateAgent } from "@/actions/state"
 import InputTextField from "@/components/FormElements/Fields/InputTextField"
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel"
@@ -6,6 +5,7 @@ import { ServerActionResponse } from "@/types/server-action-reply"
 import {  useEffect, useState } from "react"
 import NormalButton from "@/components/FormElements/Buttons/NormalButton"
 import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton"
+import { updateTeamLeadAction, checkEmailExists } from "@/actions/team-lead"
 
 export function DetailTab({document} : any) {
     const updateForm = (value : any) =>  setForm( (prev: any) =>  { return {...prev, ...value} }  )
@@ -35,7 +35,7 @@ export function DetailTab({document} : any) {
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-4">
         <form action={
             async() => { 
-                const response = await updateAgentAction(form)
+                const response = await updateTeamLeadAction(form)
                 updateForm({edit:false})
                 setResp(response)
             }

@@ -1,5 +1,5 @@
 "use client"
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 import Loader from "@/components/common/Loader";
 import { AlertError, AlertSuccess } from "@/app/ui/alerts/alerts";
 import { ServerActionResponse } from "@/types/server-action-reply";
@@ -10,6 +10,8 @@ import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel";
 import InputTextField from "@/components/FormElements/Fields/InputTextField";
 import NormalButton from "@/components/FormElements/Buttons/NormalButton";
 import { initialStateRealty } from "@/actions/state";
+import SvgAgent from "@/components/common/svg/svg-agent";
+import InputSelectField from "@/components/FormElements/Fields/inputSelectField";
 
 
 const NewRealtyForm = () => {
@@ -23,6 +25,10 @@ const NewRealtyForm = () => {
             return { ...prev, ...value };
         });
       }
+
+      useEffect(()=> {
+        fetch("/api/team-lead").then(res => res.json()).then(r => updateForm({leads: r}) )
+      }, [])
 
       return (
         <div className="grid grid-cols-5 gap-8">
@@ -153,6 +159,49 @@ const NewRealtyForm = () => {
                                         onChange={(e) => updateForm({ tin: e.target.value })}
                                         />
                             </div>
+                            
+                    </div>
+                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                        <div className="w-full sm:w-1/1">
+                                    <InputTextLabel htmlFor="commission_percent" >
+                                        Team Lead
+                                    </InputTextLabel>
+
+                                    <InputSelectField
+                                        id="lead_id"
+                                        onChange={(e) => {
+                                            updateForm({ lead_id: e.target.value })
+                                        }}
+                                        value={form.lead_id+""}
+                                        icon={<SvgAgent/>}
+                                        className={`disabled:cursor-default disabled:bg-whiter relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-12 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${ form.lead_id && form.lead_id > 0 ? "text-black  dark:text-white" : "" }`}
+                                    >
+                                        <option value=""  className="text-body dark:text-bodydark">
+                                            Select Team Lead
+                                        </option>
+                                        {
+                                            form.leads && form.leads.map( (doc:any, key:any) => <>
+                                                <option value={doc._id} className="text-body dark:text-bodydark">
+                                                    {doc.first_name} {doc.middle_name} {doc.last_name} - {doc.email}
+                                                </option>
+                                            </>)
+                                        }
+                                    </InputSelectField>
+                        </div>
+                        <div className="w-full sm:w-1/1">
+                                <InputTextLabel htmlFor="commission_percent" >
+                                    Commission
+                                </InputTextLabel>
+                                <InputTextField
+                                    id="commission_percent"
+                                    type="number"
+                                    autoComplete="off"
+                                    placeholder="Commission Percent"
+                                    required
+                                    value={form.commission_percent}
+                                    onChange={(e) => updateForm({ commission_percent: e.target.value })}
+                                    />
+                        </div>
                     </div>
 
 

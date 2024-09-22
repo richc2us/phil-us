@@ -6,6 +6,7 @@ export interface Realty extends Document {
     name: string,
     address: string,
     tin: string,
+    lead_id?: Schema.Types.ObjectId,
     commission_percent?: Number,
     description?: string,
     contact_number?: string
@@ -14,6 +15,7 @@ export interface Realty extends Document {
 
 const realSchema = new Schema<Realty>({
     company_id : { type : Schema.Types.ObjectId, ref: "Company", default: DEFAULT_COMPANY },
+    lead_id : { type : Schema.Types.ObjectId, ref: "User" },
     name : {
         type: String,
         required: [true, "Please provide a name"],

@@ -7,8 +7,8 @@ import { getTeamLeads } from "@/actions/team-lead"
 
 export const metadata: Metadata = {
     title:
-      "List of Agents",
-    description: "Agents",
+      "List of Team Lead",
+    description: "Team Leads",
   };
 
 

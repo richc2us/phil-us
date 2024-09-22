@@ -16,7 +16,7 @@ export default function PageClient({ id, document } : {id: string, document:any}
                         Details
                     </TabItem>
                     <TabItem index={2}>
-                        Buyers
+                        Realties
                     </TabItem>
                 </TabItemContainer>
 
@@ -32,7 +32,7 @@ export default function PageClient({ id, document } : {id: string, document:any}
                     </TabDetail>
 
                     <TabDetail index={2}>
-                        Buyers
+                        Realties
                     </TabDetail>
                 </TabDetailContainer>
 

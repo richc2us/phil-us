@@ -7,8 +7,8 @@ import { getRealties } from "@/actions/realties";
 
 export const metadata: Metadata = {
     title:
-      "View Agent",
-    description: "Agent",
+      "View Team Lead",
+    description: "Team Lead",
   };
 
   export default async function({params : {id}} : any ){
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     return (
     <DefaultLayout>
         <div className="mx-auto">
-            <Breadcrumb pageName={document.fullName} deepPages={["Agent", document.fullName]}/>
+            <Breadcrumb pageName={document.fullName} deepPages={["Team Lead", document.fullName]}/>
             <PageClient id={id} document={document.toJSON()} />
         </div>
     </DefaultLayout>)

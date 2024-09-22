@@ -1,12 +1,14 @@
 "use client"
 import { updateRealtyAction } from "@/actions/realties"
 import { initialStateRealty } from "@/actions/state"
+import SvgAgent from "@/components/common/svg/svg-agent"
 import NormalButton from "@/components/FormElements/Buttons/NormalButton"
 import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton"
+import InputSelectField from "@/components/FormElements/Fields/inputSelectField"
 import InputTextField from "@/components/FormElements/Fields/InputTextField"
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel"
 import { usePageID } from "@/context/IDContext"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function DetailsTab({document} : any) {
     const id = usePageID()
@@ -18,6 +20,10 @@ export default function DetailsTab({document} : any) {
           return { ...prev, ...value };
       });
     }
+
+    useEffect(()=> {
+        fetch("/api/team-lead").then(res => res.json()).then(r => updateForm({leads: r}) )
+      }, [])
 
 
     return(<>
@@ -138,20 +144,55 @@ export default function DetailsTab({document} : any) {
                                                 onChange={(e) => updateForm({ contact_number: e.target.value })}
                                                 />
                                     </div>
+
                                     <div className="w-full sm:w-1/1">
-                                            <InputTextLabel htmlFor="tin" >
-                                                Tin
-                                            </InputTextLabel>
-                                            <InputTextField
-                                                id="tin"
-                                                autoComplete="off"
-                                                placeholder="Tin Number"
-                                                required
-                                                value={form.tin}
-                                                disabled={!form.edit}
-                                                onChange={(e) => updateForm({ tin: e.target.value })}
-                                              />
+                                                <InputTextLabel htmlFor="tin" >
+                                                    Tin
+                                                </InputTextLabel>
+                                                <InputTextField
+                                                    id="tin"
+                                                    autoComplete="off"
+                                                    placeholder="Tin Number"
+                                                    required
+                                                    value={form.tin}
+                                                    disabled={!form.edit}
+                                                    onChange={(e) => updateForm({ tin: e.target.value })}
+                                                        />
                                     </div>
+                                    
+
+                            </div>
+                            <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+
+
+                                    <div className="w-full sm:w-1/1">
+                                                <InputTextLabel htmlFor="commission_percent" >
+                                                    Team Lead
+                                                </InputTextLabel>
+
+                                                <InputSelectField
+                                                    id="lead_id"
+                                                    onChange={(e) => {
+                                                        updateForm({ lead_id: e.target.value })
+                                                    }}
+                                                    disabled={!form.edit}
+                                                    value={form.lead_id+""}
+                                                    icon={<SvgAgent/>}
+                                                    className={`disabled:cursor-default disabled:bg-whiter relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-12 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${ form.lead_id && form.lead_id > 0 ? "text-black  dark:text-white" : "" }`}
+                                                >
+                                                    <option value=""  className="text-body dark:text-bodydark">
+                                                        Select Team Lead
+                                                    </option>
+                                                    {
+                                                        form.leads && form.leads.map( (doc:any, key:any) => <>
+                                                            <option value={doc._id} className="text-body dark:text-bodydark">
+                                                                {doc.first_name} {doc.middle_name} {doc.last_name} - {doc.email}
+                                                            </option>
+                                                        </>)
+                                                    }
+                                                </InputSelectField>
+                                    </div>
+
                                     <div className="w-full sm:w-1/1">
                                             <InputTextLabel htmlFor="commission_percent" >
                                                 Commission

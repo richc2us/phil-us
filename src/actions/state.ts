@@ -41,7 +41,9 @@ export const  initialStateRealty = {
     address2: "",
     description: "",
     commission_percent: 10,
-    contact_number: ""
+    contact_number: "",
+    lead_id:null,
+    leads: []
 }
 
 export const initialStateBuyer = {
@@ -94,5 +96,5 @@ export const initialStateAgent = {
     buyer_id: null,
     spouse_user_id:null,
     realties: [],
-    realty_id: null
+    realty_id: null,
 }
