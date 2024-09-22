@@ -73,7 +73,6 @@ export const initialStateBuyer = {
         tin: "",
         tin_issuance: "",
     },
-    create_spouse_user: false,
     buyer_id: null,
-    spouse_id: null
+    spouse_user_id:null
 }

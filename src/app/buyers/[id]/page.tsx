@@ -1,5 +1,5 @@
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
-import BuyerDetailTabs from "./BuyerDetailTabs"
+import BuyerDetailPage from "./BuyerDetailPage"
 import { Metadata } from "next"
 import { getBuyer } from "@/actions/buyers";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
@@ -14,7 +14,7 @@ const BuyerDetailContent = async({id} : {id: string}) => {
     const document = await getBuyer(id)
     return (<div className="mx-auto">
             <Breadcrumb pageName="Buyer" deepPages={["Buyer",document.fullName]} />
-            <BuyerDetailTabs id={id} />
+            <BuyerDetailPage id={id} document={document.toJSON()} />
         </div>)
 }
 

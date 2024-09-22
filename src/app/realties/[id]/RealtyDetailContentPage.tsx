@@ -3,17 +3,10 @@
 import { IDContextProvider } from "@/context/IDContextProvider";
 import DetailsTab from "./DetailsTab";
 import {Tab, TabDetail, TabDetailContainer, TabItem, TabItemContainer} from "@/components/Tabs/index";
-import { useEffect } from "react";
 import ChartThree from "@/components/Charts/ChartThree";
 import CardDataStats from "@/components/CardDataStats";
 
 export default function RealtyDetailContentPage({id, document} : {id: string, document:any}) {
-    useEffect(() => {
-        console.dir('effect called')
-        return () => {
-            // console.dir('effect returned')
-        }
-    },[])
     return (
         <IDContextProvider id={id}>
             <Tab>
