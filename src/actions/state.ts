@@ -76,3 +76,23 @@ export const initialStateBuyer = {
     buyer_id: null,
     spouse_user_id:null
 }
+
+export const initialStateAgent = {
+    first_name: "",
+    middle_name: "",
+    last_name: "",
+    tin: "",
+    tin_issuance: "",
+    address: "",
+    region: "",
+    province: "",
+    city: "",
+    barangay: "",
+    zip: "",
+    email: "",
+    phone: "",
+    buyer_id: null,
+    spouse_user_id:null,
+    realties: [],
+    realty_id: null
+}

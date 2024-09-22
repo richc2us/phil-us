@@ -1,4 +1,4 @@
-import { getBuyers } from "@/actions/buyers"
+import { getAgents } from "@/actions/agents"
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Link from "next/link"
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 
   export default async function() {
-    const documents = await getBuyers()
+    const documents = await getAgents()
 
     return (
         <DefaultLayout>
@@ -79,7 +79,7 @@ export const metadata: Metadata = {
                                         </div>
                                         <div className="col-span-1 flex items-center">
                                             <DeleteButton id={JSON.parse(JSON.stringify(document._id))} />
-                                            <Link key={document._id} href={"/realties/" + document._id} className="mx-2" >
+                                            <Link key={document._id} href={"/agents/" + document._id} className="mx-2" >
                                                 <button
                                                 className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                                                 type="submit"

@@ -5,7 +5,8 @@ import mongoose, { Schema, Document, SchemaTypeOptions } from "mongoose"
 
 export interface User extends Document {
     company_id: Schema.Types.ObjectId,
-    spouse_user_id: Schema.Types.ObjectId,
+    spouse_user_id?: Schema.Types.ObjectId,
+    realty_id?: Schema.Types.ObjectId,
     first_name: string,
     middle_name?: string,
     last_name: string,
@@ -27,6 +28,7 @@ export interface User extends Document {
 const userSchema = new Schema<User>({
     company_id : { type : Schema.Types.ObjectId, ref: "Company", default: DEFAULT_COMPANY },
     spouse_user_id: {type: Schema.Types.ObjectId, ref : "User" },
+    realty_id: {type: Schema.Types.ObjectId, ref : "Realty" },
     first_name: {type : String, required: true},
     middle_name : {type : String},
     last_name : {type : String, required: true},

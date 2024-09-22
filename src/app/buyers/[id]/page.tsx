@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const BuyerDetailContent = async({id} : {id: string}) => {
     const document = await getBuyer(id)
     return (<div className="mx-auto">
-            <Breadcrumb pageName="Buyer" deepPages={["Buyer",document.fullName]} />
+            <Breadcrumb pageName={document.fullName} deepPages={["Buyer",document.fullName]} />
             <BuyerDetailPage id={id} document={document.toJSON()} />
         </div>)
 }

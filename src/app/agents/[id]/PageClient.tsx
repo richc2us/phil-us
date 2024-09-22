@@ -16,14 +16,14 @@ export default function PageClient({ id, document } : {id: string, document:any}
                         Details
                     </TabItem>
                     <TabItem index={2}>
-                        Amortization(s)
+                        Buyers
                     </TabItem>
                 </TabItemContainer>
 
                 <TabDetailContainer>
                     <TabDetail index={0} >
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-                            List Buyers active Lots
+                            Real Estate Linked
                         </div>
                     </TabDetail>
 
@@ -32,7 +32,7 @@ export default function PageClient({ id, document } : {id: string, document:any}
                     </TabDetail>
 
                     <TabDetail index={2}>
-                        Amortizations
+                        Buyers
                     </TabDetail>
                 </TabDetailContainer>
 
