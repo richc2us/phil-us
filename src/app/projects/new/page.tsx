@@ -11,21 +11,14 @@ export const metadata: Metadata = {
     description: "Projects",
 };
 
-const ProjectAddContent = () => {
+export default function() {
     return (
+    <DefaultLayout>
         <div className="mx-auto">
             <Breadcrumb pageName="New Project" />
             <div>
                 <NewProjectForm/>
             </div>
         </div>
-    )
-}
-const ProjectAdd =  () => {
-    return (
-    <DefaultLayout>
-        <ProjectAddContent/>
     </DefaultLayout>)
 }
-
-export default ProjectAdd

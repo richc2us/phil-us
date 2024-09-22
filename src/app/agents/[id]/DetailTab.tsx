@@ -7,7 +7,6 @@ import {  useEffect, useState } from "react"
 import NormalButton from "@/components/FormElements/Buttons/NormalButton"
 import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton"
 import SvgRealty from "@/components/common/svg/svg-realty"
-import SVGArrowDown from "@/components/common/svg/svg-arrow-down"
 import InputSelectField from "@/components/FormElements/Fields/inputSelectField"
 
 export function DetailTab({document} : any) {

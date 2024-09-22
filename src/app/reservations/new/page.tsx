@@ -1,20 +1,14 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
-import NewCompanyForm from "./NewForm";
-import { Metadata } from "next"
+import NewForm from "./NewForm";
 
-export const metadata: Metadata = {
-    title:
-      "New Companies",
-    description: "Companies",
-};
 
 export default function(){
     return (
         <DefaultLayout>
-            <Breadcrumb pageName="New Company" />
+            <Breadcrumb pageName="New Reservation" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                <NewCompanyForm/>
+                <NewForm/>
             </div>
         </DefaultLayout>
     )

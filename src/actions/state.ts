@@ -1,3 +1,10 @@
+export const  initialSateCompany = {
+    name: "",
+    address: "",
+    address2: "",
+    description: ""
+}
+
 export const initialStateProject : any = {
     name: "",
     address1: "",

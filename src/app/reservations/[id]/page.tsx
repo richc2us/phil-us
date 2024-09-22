@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     description: entities
 };
 
-export default async function ({ params }: { params: { id: string } }){
+export default async function({ params }: { params: { id: string } }) {
 
     const document = await getRealty(params.id)
 

@@ -11,20 +11,16 @@ export const metadata: Metadata = {
     description: "Project",
 };
 
-const ProjectDetailContent = async({projectID = ""} : { projectID : string}) => {
-const project = await getProject(projectID)
 
-return (<div className="mx-auto">
-            <Breadcrumb pageName={project.name} deepPages={["Project",project.name]} />
-            { projectID && <ProjectDetailTabs projectID={projectID}/> }
-        </div>)
-}
+export default async function({ params }: { params: { id: string } }){
 
-function ProjectDetail({ params }: { params: { id: string } }){
+    const project = await getProject(params.id)
+
     return (
     <DefaultLayout>
-        { params.id.length && <ProjectDetailContent projectID={ params.id } />}
+        <div className="mx-auto">
+            <Breadcrumb pageName={project.name} deepPages={["Project",project.name]} />
+            { params.id && <ProjectDetailTabs projectID={params.id}/> }
+        </div>
     </DefaultLayout>)
 }
-
-export default ProjectDetail

@@ -1,17 +1,15 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
-import NewRealtyForm from "./NewRealtyForm";
+import NewForm from "./NewForm";
 
 
-const NewRealty = () => {
+export default function() {
     return (
         <DefaultLayout>
             <Breadcrumb pageName="New Realty" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                <NewRealtyForm/>
+                <NewForm/>
             </div>
         </DefaultLayout>
     )
 }
-
-export default NewRealty

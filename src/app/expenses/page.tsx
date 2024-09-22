@@ -10,13 +10,10 @@ export const metadata: Metadata = {
     description: "Expenses",
 };
 
-const ExpensesPage = () => {
+export default function() {
     return (
         <DefaultLayout>
             <Breadcrumb pageName="Expenses" />
-            
         </DefaultLayout>
     )
 }
-
-export default ExpensesPage

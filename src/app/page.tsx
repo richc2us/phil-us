@@ -7,12 +7,6 @@ export const metadata: Metadata = {
   description: "Metaland",
 };
 
-export default function Home() {
-  return (
-    <>
-      {/* <DefaultLayout> */}
-        <Projects />
-      {/* </DefaultLayout> */}
-    </>
-  );
+export default function(){
+  return <Projects />;
 }

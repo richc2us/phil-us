@@ -10,13 +10,10 @@ export const metadata: Metadata = {
     description: "Lots",
 };
 
-const LotsPage = () => {
+export default function(){
     return (
         <DefaultLayout>
             <Breadcrumb pageName="Lots" />
-            
         </DefaultLayout>
     )
 }
-
-export default LotsPage
