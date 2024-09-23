@@ -1,5 +1,4 @@
 import { DEFAULT_COMPANY } from "@/actions/const";
-import { get } from "http";
 import mongoose, { Schema, Document, SchemaTypeOptions } from "mongoose"
 
 
@@ -53,4 +52,5 @@ const userSchema = new Schema<User>({
     timestamps : true
 });
 userSchema.virtual('fullName').get(function(){ return this.first_name + ' ' + this.middle_name+ ' ' + this.last_name })
+userSchema.index({'email' : 'text','first_name': 'text','middle_name' : 'text', 'last_name' : 'text'})
 export default mongoose.models?.User || mongoose.model<User>("User",userSchema)

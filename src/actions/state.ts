@@ -105,3 +105,20 @@ export const initialStateAgent = {
     realties: [],
     realty_id: null,
 }
+
+export const initialStateReservation = {
+    ...initialStateBuyer,
+    project_id : null,
+    block_id: null,
+    lot_id : null,
+    projects: [],
+    blocks:[],
+    lots:[],
+    area: 0,
+    price_per_sqm:0,
+    tcp:0,
+    downpayment:0,
+    balance:0,
+    monthly:0,
+    terms:12
+}

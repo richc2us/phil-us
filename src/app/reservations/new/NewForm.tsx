@@ -9,51 +9,130 @@ import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButt
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel";
 import InputTextField from "@/components/FormElements/Fields/InputTextField";
 import NormalButton from "@/components/FormElements/Buttons/NormalButton";
-import { initialStateRealty } from "@/actions/state";
-import SvgAgent from "@/components/common/svg/svg-agent";
+import {  initialStateReservation } from "@/actions/state";
 import InputSelectField from "@/components/FormElements/Fields/inputSelectField";
-
+import AsyncSelect from 'react-select/async';
+import { searchBuyer, searchProject } from "@/actions/search";
+import SvgProject from "@/components/common/svg/svg-project";
 
 export default function NewForm() {
 
-      const [form, setForm] = useState(initialStateRealty)
-      const [requesting, setRequesting] = useState(false)
-      const [reply, setReply] = useState<ServerActionResponse>()
+    const [form, setForm] = useState(initialStateReservation)
+    const [requesting, setRequesting] = useState(false)
+    const [projectRequesting, setProjectRequesting] = useState(false)
+    const [blockRequesting, setBlockRequesting] = useState(false)
+    const [lotRequesting, setLotRequesting] = useState(false)
+    const [reply, setReply] = useState<ServerActionResponse>()
 
-      function updateForm(value : any) {
+    function updateForm(value : any) {
         return setForm((prev: any) => {
             return { ...prev, ...value };
         });
-      }
+    }
 
-      useEffect(()=> {
-        fetch("/api/team-lead").then(res => res.json()).then(r => updateForm({leads: r}) )
-      }, [])
+    const searchBuyerCallback = async(inputValue: string) => {
+        return await searchBuyer(inputValue)
+    }
 
-      return (
-        <div className="grid grid-cols-5 gap-8">
-            <div className="col-span-5 xl:col-span-3">
+    const getProjectsCallback = async(inputValue: string) => {
+        return await searchProject(inputValue)
+    }
+
+    const asyncBuyerOptions = (
+        inputValue: string,
+        callback: (options: any[]) => void
+    ) => {
+        setRequesting(true)
+        setTimeout( async() => {
+            callback(await searchBuyerCallback(inputValue))
+            setRequesting(false)
+        }, 500)
+    }
+
+    const asyncProjectOptions = (
+        inputValue: string,
+        callback: (options: any[]) => void) => {
+        setProjectRequesting(true)
+        setTimeout( async() => {
+            callback(await getProjectsCallback(inputValue))
+            setProjectRequesting(false)
+        }, 500)
+    }
+
+    useEffect(() => {
+        setProjectRequesting(true)
+        fetch("/api/projects").then(res => res.json()).then(res => {
+            updateForm({projects: res})
+            setProjectRequesting(false) 
+        })
+    },[])
+
+    useEffect(() => {
+        if(form.project_id) {
+            setBlockRequesting(true)
+            fetch("/api/projects/blocks/"+form.project_id)
+            .then(res => res.json())
+            .then(res => {
+                let blocks:any= []
+                    res.map( (item:any, key:any) => {
+
+                        item.blockLots.map( (b:any, k: any) => {
+                            item.blockLots[k] = {
+                                value: b._id,
+                                label: b.name,
+                                data: b
+                            }
+                        })
+
+                        blocks.push({
+                            value: item._id,
+                            label: item.name,
+                            data: item
+                        })
+                    })
+                    updateForm({blocks: blocks})
+                    setBlockRequesting(false)
+                }
+            )
+        }
+    },[form.project_id])
+
+    function calculateMonthly() {
+        let tcp = form.area * form.price_per_sqm
+        let downpayment = form.downpayment
+        let balance = tcp - downpayment
+        let monthly = (balance / form.terms).toFixed(2)
+        updateForm({
+            tcp,
+            balance,
+            monthly
+        })
+    }
+
+
+    return (
+        <div className="grid grid-cols-6 gap-8">
+            <div className="col-span-3 xl:col-span-3">
                 <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                     <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
                         <h3 className="font-medium text-black dark:text-white">
-                            Realty Information
+                            Buyers Information
                         </h3>
                     </div>
                     <div className="p-7">
-                        { requesting && <Loader isFormLoading={true} /> }
-                        {
+                        {/* {
                             reply?.success && <AlertSuccess message={reply?.message}/>
                         }
                         {
                             !reply?.success && reply?.message && <AlertError message={reply?.message} description={reply?.errors}/>
-                        }
+                        } */}
                         <form 
                         action={ async() => {
                             setRequesting(true)
                             let response  =  await saveRealtyAction(form)
                             setReply(response)
                             if(response.success) {
-                                setForm(initialStateRealty)
+                                setForm(initialStateReservation)
                             }
                             setRequesting(false)
                         }
@@ -61,49 +140,50 @@ export default function NewForm() {
                         >
                         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                             <div className="w-full sm:w-1/1">
-                            <InputTextLabel htmlFor="name" >
-                                Realty Name
-                            </InputTextLabel>
-                                <div className="relative">
-                                    <span className="absolute left-4.5 top-4">
-                                    <svg
-                                        className="fill-current"
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 20 20"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <g opacity="0.8">
-                                        <path
-                                            fillRule="evenodd"
-                                            clipRule="evenodd"
-                                            d="M3.72039 12.887C4.50179 12.1056 5.5616 11.6666 6.66667 11.6666H13.3333C14.4384 11.6666 15.4982 12.1056 16.2796 12.887C17.061 13.6684 17.5 14.7282 17.5 15.8333V17.5C17.5 17.9602 17.1269 18.3333 16.6667 18.3333C16.2064 18.3333 15.8333 17.9602 15.8333 17.5V15.8333C15.8333 15.1703 15.5699 14.5344 15.1011 14.0655C14.6323 13.5967 13.9964 13.3333 13.3333 13.3333H6.66667C6.00363 13.3333 5.36774 13.5967 4.8989 14.0655C4.43006 14.5344 4.16667 15.1703 4.16667 15.8333V17.5C4.16667 17.9602 3.79357 18.3333 3.33333 18.3333C2.8731 18.3333 2.5 17.9602 2.5 17.5V15.8333C2.5 14.7282 2.93899 13.6684 3.72039 12.887Z"
-                                            fill=""
-                                        />
-                                        <path
-                                            fillRule="evenodd"
-                                            clipRule="evenodd"
-                                            d="M9.99967 3.33329C8.61896 3.33329 7.49967 4.45258 7.49967 5.83329C7.49967 7.214 8.61896 8.33329 9.99967 8.33329C11.3804 8.33329 12.4997 7.214 12.4997 5.83329C12.4997 4.45258 11.3804 3.33329 9.99967 3.33329ZM5.83301 5.83329C5.83301 3.53211 7.69849 1.66663 9.99967 1.66663C12.3009 1.66663 14.1663 3.53211 14.1663 5.83329C14.1663 8.13448 12.3009 9.99996 9.99967 9.99996C7.69849 9.99996 5.83301 8.13448 5.83301 5.83329Z"
-                                            fill=""
-                                        />
-                                        </g>
-                                    </svg>
-                                    </span>
+                                <InputTextLabel htmlFor="name" >
+                                    Buyer Name
+                                </InputTextLabel>
+                                <AsyncSelect
+                                    loadOptions={asyncBuyerOptions}
+                                    autoFocus
+                                    isLoading={requesting}
+                                    onChange={
+                                        ({data, label , value} : any, b : any) => {
+                                            setForm({ ...data, spouse : data.spouse_user_id })
+                                        }
+                                    }
+                                />
+                            </div>
+                            <div className="w-full sm:w-1/1">
+                                    <InputTextLabel htmlFor="email" >
+                                        Email
+                                    </InputTextLabel>
                                     <InputTextField
-                                        id="name"
-                                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 pl-11.5 pr-4.5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                        placeholder="Realty Name"
+                                        id="email"
                                         autoComplete="off"
+                                        placeholder="Email Address"
+                                        value={form.email}
                                         required
-                                        value={form.name}
-                                        onChange={(e) => updateForm({ name: e.target.value })}
+                                        onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                     />
-                                </div>
                             </div>
                         </div>
 
                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                            <div className="w-full sm:w-1/1">
+                                    <InputTextLabel htmlFor="phone" >
+                                        Contact #
+                                    </InputTextLabel>
+                                    <InputTextField
+                                        id="phone"
+                                        autoComplete="off"
+                                        placeholder="Contact #"
+                                        required
+                                        value={form.phone}
+                                        onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                    />
+                            </div>
+
                             <div className="w-full sm:w-1/1">
                                     <InputTextLabel htmlFor="address" >
                                         Address
@@ -114,36 +194,23 @@ export default function NewForm() {
                                         placeholder="Address"
                                         required
                                         value={form.address}
-                                        onChange={(e) => updateForm({ address: e.target.value })}
-                                    />
-                            </div>
-
-                            <div className="w-full sm:w-1/1">
-                                    <InputTextLabel htmlFor="address2" >
-                                        Alternative Address
-                                    </InputTextLabel>
-                                    <InputTextField
-                                        id="address2"
-                                        autoComplete="off"
-                                        placeholder="Alternative Address"
-                                        value={form.address2}
-                                        onChange={(e) => updateForm({ address2: e.target.value })}
+                                        onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                     />
                             </div>
                     </div>
 
                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                        <div className="w-full sm:w-1/1">
-                                    <InputTextLabel htmlFor="contact_number" >
-                                        Contact Number
+                            <div className="w-full sm:w-1/1">
+                                    <InputTextLabel htmlFor="spouse_name" >
+                                        Spouse Name
                                     </InputTextLabel>
                                     <InputTextField
-                                        id="contact_number"
+                                        id="spouse_name"
                                         autoComplete="off"
-                                        placeholder="Contact Number"
+                                        placeholder="Spouse Name"
                                         required
-                                        value={form.contact_number}
-                                        onChange={(e) => updateForm({ contact_number: e.target.value })}
+                                        value={form.spouse.first_name + " " + form.spouse.middle_name +" "+ form.spouse.last_name}
+                                        onChange={(e) => updateForm({ spouse: e.target.value })}
                                         />
                             </div>
                             <div className="w-full sm:w-1/1">
@@ -156,50 +223,114 @@ export default function NewForm() {
                                         placeholder="Tin Number"
                                         required
                                         value={form.tin}
+                                        onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                        />
+                            </div>
+                    </div>
+
+
+                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                            <div className="w-full sm:w-1/1">
+                                    <InputTextLabel htmlFor="realty_id" >
+                                        Realty
+                                    </InputTextLabel>
+                                    <InputTextField
+                                        id="realty_id"
+                                        autoComplete="off"
+                                        placeholder="Realty"
+                                        required
+                                        value={form.tin}
+                                        onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                        />
+                            </div>
+                            <div className="w-full sm:w-1/1">
+                                    <InputTextLabel htmlFor="tin" >
+                                       Agent
+                                    </InputTextLabel>
+                                    <InputTextField
+                                        id="tin"
+                                        autoComplete="off"
+                                        placeholder="Tin Number"
+                                        required
+                                        value={form.tin}
                                         onChange={(e) => updateForm({ tin: e.target.value })}
                                         />
                             </div>
-                            
+                        </div>
+
+                    <div className="border-b border-stroke mb-5.5  py-4 dark:border-strokedark">
+                        <h3 className="font-medium text-black dark:text-white">
+                            Lot Information
+                        </h3>
                     </div>
+
                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                         <div className="w-full sm:w-1/1">
-                                    <InputTextLabel htmlFor="commission_percent" >
-                                        Team Lead
-                                    </InputTextLabel>
-
-                                    <InputSelectField
-                                        id="lead_id"
-                                        onChange={(e:any) => {
-                                            updateForm({ lead_id: e.target.value })
-                                        }}
-                                        value={form.lead_id+""}
-                                        icon={<SvgAgent/>}
-                                        className={`disabled:cursor-default disabled:bg-whiter relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-12 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${ form.lead_id && form.lead_id > 0 ? "text-black  dark:text-white" : "" }`}
-                                    >
-                                        <option value=""  className="text-body dark:text-bodydark">
-                                            Select Team Lead
-                                        </option>
-                                        {
-                                            form.leads && form.leads.map( (doc:any, key:any) => <>
-                                                <option value={doc._id} className="text-body dark:text-bodydark">
-                                                    {doc.first_name} {doc.middle_name} {doc.last_name} - {doc.email}
-                                                </option>
-                                            </>)
+                                <InputTextLabel htmlFor="project_id" >
+                                    Project
+                                </InputTextLabel>
+                                <AsyncSelect
+                                    loadOptions={asyncProjectOptions}
+                                    autoFocus
+                                    isLoading={projectRequesting}
+                                    defaultOptions={form.projects}
+                                    onChange={
+                                        ({data, label , value} : any, b : any) => {
+                                            updateForm({ project_id: value })
                                         }
-                                    </InputSelectField>
+                                    }
+                                />
                         </div>
                         <div className="w-full sm:w-1/1">
-                                <InputTextLabel htmlFor="commission_percent" >
-                                    Commission
+                                <InputTextLabel htmlFor="block_id" >
+                                    Blocks
+                                </InputTextLabel>
+                                <AsyncSelect
+                                        loadOptions={asyncProjectOptions}
+                                        autoFocus
+                                        isLoading={blockRequesting}
+                                        defaultOptions={form.blocks}
+                                        onChange={
+                                            ({data, label , value} : any, b : any) => {
+                                                setLotRequesting(true)
+                                                updateForm({ block_id: value, lots : data.blockLots })
+                                                setLotRequesting(false)
+                                            }
+                                        }
+                                    />
+                        </div>
+                        <div className="w-full sm:w-1/1">
+                                <InputTextLabel htmlFor="project_id" >
+                                    Lots
+                                </InputTextLabel>
+                                <AsyncSelect
+                                    autoFocus
+                                    defaultOptions={form.lots}
+                                    onChange={
+                                        ({data, label , value} : any, b : any) => {
+                                            updateForm({ project_id: value, area: data.area })
+                                        }
+                                    }
+                                />
+                        </div>
+                        <div className="w-full sm:w-1/1">
+                                <InputTextLabel htmlFor="area" >
+                                    Area
                                 </InputTextLabel>
                                 <InputTextField
-                                    id="commission_percent"
                                     type="number"
+                                    min="1"
+                                    id="area"
                                     autoComplete="off"
-                                    placeholder="Commission Percent"
+                                    placeholder="Lot Are Sqm"
                                     required
-                                    value={form.commission_percent}
-                                    onChange={(e) => updateForm({ commission_percent: e.target.value })}
+                                    value={form.area}
+                                    onChange={
+                                        (e) => {
+                                            updateForm({ [e.target.name]: e.target.value })
+                                            calculateMonthly()
+                                        }
+                                    }
                                     />
                         </div>
                     </div>
@@ -208,34 +339,135 @@ export default function NewForm() {
 
                         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                             <div className="w-full sm:w-1/1">
-                            <InputTextLabel htmlFor="description" >
-                                Description
-                            </InputTextLabel>
-                            <textarea
-                                rows={6}
-                                name="description"
-                                id="description"
-                                placeholder="Type your message"
-                                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                value={form.description}
-                                onChange={(e) => updateForm({ description: e.target.value })}
-                            ></textarea>
+                                    <InputTextLabel htmlFor="price_per_sqm" >
+                                        Price Per Sqm
+                                    </InputTextLabel>
+                                    <InputTextField
+                                        id="price_per_sqm"
+                                        min="1"
+                                        autoComplete="off"
+                                        placeholder="Price Per Sqm"
+                                        required
+                                        value={form.price_per_sqm}
+                                        onChange={
+                                            (e) => {
+                                                updateForm({ [e.target.name]: e.target.value })
+                                                calculateMonthly()
+                                            }
+                                        }
+                                        />
+                            </div>
+
+                            <div className="w-full sm:w-1/1">
+                                    <InputTextLabel htmlFor="tcp" >
+                                        TCP
+                                    </InputTextLabel>
+                                    <InputTextField
+                                        type="number"
+                                        id="tcp"
+                                        autoComplete="off"
+                                        placeholder="TCP"
+                                        required
+                                        value={form.tcp}
+                                        onChange={
+                                            (e) => {
+                                                updateForm({ [e.target.name]: e.target.value })
+                                                calculateMonthly()
+                                            }
+                                        }
+                                        />
                             </div>
                         </div>
 
-                        <div className="mb-4 flex items-center gap-3">
-                        <div className="flex justify-end gap-4.5">
-                            <Link
-                            href="/realties">
-                                <NormalButton>
-                                    Cancel
-                                </NormalButton>
-                            </Link>
-                            <PrimarySaveButton/>
+                        <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                            <div className="w-full sm:w-1/1">
+                                    <InputTextLabel htmlFor="downpayment" >
+                                        Down Payment
+                                    </InputTextLabel>
+                                    <InputTextField
+                                        type="number"
+                                        id="downpayment"
+                                        autoComplete="off"
+                                        placeholder="Down Payment"
+                                        required
+                                        value={form.downpayment}
+                                        onChange={
+                                            (e) => {
+                                                updateForm({ [e.target.name]: e.target.value })
+                                                calculateMonthly()
+                                            }
+                                        }
+                                        />
+                            </div>
+                            <div className="w-full sm:w-1/1">
+                                    <InputTextLabel htmlFor="terms" >
+                                        Terms
+                                    </InputTextLabel>
+                                    <InputTextField
+                                        type="number"
+                                        id="terms"
+                                        autoComplete="off"
+                                        placeholder="Terms"
+                                        required
+                                        value={form.terms}
+                                        onChange={
+                                            (e) => {
+                                                updateForm({ [e.target.name]: e.target.value })
+                                                calculateMonthly()
+                                            }
+                                        }
+                                        />
+                            </div>
+                            <div className="w-full sm:w-1/1">
+                                    <InputTextLabel htmlFor="balance" >
+                                        Balance
+                                    </InputTextLabel>
+                                    <InputTextField
+                                        id="balance"
+                                        autoComplete="off"
+                                        placeholder="Balance less down"
+                                        required
+                                        value={form.balance}
+                                        onChange={
+                                            (e) => {
+                                                updateForm({ [e.target.name]: e.target.value })
+                                                calculateMonthly()
+                                            }
+                                        }
+                                        />
+                            </div>
+                            <div className="w-full sm:w-1/1">
+                                    <InputTextLabel htmlFor="monthly" >
+                                        Monthly Amortization
+                                    </InputTextLabel>
+                                    <InputTextField
+                                        id="monthly"
+                                        autoComplete="off"
+                                        placeholder="Monthly Amortization"
+                                        required
+                                        disabled
+                                        value={form.monthly}
+                                        onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                        />
+                            </div>
                         </div>
+
+                        
+
+                        <div className="mb-4 flex items-center gap-3">
+                            <div className="flex justify-end gap-4.5">
+                                <Link
+                                href="/realties">
+                                    <NormalButton>
+                                        Cancel
+                                    </NormalButton>
+                                </Link>
+                                <PrimarySaveButton/>
+                            </div>
                         </div>
                         </form>
                     </div>
+                  
                 </div>
             </div>
         </div>

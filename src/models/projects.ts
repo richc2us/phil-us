@@ -146,4 +146,6 @@ const projectSchema = new Schema<Project>({
     timestamps : true
 })
 
+projectSchema.index({'name' : 'text','address1':'text','address2':'text'})
+
 export default mongoose.models?.Project || mongoose.model<Project>("Project", projectSchema )
