@@ -107,18 +107,24 @@ export const initialStateAgent = {
 }
 
 export const initialStateReservation = {
-    ...initialStateBuyer,
+    borrowers:[
+        {...initialStateBuyer}
+    ],
     project_id : null,
     block_id: null,
     lot_id : null,
+    realty_id: null,
+    agent_id:null,
     projects: [],
     blocks:[],
     lots:[],
     area: 0,
     price_per_sqm:0,
     tcp:0,
-    downpayment:0,
+    down_payment:0,
+    reservation:0,
     balance:0,
     monthly:0,
-    terms:12
+    terms:12,
+    years: 1
 }

@@ -10,10 +10,9 @@ import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel";
 import InputTextField from "@/components/FormElements/Fields/InputTextField";
 import NormalButton from "@/components/FormElements/Buttons/NormalButton";
 import {  initialStateReservation } from "@/actions/state";
-import InputSelectField from "@/components/FormElements/Fields/inputSelectField";
 import AsyncSelect from 'react-select/async';
 import { searchBuyer, searchProject } from "@/actions/search";
-import SvgProject from "@/components/common/svg/svg-project";
+import { initTWE, Collapse } from "tw-elements";
 
 export default function NewForm() {
 
@@ -45,6 +44,7 @@ export default function NewForm() {
         setRequesting(true)
         setTimeout( async() => {
             callback(await searchBuyerCallback(inputValue))
+            initTWE({ Collapse })
             setRequesting(false)
         }, 500)
     }
@@ -99,8 +99,8 @@ export default function NewForm() {
 
     function calculateMonthly() {
         let tcp = form.area * form.price_per_sqm
-        let downpayment = form.downpayment
-        let balance = tcp - downpayment
+        let down_payment = form.down_payment
+        let balance = tcp - down_payment
         let monthly = (balance / form.terms).toFixed(2)
         updateForm({
             tcp,
@@ -138,98 +138,181 @@ export default function NewForm() {
                         }
                     } 
                         >
-                        <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                            <div className="w-full sm:w-1/1">
-                                <InputTextLabel htmlFor="name" >
-                                    Buyer Name
-                                </InputTextLabel>
-                                <AsyncSelect
-                                    loadOptions={asyncBuyerOptions}
-                                    autoFocus
-                                    isLoading={requesting}
-                                    onChange={
-                                        ({data, label , value} : any, b : any) => {
-                                            setForm({ ...data, spouse : data.spouse_user_id })
-                                        }
+
+                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                        <div className="w-full sm:w-1/1">
+                            <InputTextLabel htmlFor="name" >
+                                Buyer Name
+                            </InputTextLabel>
+                            <AsyncSelect
+                                loadOptions={asyncBuyerOptions}
+                                autoFocus
+                                isLoading={requesting}
+                                // value={}
+                                isMulti={true}
+                                onChange={
+                                    (e : any, b : any) => {
+                                        let borrowers :any = []
+                                        e.map( (buyer:any) => borrowers.push({ ...buyer.data, spouse : buyer.data.spouse_user_id}) )
+                                        updateForm({ borrowers : [...borrowers]  })
                                     }
-                                />
-                            </div>
-                            <div className="w-full sm:w-1/1">
-                                    <InputTextLabel htmlFor="email" >
-                                        Email
-                                    </InputTextLabel>
-                                    <InputTextField
-                                        id="email"
-                                        autoComplete="off"
-                                        placeholder="Email Address"
-                                        value={form.email}
-                                        required
-                                        onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                    />
+                                }
+                            />
+                        </div>
+                    </div>
+
+                    {
+                        form.borrowers[0].first_name.length > 0 &&
+                        <div className="mb-5.5 flex flex-col gap-5.5">
+                            <div className="rounded-sm border border-stroke shadow-default dark:border-strokedark dark:bg-boxdark">
+                                <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
+                                    <div id="accordionBlock">
+                                        <h3 className="mb-2">Individual Information </h3>
+                                    {
+                                        form.borrowers.map((borrower:any, index:any) => {
+                                                if(borrower.first_name.length == 0)  {
+                                                    return
+                                                }
+                                                return (
+                                                    <div className="rounded-lg border border-neutral-200 bg-white dark:border-neutral-600 dark:bg-body-dark mb-2 pb-2" key={index}>
+                                                        <h2 className="mb-0" id={"heading" + index}>
+                                                            <button
+                                                                className="group relative flex w-full items-center rounded-t-lg border-0 bg-white px-5 py-4 text-left text-base text-neutral-800 transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-body-dark dark:text-white [&:not([data-twe-collapse-collapsed])]:bg-white [&:not([data-twe-collapse-collapsed])]:text-primary [&:not([data-twe-collapse-collapsed])]:shadow-border-b dark:[&:not([data-twe-collapse-collapsed])]:bg-surface-dark dark:[&:not([data-twe-collapse-collapsed])]:text-primary dark:[&:not([data-twe-collapse-collapsed])]:shadow-white/10 "
+                                                                type="button"
+                                                                data-twe-collapse-init
+                                                                data-twe-target={"#collapse" + index}
+                                                                aria-expanded={ index == 0 ? "true" : "false"}
+                                                                aria-controls={"#collapse" + index}
+                                                                >
+                                                                   #{index + 1} {borrower.first_name } {borrower.middle_name} {borrower.last_name}
+                                                                   {
+                                                                        borrower.spouse?.first_name ? ("  * spouse * " + borrower.first_name + " "+borrower.middle_name+" " +borrower.last_name) : ""
+                                                                   }
+                                                                <span
+                                                                className="-me-1 ms-auto h-5 w-5 shrink-0 rotate-[-180deg] transition-transform duration-200 ease-in-out group-data-[twe-collapse-collapsed]:me-0 group-data-[twe-collapse-collapsed]:rotate-0 motion-reduce:transition-none [&>svg]:h-6 [&>svg]:w-6">
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    fill="none"
+                                                                    viewBox="0 0 24 24"
+                                                                    strokeWidth="1.5"
+                                                                    stroke="currentColor">
+                                                                    <path
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"
+                                                                    d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                                                </svg>
+                                                                </span>
+                                                            </button>
+                                                        </h2>
+                                                        <div
+                                                            id={"collapse" + index}
+                                                            className={"!visible " + ((index == 0 ) ? "" : "hidden")}
+                                                            data-twe-collapse-item
+                                                            aria-labelledby={"heading" + index}
+                                                            data-twe-parent="#accordionBlock"
+                                                        >
+                                                            <div className="px-5">
+                                                                <div className="grid grid-cols-2 gap-2">
+                                                                    <div className="w-full sm:w-1/1">
+                                                                        <InputTextLabel htmlFor={"email"+index} >
+                                                                            Email
+                                                                        </InputTextLabel>
+                                                                        <InputTextField
+                                                                            id={"email"+index}
+                                                                            autoComplete="off"
+                                                                            placeholder="Email Address"
+                                                                            value={form.borrowers[index].email}
+                                                                            required
+                                                                            onChange={(e) => {
+                                                                                let b = [...form.borrowers]
+                                                                                b[index].email = e.target.value
+                                                                                updateForm({ borrower: b })
+                                                                            } }
+                                                                        />
+                                                                    </div>
+
+                                                                    <div className="w-full sm:w-1/1">
+                                                                        <InputTextLabel htmlFor={"phone" + index} >
+                                                                            Contact #
+                                                                        </InputTextLabel>
+                                                                        <InputTextField
+                                                                            id={"phone"+index}
+                                                                            autoComplete="off"
+                                                                            placeholder="Contact #"
+                                                                            required
+                                                                            value={form.borrowers[index].phone}
+                                                                            onChange={(e) => {
+                                                                                let b = [...form.borrowers]
+                                                                                b[index].phone = e.target.value
+                                                                                updateForm({ borrower: b })
+                                                                            } }
+                                                                            />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="grid grid-cols-2 gap-2">
+                                                                    <div className="w-full sm:w-1/1">
+                                                                            <InputTextLabel htmlFor={"address" + index} >
+                                                                                Address
+                                                                            </InputTextLabel>
+                                                                            <InputTextField
+                                                                                id={"address"+index}
+                                                                                autoComplete="off"
+                                                                                placeholder="Address"
+                                                                                required
+                                                                                value={form.borrowers[index].address}
+                                                                                onChange={(e) => {
+                                                                                    let b = [...form.borrowers]
+                                                                                    b[index].address = e.target.value
+                                                                                    updateForm({ borrower: b })
+                                                                                } }
+                                                                            />
+                                                                    </div>
+                                                                    {/* <div className="w-full sm:w-1/1">
+                                                                            <InputTextLabel htmlFor="spouse_name" >
+                                                                                Spouse Name
+                                                                            </InputTextLabel>
+                                                                            <InputTextField
+                                                                                id="spouse_name"
+                                                                                autoComplete="off"
+                                                                                placeholder="Spouse Name"
+                                                                                required
+                                                                                value={form.borrowers[index]?.spouse.first_name + " " + form.borrowers[index]?.spouse.middle_name +" "+ form.borrowers[index]?.spouse.last_name}
+                                                                                // onChange={(e) => updateForm({ spouse: e.target.value })}
+                                                                                />
+                                                                    </div> */}
+                                                                    <div className="w-full sm:w-1/1">
+                                                                            <InputTextLabel htmlFor={"tin" + index} >
+                                                                                Tin
+                                                                            </InputTextLabel>
+                                                                            <InputTextField
+                                                                                id={"tin"+index}
+                                                                                autoComplete="off"
+                                                                                placeholder="Tin Number"
+                                                                                required
+                                                                                value={form.borrowers[index].tin}
+                                                                                onChange={(e) => {
+                                                                                    let b = [...form.borrowers]
+                                                                                    b[index].tin = e.target.value
+                                                                                    updateForm({ borrower: b })
+                                                                                } }
+                                                                                />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                )
+                                            })
+                                    }
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                            <div className="w-full sm:w-1/1">
-                                    <InputTextLabel htmlFor="phone" >
-                                        Contact #
-                                    </InputTextLabel>
-                                    <InputTextField
-                                        id="phone"
-                                        autoComplete="off"
-                                        placeholder="Contact #"
-                                        required
-                                        value={form.phone}
-                                        onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                    />
-                            </div>
-
-                            <div className="w-full sm:w-1/1">
-                                    <InputTextLabel htmlFor="address" >
-                                        Address
-                                    </InputTextLabel>
-                                    <InputTextField
-                                        id="address"
-                                        autoComplete="off"
-                                        placeholder="Address"
-                                        required
-                                        value={form.address}
-                                        onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                    />
-                            </div>
-                    </div>
-
-                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                            <div className="w-full sm:w-1/1">
-                                    <InputTextLabel htmlFor="spouse_name" >
-                                        Spouse Name
-                                    </InputTextLabel>
-                                    <InputTextField
-                                        id="spouse_name"
-                                        autoComplete="off"
-                                        placeholder="Spouse Name"
-                                        required
-                                        value={form.spouse.first_name + " " + form.spouse.middle_name +" "+ form.spouse.last_name}
-                                        onChange={(e) => updateForm({ spouse: e.target.value })}
-                                        />
-                            </div>
-                            <div className="w-full sm:w-1/1">
-                                    <InputTextLabel htmlFor="tin" >
-                                        Tin
-                                    </InputTextLabel>
-                                    <InputTextField
-                                        id="tin"
-                                        autoComplete="off"
-                                        placeholder="Tin Number"
-                                        required
-                                        value={form.tin}
-                                        onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                        />
-                            </div>
-                    </div>
+                    }
+                    
 
 
-                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                    <div className="flex flex-col gap-5.5 sm:flex-row">
                             <div className="w-full sm:w-1/1">
                                     <InputTextLabel htmlFor="realty_id" >
                                         Realty
@@ -239,20 +322,20 @@ export default function NewForm() {
                                         autoComplete="off"
                                         placeholder="Realty"
                                         required
-                                        value={form.tin}
+                                        value={form.realty_id ? form.realty_id  : ""}
                                         onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                         />
                             </div>
                             <div className="w-full sm:w-1/1">
-                                    <InputTextLabel htmlFor="tin" >
+                                    <InputTextLabel htmlFor="agent_id" >
                                        Agent
                                     </InputTextLabel>
                                     <InputTextField
-                                        id="tin"
+                                        id="agent_id"
                                         autoComplete="off"
-                                        placeholder="Tin Number"
+                                        placeholder="Agent"
                                         required
-                                        value={form.tin}
+                                        value={form.agent_id ? form.agent_id : ""}
                                         onChange={(e) => updateForm({ tin: e.target.value })}
                                         />
                             </div>
@@ -287,7 +370,6 @@ export default function NewForm() {
                                 </InputTextLabel>
                                 <AsyncSelect
                                         loadOptions={asyncProjectOptions}
-                                        autoFocus
                                         isLoading={blockRequesting}
                                         defaultOptions={form.blocks}
                                         onChange={
@@ -304,7 +386,6 @@ export default function NewForm() {
                                     Lots
                                 </InputTextLabel>
                                 <AsyncSelect
-                                    autoFocus
                                     defaultOptions={form.lots}
                                     onChange={
                                         ({data, label , value} : any, b : any) => {
@@ -313,31 +394,31 @@ export default function NewForm() {
                                     }
                                 />
                         </div>
-                        <div className="w-full sm:w-1/1">
-                                <InputTextLabel htmlFor="area" >
-                                    Area
-                                </InputTextLabel>
-                                <InputTextField
-                                    type="number"
-                                    min="1"
-                                    id="area"
-                                    autoComplete="off"
-                                    placeholder="Lot Are Sqm"
-                                    required
-                                    value={form.area}
-                                    onChange={
-                                        (e) => {
-                                            updateForm({ [e.target.name]: e.target.value })
-                                            calculateMonthly()
-                                        }
-                                    }
-                                    />
-                        </div>
                     </div>
 
 
 
                         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                            <div className="w-full sm:w-1/1">
+                                    <InputTextLabel htmlFor="area" >
+                                        Area
+                                    </InputTextLabel>
+                                    <InputTextField
+                                        type="number"
+                                        min="1"
+                                        id="area"
+                                        autoComplete="off"
+                                        placeholder="Lot Are Sqm"
+                                        required
+                                        value={form.area}
+                                        onChange={
+                                            (e) => {
+                                                updateForm({ [e.target.name]: e.target.value })
+                                                calculateMonthly()
+                                            }
+                                        }
+                                        />
+                            </div>
                             <div className="w-full sm:w-1/1">
                                     <InputTextLabel htmlFor="price_per_sqm" >
                                         Price Per Sqm
@@ -381,16 +462,16 @@ export default function NewForm() {
 
                         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                             <div className="w-full sm:w-1/1">
-                                    <InputTextLabel htmlFor="downpayment" >
+                                    <InputTextLabel htmlFor="down_payment" >
                                         Down Payment
                                     </InputTextLabel>
                                     <InputTextField
                                         type="number"
-                                        id="downpayment"
+                                        id="down_payment"
                                         autoComplete="off"
                                         placeholder="Down Payment"
                                         required
-                                        value={form.downpayment}
+                                        value={form.down_payment}
                                         onChange={
                                             (e) => {
                                                 updateForm({ [e.target.name]: e.target.value })
@@ -401,7 +482,7 @@ export default function NewForm() {
                             </div>
                             <div className="w-full sm:w-1/1">
                                     <InputTextLabel htmlFor="terms" >
-                                        Terms
+                                        Terms - { form.years } year(s)
                                     </InputTextLabel>
                                     <InputTextField
                                         type="number"
@@ -412,7 +493,9 @@ export default function NewForm() {
                                         value={form.terms}
                                         onChange={
                                             (e) => {
-                                                updateForm({ [e.target.name]: e.target.value })
+                                                let v  : number = parseInt(e.target.value)
+                                                let years : number = v > 12 ? Math.floor(v/12) +   ((v % 12) / 12)  : v/12
+                                                updateForm({ [e.target.name]: e.target.value, years : years.toFixed(1) })
                                                 calculateMonthly()
                                             }
                                         }
@@ -468,6 +551,50 @@ export default function NewForm() {
                         </form>
                     </div>
                   
+                </div>
+            </div>
+            <div className="col-span-3 xl:col-span-3">
+                <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+                    <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
+                        <h3 className="font-medium text-black dark:text-white">
+                            Amortization
+                        </h3>
+                    </div>
+                    <div className="p-7">
+                        <table className="w-full">
+                            <thead>
+                                <tr>
+                                    <th>MA#</th>
+                                    <th>Amount</th>
+                                    <th>Due Date</th>
+                                    {/* <th>Date Paid</th> */}
+                                    {/* <th>Sales Invoice #</th> */}
+                                    {/* <th>Amount Paid</th> */}
+                                    {/* <th>Running Balance</th> */}
+                                </tr>
+                                
+                            </thead>
+                            <tbody className="text-center">
+                                {
+                                        form.terms > 0 && form.monthly > 0 && Array.from({length: form.terms}).map( (i:any,k:any) => {
+                                                return <tr key={k}>
+                                                    <td>
+                                                       <p> {k+1}</p>
+                                                    </td>
+                                                    <td>
+                                                       <p> {form.monthly} </p>
+                                                    </td>
+                                                    <td>
+                                                       <p> {k+1} </p>
+                                                    </td>
+
+                                                </tr>
+                                            }
+                                        )
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
