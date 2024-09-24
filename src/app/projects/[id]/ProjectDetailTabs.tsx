@@ -28,7 +28,7 @@ useEffect(() => {
 return (
     <ProjectContext.Provider value={{projectID : projectID}}>
         <ul
-        className="mb-5 flex list-none flex-row flex-wrap border-b-0 ps-0"
+        className="flex list-none flex-row flex-wrap border-b-0 ps-0"
         role="tablist"
         data-twe-nav-ref>
         <li role="presentation">

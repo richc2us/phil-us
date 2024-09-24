@@ -54,12 +54,12 @@ export const  initialStateRealty = {
     leads: []
 }
 
-export const initialStateBuyer = {
+export const initialStateUser = {
+    spouse_user_id:null,
+    realty_id : null,
     first_name: "",
     middle_name: "",
     last_name: "",
-    tin: "",
-    tin_issuance: "",
     address: "",
     region: "",
     province: "",
@@ -70,40 +70,22 @@ export const initialStateBuyer = {
     civil_status:"",
     email: "",
     phone: "",
+    account_type: "",
+    tin: "",
+    tin_issuance: "",
+    verified : false,
+    references: []
+}
+
+export const initialStateBuyer = {
+    ...initialStateUser,
     spouse: {
-        first_name: "",
-        middle_name: "",
-        last_name:"",
-        address:"",
-        region: "",
-        province: "",
-        city: "",
-        barangay: "",
-        zip: "",
-        email: "",
-        phone: "",
-        tin: "",
-        tin_issuance: "",
-    },
-    buyer_id: null,
-    spouse_user_id:null
+        ...initialStateUser
+    }
 }
 
 export const initialStateAgent = {
-    first_name: "",
-    middle_name: "",
-    last_name: "",
-    tin: "",
-    tin_issuance: "",
-    address: "",
-    region: "",
-    province: "",
-    city: "",
-    barangay: "",
-    zip: "",
-    email: "",
-    phone: "",
-    buyer_id: null,
+    ...initialStateUser,
     spouse_user_id:null,
     realties: [],
     realty_id: null,

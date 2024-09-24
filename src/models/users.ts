@@ -23,7 +23,9 @@ export interface User extends Document {
     account_type: string,
     tin?: string,
     tin_issuance?: string,
-    verified?: boolean
+    verified?: boolean,
+    references: [],
+    active: boolean
 }
 
 const userSchema = new Schema<User>({
@@ -51,7 +53,9 @@ const userSchema = new Schema<User>({
     tin: {type : String},
     tin_issuance: {type : String},
     account_type:{type : String, default: 'admin'},
-    verified: {type : Boolean, default: false}
+    verified: {type : Boolean, default: false},
+    active: {type : Boolean, default: true},
+    references: [{type : {}}]
 },{
     timestamps : true
 });

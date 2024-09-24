@@ -10,6 +10,8 @@ import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel"
 import SvgRealty from "@/components/common/svg/svg-realty"
 import SVGArrowDown from "@/components/common/svg/svg-arrow-down"
 import InputSelectField from "@/components/FormElements/Fields/inputSelectField"
+import AsyncSelect from 'react-select/async'
+
 
 export default function NewForm() {
 
@@ -214,8 +216,7 @@ export default function NewForm() {
                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                 />
                     </div>
-                </div>
-                <div className="mb-5 5 flex flex-col gap-5.5 sm:flex-row">
+
                     <div className="w-full sm:w-1/4">
                                 <InputTextLabel htmlFor="city">
                                     City
@@ -242,6 +243,12 @@ export default function NewForm() {
                                 />
                     </div>
 
+                    
+
+                </div>
+                <div className="mb-5 5 flex flex-col gap-5.5 sm:flex-row">
+                    
+
                     <div className="w-full sm:w-1/4">
                                 <InputTextLabel htmlFor="zip">
                                     Zip
@@ -254,6 +261,47 @@ export default function NewForm() {
                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                 />
                     </div>
+
+                    <div className="w-full sm:w-1/3">
+                                <InputTextLabel htmlFor="gender">
+                                    Gender
+                                </InputTextLabel>
+
+                                <AsyncSelect
+                                    id="gender"
+                                    isSearchable={false}
+                                    defaultOptions={ [
+                                        {value: "Male",label : "Male"},
+                                        {value: "Female",label : "Female"}
+                                    ]}
+                                    onChange={
+                                        ({data, label , value} : any, b : any) => {
+                                             updateForm({ gender: value })
+                                        }
+                                    }
+                                />
+                    </div>
+                    <div className="w-full sm:w-1/3">
+                                <InputTextLabel htmlFor="civil_status">
+                                    Civil Status
+                                </InputTextLabel>
+
+                                <AsyncSelect
+                                    id="civil_status"
+                                    isSearchable={false}
+                                    defaultOptions={ [
+                                        {value: "Married",label : "Married"},
+                                        {value: "Single",label : "Single"}
+                                    ]}
+                                    onChange={
+                                        ({data, label , value} : any, b : any) => {
+                                            updateForm({civil_status: value })
+                                        }
+                                    }
+                                />
+
+                    </div>
+
                     <div className="w-full sm:w-1/4">
                                     <InputTextLabel htmlFor="realty">
                                         Realty

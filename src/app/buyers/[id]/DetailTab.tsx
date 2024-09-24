@@ -7,6 +7,7 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import NormalButton from "@/components/FormElements/Buttons/NormalButton"
 import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton"
+import AsyncSelect from 'react-select/async'
 
 export function DetailTab({document} : any) {
     const updateForm = (value : any) =>  setForm( (prev: any) =>  { return {...prev, ...value} }  )
@@ -245,6 +246,29 @@ export function DetailTab({document} : any) {
                                         onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                     />
                         </div>
+
+                        <div className="w-full sm:w-1/3">
+                                <InputTextLabel htmlFor="gender">
+                                    Gender
+                                </InputTextLabel>
+
+                                <AsyncSelect
+                                    id="gender"
+                                    isSearchable={false}
+                                    isDisabled={!form.edit}
+                                    value={{value:form.gender, label : form.gender}}
+                                    defaultOptions={ [
+                                        {value: "Male",label : "Male"},
+                                        {value: "Female",label : "Female"}
+                                    ]}
+                                    onChange={
+                                        ({data, label , value} : any, b : any) => {
+                                             updateForm({ spouse : { ...form.spouse, gender: value }})
+                                        }
+                                    }
+                                />
+                        </div>
+
                     </div>
                     <div className="mb-5 5 flex flex-col gap-5.5 sm:flex-row">
                         <div className="w-full sm:w-1/3">
@@ -288,8 +312,33 @@ export function DetailTab({document} : any) {
                                         onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                     />
                         </div>
+
+                        <div className="w-full sm:w-1/3">
+                                <InputTextLabel htmlFor="civil_status">
+                                    Civil Status
+                                </InputTextLabel>
+
+                                <AsyncSelect
+                                    id="civil_status"
+                                    isDisabled={!form.edit}
+                                    isSearchable={false}
+                                    value={{value:form.civil_status, label : form.civil_status}}
+                                    defaultOptions={ [
+                                        {value: "Married",label : "Married"},
+                                        {value: "Single",label : "Single"}
+                                    ]}
+                                    onChange={
+                                        ({data, label , value} : any, b : any) => {
+                                            updateForm({civil_status: value })
+                                        }
+                                    }
+                                />
+
+                        </div>
                     </div>
 
+                    {
+                    form.civil_status && form.civil_status.length > 0 &&  form.civil_status == "Married" && <>
                     <div className="border-b border-stroke py-4 dark:border-strokedark">
                         <h3 className="font-medium text-black dark:text-white">Spouse Information {form.spouse_user_id && <Link className="text-[#9D5425]" href={"/buyers/" + form.spouse_user_id} > <span className="text-sm">Edit</span></Link> } </h3>
                     </div>
@@ -484,7 +533,8 @@ export function DetailTab({document} : any) {
                                         disabled={true}
                                     />
                         </div>
-                    </div>
+                    </div></>
+                }
                 </div>
                 
             </div>

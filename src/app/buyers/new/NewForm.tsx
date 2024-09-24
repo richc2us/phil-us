@@ -7,13 +7,13 @@ import { ServerActionResponse } from "@/types/server-action-reply"
 import { initialStateBuyer } from "@/actions/state"
 import InputTextField from "@/components/FormElements/Fields/InputTextField"
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel"
-import AsyncSelect from 'react-select/async';
+import AsyncSelect from 'react-select/async'
 
 export default function NewForm() {
 
     const updateForm = (value : any) =>  setForm( (prev: any) =>  { return {...prev, ...value} }  )
 
-    const [form, setForm] = useState(initialStateBuyer)
+    const [form, setForm] = useState({...initialStateBuyer, spouse: {...initialStateBuyer.spouse, civil_status : "Married"} })
     const [emailBuyerExists, setEmailBuyerExists] = useState(false)
     const [emailSpouseExists, setEmailSpouseExists] = useState(false)
     const [emailCheckBuyer, setEmailCheckBuyer] = useState<ServerActionResponse>()
@@ -219,12 +219,13 @@ export default function NewForm() {
                     </div>
 
                     <div className="w-full sm:w-1/3">
-                        <InputTextLabel htmlFor="zip">
+                        <InputTextLabel htmlFor="gender">
                             Gender
                         </InputTextLabel>
 
                         <AsyncSelect
                             id="gender"
+                            isSearchable={false}
                             defaultOptions={ [
                                 {value: "Male",label : "Male"},
                                 {value: "Female",label : "Female"}
@@ -286,6 +287,7 @@ export default function NewForm() {
 
                                 <AsyncSelect
                                     id="civil_status"
+                                    isSearchable={false}
                                     defaultOptions={ [
                                         {value: "Married",label : "Married"},
                                         {value: "Single",label : "Single"}
@@ -488,11 +490,12 @@ export default function NewForm() {
                                 />
                     </div>
                     <div className="w-full sm:w-1/3">
-                                <InputTextLabel htmlFor="zip">
+                                <InputTextLabel htmlFor="gender">
                                     Gender
                                 </InputTextLabel>
 
                                 <AsyncSelect
+                                    id="gender"
                                     defaultOptions={ [
                                         {value: "Male",label : "Male"},
                                         {value: "Female",label : "Female"}
@@ -552,6 +555,8 @@ export default function NewForm() {
 
                                 <AsyncSelect
                                     id="civil_status"
+                                    isDisabled
+                                    value={{value:form.spouse.civil_status, label : form.spouse.civil_status}}
                                     defaultOptions={ [
                                         {value: "Married",label : "Married"},
                                         {value: "Single",label : "Single"}
