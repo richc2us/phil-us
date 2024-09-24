@@ -1,3 +1,4 @@
+
 export const  initialSateCompany = {
     name: "",
     address: "",
@@ -65,6 +66,8 @@ export const initialStateBuyer = {
     city: "",
     barangay: "",
     zip: "",
+    gender:"",
+    civil_status:"",
     email: "",
     phone: "",
     spouse: {
@@ -122,9 +125,13 @@ export const initialStateReservation = {
     price_per_sqm:0,
     tcp:0,
     down_payment:0,
+    discount_percent:0,
+    discount_percent_amount : 0,
     reservation:0,
+    lot_condition:'',
     balance:0,
     monthly:0,
     terms:12,
-    years: 1
+    years: 1,
+    active: 1
 }

@@ -1,38 +1,27 @@
 'use server';
 import dbConnect from "@/lib/mongodb";
-import  User  from "@/models/users"
+import  Amortization  from "@/models/amortizations"
 import { revalidatePath } from "next/cache";
 import { ServerActionResponse } from "@/types/server-action-reply";
-export const getBuyers = async() => {
+export const getAmortizations = async() => {
     await dbConnect()
     revalidatePath('/')
-    return await User.find({account_type: 'buyer'})
+    return await Amortization.find()
 }
 
-export const getBuyer = async(id: string) => {
+export const getAmortization = async(id: string) => {
     await dbConnect()
     revalidatePath('/')
-    return await User.findById(id)
+    return await Amortization.findById(id)
 }
 
-export const checkEmailExists = async(email:string) : Promise<ServerActionResponse> => {
-    const user  = await User.findOne({email: email})
-    return {success: user && user.email.length > 0 , message: user && user.email.length > 0 ? 'Email already in used' : "Email is unused", document: [  user && user.email.length > 0 ?  { first_name: user.first_name, middle_name: user.middle_name, last_name : user.last_name ,email: user.email } : {} ] }
-}
-
-export async function saveBuyerAction(state: any) {
+export async function saveAmortizationAction(state: any) {
     await dbConnect()
     try {
-        let buyer = null
-        let spouse = null
-
-        buyer = await User.create( {...state , account_type: "buyer"} )
-        if(state.spouse.email.length) {
-            spouse = await User.create( {...state.spouse , account_type: "buyer", spouse_user_id: buyer._id} )
-            await User.updateOne({ _id: buyer._id }, { spouse_user_id: spouse._id });
-        }
+        let document = null
+        document = await Amortization.create( {...state , account_type: "agent"} )
         revalidatePath("/")
-        return {success: true, message: buyer.name + ' created', document : { id: buyer._id, buyer: buyer.toJSON(), spouse: spouse ? spouse.toJSON() : {} }}
+        return {success: true, message: document.name + ' created', document : { id: document._id, buyer: document.toJSON() }}
     } catch (e: any) {
         let errors = []
         for(let field in e.errors) {
@@ -46,10 +35,10 @@ export async function saveBuyerAction(state: any) {
     }
 }
 
-export async function updateBuyerAction(state: any) {
+export async function updateAmortizationAction(state: any) {
     await dbConnect()
     try {
-        await User.updateOne({_id: state.id}, {...state})
+        await Amortization.updateOne({_id: state.id}, {...state})
         revalidatePath("/")
         return {success: true, message: 'updated', document : { ...state }}
     } catch (e: any) {
@@ -66,10 +55,10 @@ export async function updateBuyerAction(state: any) {
 }
 
 
-export const deleteBuyerAction = async(id: any) : Promise <ServerActionResponse> => {
+export const deleteAmortizationAction = async(id: any) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {
-        await User.deleteOne({_id: id, account_type: "buyer" })
+        await Amortization.deleteOne({_id: id, account_type: "agent" })
         revalidatePath("/");
         return {success: true, message: 'deleted', document: null}
     } catch (e:any) {

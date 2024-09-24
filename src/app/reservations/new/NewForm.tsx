@@ -14,6 +14,7 @@ import AsyncSelect from 'react-select/async';
 import { searchBuyer, searchProject } from "@/actions/search";
 import { initTWE, Collapse } from "tw-elements";
 
+
 export default function NewForm() {
 
     const [form, setForm] = useState(initialStateReservation)
@@ -22,6 +23,18 @@ export default function NewForm() {
     const [blockRequesting, setBlockRequesting] = useState(false)
     const [lotRequesting, setLotRequesting] = useState(false)
     const [reply, setReply] = useState<ServerActionResponse>()
+    const [labels, setLabels] = useState({
+        project_label: "",
+        block_label:"",
+        lot_label:""
+    })
+
+    function displayLotLabel() {
+        let pl = labels.project_label.length > 0 ? labels.project_label : ""
+        let bl = labels.block_label.length > 0 ? labels.block_label : ""
+        let ll = labels.lot_label.length > 0 ? labels.lot_label : ""
+        return (pl.length > 0 ? " : " : "") + pl +  bl +  ll
+    }
 
     function updateForm(value : any) {
         return setForm((prev: any) => {
@@ -100,8 +113,10 @@ export default function NewForm() {
     function calculateMonthly() {
         let tcp = form.area * form.price_per_sqm
         let down_payment = form.down_payment
-        let balance = tcp - down_payment
-        let monthly = (balance / form.terms).toFixed(2)
+        let reservation = form.reservation
+        let discount_percent_amount = (form.discount_percent/100) * tcp
+        let balance = tcp - down_payment - discount_percent_amount - reservation
+        let monthly = parseFloat((balance / form.terms).toFixed(2))
         updateForm({
             tcp,
             balance,
@@ -109,8 +124,22 @@ export default function NewForm() {
         })
     }
 
+    useEffect(() => {
+        calculateMonthly()
+    },[
+        form.area,
+        form.price_per_sqm,
+        form.reservation,
+        form.discount_percent,
+        form.down_payment,
+        form.terms,
+        form.balance,
+        form.monthly
+    ])
+
 
     return (
+  
         <div className="grid grid-cols-6 gap-8">
             <div className="col-span-3 xl:col-span-3">
                 <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -162,7 +191,7 @@ export default function NewForm() {
                     </div>
 
                     {
-                        form.borrowers[0].first_name.length > 0 &&
+                        form.borrowers[0] && form.borrowers[0].first_name.length > 0 &&
                         <div className="mb-5.5 flex flex-col gap-5.5">
                             <div className="rounded-sm border border-stroke shadow-default dark:border-strokedark dark:bg-boxdark">
                                 <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
@@ -185,9 +214,6 @@ export default function NewForm() {
                                                                 aria-controls={"#collapse" + index}
                                                                 >
                                                                    #{index + 1} {borrower.first_name } {borrower.middle_name} {borrower.last_name}
-                                                                   {
-                                                                        borrower.spouse?.first_name ? ("  * spouse * " + borrower.first_name + " "+borrower.middle_name+" " +borrower.last_name) : ""
-                                                                   }
                                                                 <span
                                                                 className="-me-1 ms-auto h-5 w-5 shrink-0 rotate-[-180deg] transition-transform duration-200 ease-in-out group-data-[twe-collapse-collapsed]:me-0 group-data-[twe-collapse-collapsed]:rotate-0 motion-reduce:transition-none [&>svg]:h-6 [&>svg]:w-6">
                                                                 <svg
@@ -212,12 +238,13 @@ export default function NewForm() {
                                                             data-twe-parent="#accordionBlock"
                                                         >
                                                             <div className="px-5">
-                                                                <div className="grid grid-cols-2 gap-2">
-                                                                    <div className="w-full sm:w-1/1">
+                                                                <div className="grid grid-cols-3 gap-2">
+                                                                    <div className="mb-4.5 w-full sm:w-1/1">
                                                                         <InputTextLabel htmlFor={"email"+index} >
                                                                             Email
                                                                         </InputTextLabel>
                                                                         <InputTextField
+                                                                            className="w-full rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                                             id={"email"+index}
                                                                             autoComplete="off"
                                                                             placeholder="Email Address"
@@ -231,11 +258,12 @@ export default function NewForm() {
                                                                         />
                                                                     </div>
 
-                                                                    <div className="w-full sm:w-1/1">
+                                                                    <div className="mb-4.5 w-full sm:w-1/1">
                                                                         <InputTextLabel htmlFor={"phone" + index} >
                                                                             Contact #
                                                                         </InputTextLabel>
                                                                         <InputTextField
+                                                                            className="w-full rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                                             id={"phone"+index}
                                                                             autoComplete="off"
                                                                             placeholder="Contact #"
@@ -248,6 +276,22 @@ export default function NewForm() {
                                                                             } }
                                                                             />
                                                                     </div>
+
+                                                                    <div className="mb-4.5 w-full sm:w-1/1">
+                                                                        <InputTextLabel htmlFor={"spouse" + index} >
+                                                                            Spouse
+                                                                        </InputTextLabel>
+                                                                        <InputTextField
+                                                                            className="w-full rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                                            id={"spouse"+index}
+                                                                            autoComplete="off"
+                                                                            placeholder="Contact #"
+                                                                            disabled
+                                                                            value={borrower.spouse?.first_name ? (borrower.first_name + " "+borrower.middle_name+" " +borrower.last_name) : ""}
+                                                                            />
+                                                                    </div>
+
+                                                                    
                                                                 </div>
                                                                 <div className="grid grid-cols-2 gap-2">
                                                                     <div className="w-full sm:w-1/1">
@@ -255,6 +299,7 @@ export default function NewForm() {
                                                                                 Address
                                                                             </InputTextLabel>
                                                                             <InputTextField
+                                                                                className="w-full rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                                                 id={"address"+index}
                                                                                 autoComplete="off"
                                                                                 placeholder="Address"
@@ -285,6 +330,7 @@ export default function NewForm() {
                                                                                 Tin
                                                                             </InputTextLabel>
                                                                             <InputTextField
+                                                                                className="w-full rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                                                 id={"tin"+index}
                                                                                 autoComplete="off"
                                                                                 placeholder="Tin Number"
@@ -318,10 +364,10 @@ export default function NewForm() {
                                         Realty
                                     </InputTextLabel>
                                     <InputTextField
+                                        className="w-full rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                         id="realty_id"
                                         autoComplete="off"
                                         placeholder="Realty"
-                                        required
                                         value={form.realty_id ? form.realty_id  : ""}
                                         onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                         />
@@ -331,6 +377,7 @@ export default function NewForm() {
                                        Agent
                                     </InputTextLabel>
                                     <InputTextField
+                                        className="w-full rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                         id="agent_id"
                                         autoComplete="off"
                                         placeholder="Agent"
@@ -341,69 +388,104 @@ export default function NewForm() {
                             </div>
                         </div>
 
-                    <div className="border-b border-stroke mb-5.5  py-4 dark:border-strokedark">
+                    <div className="border-b border-stroke py-4 dark:border-strokedark">
                         <h3 className="font-medium text-black dark:text-white">
                             Lot Information
+                            <span className="text-meta-3">{displayLotLabel()}</span>
+                            {
+                                labels.project_label.length > 0 && 
+                                <span className="cursor-pointer text-sm text-primary" onClick={ (e) => 
+                                    setLabels({
+                                        ...labels,
+                                        project_label:"",
+                                        block_label:"",
+                                        lot_label:""
+                                    })
+                                }> Edit</span>
+                            }
+
                         </h3>
                     </div>
 
-                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                    <div className={"flex flex-col  gap-5.5 sm:flex-row " + (labels.project_label.length > 0 ? "" : "mt-5.5")}>
                         <div className="w-full sm:w-1/1">
-                                <InputTextLabel htmlFor="project_id" >
-                                    Project
-                                </InputTextLabel>
-                                <AsyncSelect
+                                {
+                                    labels.project_label.length == 0 &&
+                                    <InputTextLabel htmlFor="project_id" >
+                                        Project
+                                    </InputTextLabel>
+                                }
+
+                                {
+                                    labels.project_label.length == 0 &&
+                                    <AsyncSelect
                                     loadOptions={asyncProjectOptions}
                                     autoFocus
                                     isLoading={projectRequesting}
                                     defaultOptions={form.projects}
                                     onChange={
-                                        ({data, label , value} : any, b : any) => {
-                                            updateForm({ project_id: value })
+                                            ({data, label , value} : any, b : any) => {
+                                                updateForm({ project_id: value})
+                                                setLabels({ ...labels, project_label : label })
+                                            }
                                         }
-                                    }
-                                />
+                                    />
+                                }
+                                
                         </div>
                         <div className="w-full sm:w-1/1">
-                                <InputTextLabel htmlFor="block_id" >
-                                    Blocks
-                                </InputTextLabel>
-                                <AsyncSelect
+
+                                {
+                                    labels.block_label.length == 0 &&
+
+                                        <InputTextLabel htmlFor="block_id" >
+                                            Blocks
+                                        </InputTextLabel> 
+                                }
+                                { labels.block_label.length == 0 &&
+                                        <AsyncSelect
                                         loadOptions={asyncProjectOptions}
                                         isLoading={blockRequesting}
                                         defaultOptions={form.blocks}
                                         onChange={
                                             ({data, label , value} : any, b : any) => {
                                                 setLotRequesting(true)
-                                                updateForm({ block_id: value, lots : data.blockLots })
+                                                updateForm({ block_id: value, lots : data.blockLots  })
+                                                setLabels({ ...labels, block_label : " / "+label })
                                                 setLotRequesting(false)
                                             }
                                         }
                                     />
+                                }
                         </div>
                         <div className="w-full sm:w-1/1">
-                                <InputTextLabel htmlFor="project_id" >
+
+                                {
+                                    labels.lot_label.length == 0 &&
+                                    <InputTextLabel htmlFor="project_id" >
                                     Lots
-                                </InputTextLabel>
-                                <AsyncSelect
-                                    defaultOptions={form.lots}
-                                    onChange={
-                                        ({data, label , value} : any, b : any) => {
-                                            updateForm({ project_id: value, area: data.area })
+                                    </InputTextLabel> }
+                                { labels.lot_label.length == 0 &&
+                                    <AsyncSelect
+                                        defaultOptions={form.lots}
+                                        onChange={
+                                            ({data, label , value} : any, b : any) => {
+                                                updateForm({ project_id: value, area: data.area })
+                                                setLabels({ ...labels, lot_label : " / " + label })
+                                            }
                                         }
-                                    }
-                                />
+                                    />
+                                }
                         </div>
                     </div>
 
-
-
-                        <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                    <div className="mb-5.5 mt-5.5 flex flex-col gap-5.5 sm:flex-row">
                             <div className="w-full sm:w-1/1">
                                     <InputTextLabel htmlFor="area" >
                                         Area
                                     </InputTextLabel>
                                     <InputTextField
+                                        className="w-full rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                         type="number"
                                         min="1"
                                         id="area"
@@ -413,8 +495,7 @@ export default function NewForm() {
                                         value={form.area}
                                         onChange={
                                             (e) => {
-                                                updateForm({ [e.target.name]: e.target.value })
-                                                calculateMonthly()
+                                                updateForm({ [e.target.name]: parseFloat(e.target.value) })
                                             }
                                         }
                                         />
@@ -424,16 +505,17 @@ export default function NewForm() {
                                         Price Per Sqm
                                     </InputTextLabel>
                                     <InputTextField
+                                        className="w-full rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                        type="number"
                                         id="price_per_sqm"
-                                        min="1"
+                                        min="0"
                                         autoComplete="off"
                                         placeholder="Price Per Sqm"
                                         required
                                         value={form.price_per_sqm}
                                         onChange={
                                             (e) => {
-                                                updateForm({ [e.target.name]: e.target.value })
-                                                calculateMonthly()
+                                                updateForm({ [e.target.name]: parseFloat(e.target.value) })
                                             }
                                         }
                                         />
@@ -444,6 +526,7 @@ export default function NewForm() {
                                         TCP
                                     </InputTextLabel>
                                     <InputTextField
+                                        className="w-full rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                         type="number"
                                         id="tcp"
                                         autoComplete="off"
@@ -452,8 +535,68 @@ export default function NewForm() {
                                         value={form.tcp}
                                         onChange={
                                             (e) => {
-                                                updateForm({ [e.target.name]: e.target.value })
-                                                calculateMonthly()
+                                                updateForm({ [e.target.name]: parseFloat(e.target.value) })
+                                            }
+                                        }
+                                        />
+                            </div>
+                        </div>
+
+
+                        <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                            <div className="w-full sm:w-1/1">
+                                    <InputTextLabel htmlFor="lot_condition" >
+                                        Lot Condition
+                                    </InputTextLabel>
+                                    <AsyncSelect
+                                    defaultOptions={[
+                                        {value: 'as-is-where-is',label: "As Is Where Is"},
+                                        {value: 'subdivision lot',label: "Subdivision Lot"},
+                                    ]}
+                                        onChange={
+                                            ({data, label , value} : any, b : any) => {
+                                                updateForm({ lot_condition: value})
+                                            }
+                                        }
+                                    />
+                            </div>
+                            <div className="w-full sm:w-1/1">
+                                    <InputTextLabel htmlFor="reservation" >
+                                        Reservation Fee
+                                    </InputTextLabel>
+                                    <InputTextField
+                                        className="w-full rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                        type="number"
+                                        id="reservation"
+                                        min="0"
+                                        autoComplete="off"
+                                        placeholder="Reservation Fee"
+                                        required
+                                        value={form.reservation}
+                                        onChange={
+                                            (e) => {
+                                                updateForm({ [e.target.name]: parseFloat(e.target.value) })
+                                            }
+                                        }
+                                        />
+                            </div>
+
+                            <div className="w-full sm:w-1/1">
+                                    <InputTextLabel htmlFor="discount_percent" >
+                                        Discount Percent {form.discount_percent_amount > 0 ? " ("+form.discount_percent_amount+")" : "" }
+                                    </InputTextLabel>
+                                    <InputTextField
+                                        className="w-full rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                        type="number"
+                                        id="discount_percent"
+                                        min="0"
+                                        autoComplete="off"
+                                        placeholder="Discount Percent"
+                                        required
+                                        value={form.discount_percent}
+                                        onChange={
+                                            (e) => {
+                                                updateForm({ [e.target.name]: e.target.value, discount_percent_amount : form.tcp * (parseInt(e.target.value) / 100) })
                                             }
                                         }
                                         />
@@ -466,16 +609,17 @@ export default function NewForm() {
                                         Down Payment
                                     </InputTextLabel>
                                     <InputTextField
+                                        className="w-full rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                         type="number"
                                         id="down_payment"
+                                        min="0"
                                         autoComplete="off"
                                         placeholder="Down Payment"
                                         required
                                         value={form.down_payment}
                                         onChange={
                                             (e) => {
-                                                updateForm({ [e.target.name]: e.target.value })
-                                                calculateMonthly()
+                                                updateForm({ [e.target.name]: parseFloat(e.target.value) })
                                             }
                                         }
                                         />
@@ -485,6 +629,7 @@ export default function NewForm() {
                                         Terms - { form.years } year(s)
                                     </InputTextLabel>
                                     <InputTextField
+                                        className="w-full rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                         type="number"
                                         id="terms"
                                         autoComplete="off"
@@ -496,7 +641,6 @@ export default function NewForm() {
                                                 let v  : number = parseInt(e.target.value)
                                                 let years : number = v > 12 ? Math.floor(v/12) +   ((v % 12) / 12)  : v/12
                                                 updateForm({ [e.target.name]: e.target.value, years : years.toFixed(1) })
-                                                calculateMonthly()
                                             }
                                         }
                                         />
@@ -505,33 +649,27 @@ export default function NewForm() {
                                     <InputTextLabel htmlFor="balance" >
                                         Balance
                                     </InputTextLabel>
-                                    <InputTextField
+                                    <p className="px-5 py-3"> ₱ {new Intl.NumberFormat().format(form.balance)}</p>
+                                    {/* <InputTextField
                                         id="balance"
                                         autoComplete="off"
                                         placeholder="Balance less down"
                                         required
                                         value={form.balance}
+                                        disabled
                                         onChange={
                                             (e) => {
-                                                updateForm({ [e.target.name]: e.target.value })
-                                                calculateMonthly()
+                                                updateForm({ [e.target.name]: parseFloat(e.target.value) })
                                             }
                                         }
-                                        />
+                                        /> */}
                             </div>
                             <div className="w-full sm:w-1/1">
                                     <InputTextLabel htmlFor="monthly" >
                                         Monthly Amortization
                                     </InputTextLabel>
-                                    <InputTextField
-                                        id="monthly"
-                                        autoComplete="off"
-                                        placeholder="Monthly Amortization"
-                                        required
-                                        disabled
-                                        value={form.monthly}
-                                        onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                        />
+                                    <p className="px-5 py-3"> ₱ {new Intl.NumberFormat().format(form.monthly)}</p>
+                                    
                             </div>
                         </div>
 
@@ -598,6 +736,5 @@ export default function NewForm() {
                 </div>
             </div>
         </div>
-        
       );
 };
