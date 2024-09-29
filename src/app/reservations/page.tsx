@@ -1,12 +1,13 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Link from "next/link";
-import { getRealties } from "@/actions/realties";
 import { DeleteButton } from "./DeleteButton";
+import { getAmortizations } from "@/actions/amortizations";
+import { deleteAmortizationAction } from "@/actions/amortizations"
 
 export default async function(){
 
-  const colletions = await getRealties()
+  const colletions = await getAmortizations()
     return (
         <DefaultLayout>
             <Breadcrumb pageName="Reservations" />
@@ -34,16 +35,19 @@ export default async function(){
             <p className="font-medium">ID</p>
           </div>
           <div className="col-span-1 flex items-center">
-            <p className="font-medium">Name</p>
+            <p className="font-medium">Borrowers</p>
           </div>
           <div className="col-span-1 hidden items-center sm:flex">
-            <p className="font-medium">Description</p>
+            <p className="font-medium">Project / Block / Lot</p>
           </div>
           <div className="col-span-1 flex items-center">
-            <p className="font-medium">Tin #</p>
+            <p className="font-medium">Reservation</p>
           </div>
           <div className="col-span-1 flex items-center">
-            <p className="font-medium">Contact Number</p>
+            <p className="font-medium">Terms</p>
+          </div>
+          <div className="col-span-1 flex items-center">
+            <p className="font-medium">Monthly</p>
           </div>
           <div className="col-span-1 flex items-center">
             <p className="font-medium">Created</p>
@@ -63,23 +67,37 @@ export default async function(){
             </div>
             <div className="col-span-1 flex items-center">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                <ul>
+                  {/* { doc.borrowers[0].toString()} */}
+                  {
+                    doc.borrowers.map( (borrower:any,k:any) =>
+                        <li key={k}>
+                            {borrower.email} {borrower.last_name}
+                        </li>
+                    )
+                  }
+                </ul>
+              </div>
+            </div>
+            <div className="col-span-1 flex items-center">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 <p className="text-sm text-black dark:text-white">
-                  {doc.name}
+                  {doc.project_id.name} / {doc.block_id.name} / {doc.lot_id.name}
                 </p>
               </div>
             </div>
             <div className="col-span-1 hidden items-center sm:flex">
               <p className="text-sm text-black dark:text-white">
-                {doc.description}
+              ₱ {doc.reservation}
               </p>
             </div>
             <div className="col-span-1 flex items-center">
               <p className="text-sm text-black dark:text-white">
-                {doc.tin}
+                {doc.terms}
               </p>
             </div>
             <div className="col-span-1 flex items-center">
-              <p className="text-sm text-black dark:text-white">{doc.contact_number}</p>
+              <p className="text-sm text-black dark:text-white">₱ {doc.monthly}</p>
             </div>
             <div className="col-span-1 flex items-center">
               <p className="text-sm dark:text-white">
@@ -87,9 +105,8 @@ export default async function(){
               </p>
             </div>
             <div className="col-span-1 flex items-center">
-              
-             <DeleteButton id={JSON.parse(JSON.stringify(doc._id))} />
-              <Link key={doc._id} href={"/realties/" + doc._id} className="mx-2" >
+              <DeleteButton id={doc._id.toString()}/>
+              <Link key={doc._id} href={"/amortizations/" + doc._id} className="mx-2" >
                 <button
                   className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                   type="submit"

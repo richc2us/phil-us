@@ -3,8 +3,8 @@ import mongoose, { Schema, Document, SchemaTypeOptions } from "mongoose"
 
 
 export interface Amortization extends Document {
-    borrowers: [],
-    borrowers_details: [],
+    // borrowers: [],
+    // borrowers_details: [],
     company_id: Schema.Types.ObjectId,
     project_id : Schema.Types.ObjectId,
     block_id: Schema.Types.ObjectId,
@@ -27,8 +27,8 @@ export interface Amortization extends Document {
 }
 
 const amortSchema = new Schema<Amortization>({
-    borrowers: [{ type : Schema.Types.ObjectId, ref: "User"}],
-    borrowers_details: [{type: {} }],
+    // borrowers: [{ type : Schema.Types.ObjectId, ref: "User"}],
+    // borrowers_details: [{type: {} }],
     company_id : { type : Schema.Types.ObjectId, ref: "Company", default: DEFAULT_COMPANY },
     project_id : { type : Schema.Types.ObjectId, ref: "Project"},
     block_id: { type : Schema.Types.ObjectId, ref: "Block"},
@@ -49,7 +49,13 @@ const amortSchema = new Schema<Amortization>({
     years: {type: Number},
     active: {type: Boolean}
 },{
-    timestamps : true
+    timestamps : true,
+    toJSON: { virtuals: true },
 });
+amortSchema.virtual('borrowers',{
+    ref:"AmortizationBorrower",
+    localField:"_id",
+    foreignField:"amortization_id"
+})
 // amortSchema.index({'email' : 'text','first_name': 'text','middle_name' : 'text', 'last_name' : 'text'})
 export default mongoose.models?.Amortization || mongoose.model<Amortization>("Amortization",amortSchema)

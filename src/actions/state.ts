@@ -91,9 +91,20 @@ export const initialStateAgent = {
     realty_id: null,
 }
 
+export const initialStateAmortizationSchedule = {
+    amortization_id : null,
+    payment_id: null,
+    due_date : "",
+    amount: 0,
+    paid: false
+}
+
 export const initialStateReservation = {
     borrowers:[
         {...initialStateBuyer}
+    ],
+    schedules : [
+        {...initialStateAmortizationSchedule}
     ],
     project_id : null,
     block_id: null,
@@ -103,6 +114,8 @@ export const initialStateReservation = {
     projects: [],
     blocks:[],
     lots:[],
+    realties:[],
+    agents:[],
     area: 0,
     price_per_sqm:0,
     tcp:0,
@@ -110,7 +123,7 @@ export const initialStateReservation = {
     discount_percent:0,
     discount_percent_amount : 0,
     reservation:0,
-    lot_condition:'',
+    lot_condition:"",
     balance:0,
     monthly:0,
     terms:12,
