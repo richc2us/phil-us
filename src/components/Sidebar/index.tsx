@@ -73,8 +73,8 @@ const menuGroups = [
         icon: <SvgReservation/>
       },
       {
-        label: "M.A Calculator",
-        route: "/calculator",
+        label: "Monthly Calculator",
+        route: "/monthly-calculator",
         icon: <SvgReservation/>
       },
       {

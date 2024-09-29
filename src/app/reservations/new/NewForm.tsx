@@ -2,7 +2,7 @@
 import {  useEffect, useState } from "react";
 import { AlertError, AlertSuccess } from "@/app/ui/alerts/alerts";
 import { ServerActionResponse } from "@/types/server-action-reply";
-import { getRealties, saveRealtyAction } from "@/actions/realties";
+import { getRealties } from "@/actions/realties";
 import Link from "next/link";
 import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton";
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel";
@@ -178,6 +178,7 @@ export default function NewForm() {
             }
             date.setDate(  date.getDate() + 30 )
         })
+        schedules = form.schedules.slice(0, form.terms)
         updateForm({schedules: schedules})
     }
 
