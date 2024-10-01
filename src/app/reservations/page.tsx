@@ -3,7 +3,6 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Link from "next/link";
 import { DeleteButton } from "./DeleteButton";
 import { getAmortizations } from "@/actions/amortizations";
-import { deleteAmortizationAction } from "@/actions/amortizations"
 
 export default async function(){
 

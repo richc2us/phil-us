@@ -1,7 +1,7 @@
 "use client"
 import { checkEmailExists, saveBuyerAction } from "@/actions/buyers"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import NewSubmit from "./NewSubmit"
 import { ServerActionResponse } from "@/types/server-action-reply"
 import { initialStateBuyer } from "@/actions/state"
@@ -14,8 +14,14 @@ export default function NewForm() {
     const updateForm = (value : any) =>  setForm( (prev: any) =>  { return {...prev, ...value} }  )
 
     const [form, setForm] = useState({...initialStateBuyer, spouse: {...initialStateBuyer.spouse, civil_status : "Married"} })
-    const [emailBuyerExists, setEmailBuyerExists] = useState(false)
-    const [emailSpouseExists, setEmailSpouseExists] = useState(false)
+    const [regions, setRegions] = useState([])
+
+    const [request, setRequest] = useState({
+        regionRequest: false,
+        emailBuyerExists : false,
+        emailSpouseExists : false,
+    })
+
     const [emailCheckBuyer, setEmailCheckBuyer] = useState<ServerActionResponse>()
     const [emailCheckSpouse, setEmailCheckSpouse] = useState<ServerActionResponse>()
     const [resp, setResp] = useState<ServerActionResponse>()
@@ -25,12 +31,40 @@ export default function NewForm() {
         const checker = await checkEmailExists(email)
         if(type == 'buyer') {
             setEmailCheckBuyer(checker)
-            setEmailBuyerExists(checker.success)
+            setRequest({...request, emailBuyerExists : checker.success})
         } else {
             setEmailCheckSpouse(checker)
-            setEmailSpouseExists(checker.success)
+            setRequest({...request, emailSpouseExists : checker.success})
         }
     }
+
+    useEffect(()=> {
+        setRequest({...request, regionRequest : true})
+        fetch('/api/addresses/regions').then( res => res.json()).then(res => {
+            let tempRegions = res.map( (region:any, key:any) => {
+                return {
+                    value: key,
+                    label: key,
+                    data: region
+                }
+            })
+            setRegions(tempRegions)
+            console.dir(tempRegions)
+            setRequest({...request, regionRequest : false})
+        })
+    },[])
+
+    // const asyncRegionOptions = (
+    //     inputValue: string,
+    //     callback: (options: any[]) => void
+    // ) => {
+    //     setRegionRequest(true)
+
+    //     setTimeout( async() => {
+    //         callback(await searchBuyerCallback(inputValue))
+    //         setRegionRequest(false)
+    //     }, 500)
+    // }
 
     return (<>
        <form action={
@@ -130,7 +164,7 @@ export default function NewForm() {
                                 />
                                 { form?.email?.length > 2 && emailCheckBuyer?.message && <p className={(!emailCheckBuyer?.success ? "text-success " : "text-[#CD5D5D] ") +"text-sm mt-1.5 px-2"}>{emailCheckBuyer?.message}</p> }
                                 { 
-                                   emailBuyerExists && <ol>
+                                   request.emailBuyerExists && <ol>
                                         {emailCheckBuyer?.document && emailCheckBuyer?.document.map( (user:any, key:any) => {
                                             return <li key={key} className="text-sm py-2"> {key + 1}. { user.first_name } { user.middle_name } { user.last_name } { user.email } </li>
                                         })}
@@ -196,13 +230,40 @@ export default function NewForm() {
                                 <InputTextLabel htmlFor="region">
                                     Region
                                 </InputTextLabel>
-                                <InputTextField
+                                <AsyncSelect
                                     id="region"
                                     value={form.region}
-                                    autoComplete="off"
+                                    isLoading={request.regionRequest}
+                                    defaultOptions={regions}
                                     placeholder="Region"
-                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                />
+                                    isSearchable={true}
+                                    onChange={
+                                        ({ label , value} : any, b : any) => {
+                                            updateForm({ region: value})
+                                            console.dir(form)
+                                        }
+                                    }
+                                    />
+                                     {/* <AsyncSelect
+                                loadOptions={asyncRegionOptions}
+                                autoFocus
+                                isLoading={requesting}
+                                className="border-b"
+                                styles={{
+                                    control: (baseStyles, state) => ({
+                                        ...baseStyles,
+                                        border: 'none'
+                                    })
+                                }}
+                                isMulti={true}
+                                onChange={
+                                    (e : any, b : any) => {
+                                        let borrowers :any = []
+                                        e.map( (buyer:any) => borrowers.push({ ...buyer.data, spouse : buyer.data.spouse_user_id}) )
+                                        updateForm({ borrowers : [...borrowers]  })
+                                    }
+                                }
+                                /> */}
                     </div>
 
                     <div className="w-full sm:w-1/3">
@@ -400,7 +461,7 @@ export default function NewForm() {
 
                                  { form?.spouse.email?.length > 2 && emailCheckSpouse?.message && <p className={(!emailCheckSpouse?.success ? "text-success " : "text-[#CD5D5D] ") +"text-sm mt-1.5 px-2"}>{emailCheckSpouse?.message}</p> }
                                 {
-                                   emailSpouseExists && <ol>
+                                   request.emailSpouseExists && <ol>
                                         {emailCheckSpouse?.document && emailCheckSpouse?.document.map( (user:any, key:any) => {
                                             return <li key={key} className="text-sm py-2"> {key + 1}. { user.first_name } { user.middle_name } { user.last_name } { user.email } </li>
                                         })}
@@ -581,7 +642,7 @@ export default function NewForm() {
                             Cancel
                         </button>
                     </Link>
-                    <NewSubmit state={ {...resp, disabled: emailBuyerExists || emailSpouseExists} }/>
+                    <NewSubmit state={ {...resp, disabled: request.emailBuyerExists || request.emailSpouseExists} }/>
                 </div>
             </div>
         </form>
