@@ -2,18 +2,18 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import { Metadata } from "next"
 import PageClient from "./PageClient";
-import { getAcceptablePaymentAction } from "@/actions/acceptable_payments";
+import { getReceiverAccountAction } from "@/actions/receiver_accounts";
 export const metadata: Metadata = {
     title:
-      "View Acceptable Payments",
-    description: "View Acceptable Payments",
+      "New Receiver Account",
+    description: "View Receiver Account",
 };
 
 export default async function({ params : {id } }: { params: { id: string } }){
-    const document = await getAcceptablePaymentAction(id)
+    const document = await getReceiverAccountAction(id)
     return (
         <DefaultLayout>
-            <Breadcrumb pageName="View Acceptable Payments" />
+            <Breadcrumb pageName={document?.name} />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <PageClient document={document.toJSON()}/>
             </div>

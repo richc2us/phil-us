@@ -136,3 +136,8 @@ export const initialAcceptablePayment = {
     name: "",
     description: ""
 }
+
+export const initialReceiverAccount = {
+    ...initialAcceptablePayment,
+    account_number: ""
+}
