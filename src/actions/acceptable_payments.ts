@@ -5,13 +5,19 @@ import { revalidatePath } from "next/cache";
 import { ServerActionResponse } from "@/types/server-action-reply";
 import { auth } from "@/lib/nextAuthOptions";
 
-export const getAcceptablePayments = async() => {
+export const getAcceptablePaymentsAction = async() => {
     await dbConnect()
     revalidatePath('/')
     return await AcceptablePayment.find().populate('created_by')
 }
 
-export const getAcceptablePayment = async(id: string) => {
+export const getAcceptablePaymentsNewAction = async() => {
+    await dbConnect()
+    revalidatePath('/')
+    return await AcceptablePayment.find()
+}
+
+export const getAcceptablePaymentAction = async(id: string) => {
     await dbConnect()
     revalidatePath('/')
     return await AcceptablePayment.findById(id)

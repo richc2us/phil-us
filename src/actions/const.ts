@@ -4,7 +4,7 @@ export const MODE_OF_PAYMENT = {
     'Cash' : [],
     'Bank' : [
         'Cheque',
-        'Deposit',
+        'Direct Deposit',
         'Online Banking'
     ],
     'Digital Bank' : [],

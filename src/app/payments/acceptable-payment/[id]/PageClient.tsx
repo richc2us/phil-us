@@ -1,5 +1,5 @@
 "use client"
-import {  useEffect, useState } from "react";
+import {  useState } from "react";
 import Loader from "@/components/common/Loader";
 import { AlertError, AlertSuccess } from "@/app/ui/alerts/alerts";
 import { ServerActionResponse } from "@/types/server-action-reply";
@@ -9,13 +9,12 @@ import InputTextField from "@/components/FormElements/Fields/InputTextField";
 import Select from "react-select";
 import { MODE_OF_PAYMENT } from "@/actions/const";
 import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton";
-import { getAcceptablePaymentsNewAction, saveAcceptablePaymentsAction } from "@/actions/acceptable_payments";
+import { saveAcceptablePaymentsAction } from "@/actions/acceptable_payments";
 
 
-export default function NewForm(){
+export default function PageClient({document} : any){
 
-      const [form, setForm] = useState(initialAcceptablePayment)
-      const [acceptablePayments, setAcceptablePayments] = useState([])
+      const [form, setForm] = useState({...document})
       const [requesting, setRequesting] = useState(false)
       const [reply, setReply] = useState<ServerActionResponse>()
 
@@ -24,18 +23,6 @@ export default function NewForm(){
             return { ...prev, ...value };
         });
       }
-
-      const getPaymentsAction = async() => {
-        const resp:any = await getAcceptablePaymentsNewAction()
-        if(resp) {
-            setAcceptablePayments(resp )
-        }
-      }
-
-      useEffect(() => {
-            getPaymentsAction()
-        
-      },[requesting])
 
       return (
         <div className="grid grid-cols-2 gap-8">
@@ -61,10 +48,9 @@ export default function NewForm(){
                                     console.dir(response)
                                     setReply(response)
                                     if(response.success) {
-                                        setForm(initialAcceptablePayment)
+                                        // setForm(initialAcceptablePayment)
                                     }
                                     setRequesting(false)
-                                    getPaymentsAction()
                                 }
                             }
                         >
@@ -107,6 +93,7 @@ export default function NewForm(){
                                             })
                                             }
                                             placeholder="Mode of Payment"
+                                            defaultValue={{value:form.mode_of_payment, label: form.mode_of_payment}}
                                             onChange={
                                                 async({ data ,label , value} : any, b : any) => {
                                                     updateForm({ mode_of_payment: label})
@@ -151,59 +138,6 @@ export default function NewForm(){
                     </div>
                 </div>
             </div>
-            <div className="col-span-1 xl:col-span-1">
-                <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                    <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
-                        <h3 className="font-medium text-black dark:text-white">
-                            Current Acceptable Payments
-                        </h3>
-                    </div>
-                    <div className="p-7">
-                        <div className="grid grid-cols-3 border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-3 md:px-6 2xl:px-7.5">
-                            <div className="col-span-1 flex items-center">
-                                <p className="font-medium">ID</p>
-                            </div>
-                            <div className="col-span-1 flex items-center">
-                            <p className="font-medium">Name</p>
-                            </div>
-
-                            <div className="col-span-1 flex items-center">
-                            <p className="font-medium">Description</p>
-                            </div>
-
-                           
-                        </div>
-                                {
-                                    acceptablePayments.map((document:any, key:any) => (
-                                        <div
-                                        className="grid grid-cols-3 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-3 md:px-6 2xl:px-7.5"
-                                        key={key}
-                                      >
-                                        <div className="col-span-1 hidden items-center sm:flex">
-                                          <p className="text-sm text-black dark:text-white">
-                                            {key + 1}
-                                          </p>
-                                        </div>
-                                        
-                                        <div className="col-span-1 flex items-center">
-                                          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                                            <p className="text-sm text-black dark:text-white">
-                                              {document.name}
-                                            </p>
-                                          </div>
-                                        </div>
-
-                                        <div className="col-span-1 flex items-center">
-                                          <p className="text-sm text-black dark:text-white">
-                                            {document.description}
-                                          </p>
-                                        </div>
-                                        
-                                      </div>))
-                                }
-                    </div>
-                </div>
-            </div>
         </div>
-    );
+      );
 };

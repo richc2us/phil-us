@@ -9,7 +9,6 @@ import InputTextField from "@/components/FormElements/Fields/InputTextField"
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel"
 import Select from 'react-select'
 import AsyncSelect from 'react-select/async'
-import AsyncCreatable from 'react-select/async-creatable'
 import { getBarangays, getCities, getProvinces, getRegions, getZipCode } from "@/actions/addresses"
 
 export default function NewForm() {

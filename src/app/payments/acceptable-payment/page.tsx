@@ -4,7 +4,7 @@ import Link from "next/link";
 import { BSON } from "mongodb"
 import { DEFAULT_COMPANY } from "@/actions/const";
 import { Metadata } from "next"
-import { getAcceptablePayments } from "@/actions/acceptable_payments";
+import { getAcceptablePaymentsAction } from "@/actions/acceptable_payments";
 import { DeleteButton } from "./DeleteButton";
 
 export const metadata: Metadata = {
@@ -16,14 +16,14 @@ export const metadata: Metadata = {
 
 export default async function() {
 
-  const documents = await getAcceptablePayments()
+  const documents = await getAcceptablePaymentsAction()
     return (
         <DefaultLayout>
             <Breadcrumb pageName="Acceptable Payments" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div className="px-4 py-4 md:px-6 xl:px-7.5">
                   <div className="grid grid-cols-2">
-                      <h4 className="text-xl font-semibold text-black dark:text-white"></h4>
+                      <div></div>
                       <div className="flex justify-end gap-4.5">
                           <Link href="/payments/acceptable-payment/new" className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
                           <button
@@ -99,7 +99,7 @@ export default async function() {
                   </div>
                   <div className="col-span-1 flex items-center">
                     { new BSON.ObjectId(DEFAULT_COMPANY).equals(document._id) ? "" : <DeleteButton id={JSON.parse(JSON.stringify(document._id))}/>  }
-                    <Link key={document._id} href={"/companies/" + document._id} className="mx-2" >
+                    <Link key={document._id} href={"/payments/acceptable-payment/" + document._id} className="mx-2" >
                       <button
                         className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                         type="submit"
