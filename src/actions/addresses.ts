@@ -4,13 +4,13 @@ import { promises as fs } from 'fs';
 const addressesDirectory = process.cwd() + '/src/lib/addresses/'
 
 export const getRegions = async() => {
-    let file = await fs.readFile(addressesDirectory + 'regions.json', 'utf8');
-    return JSON.parse(file);
+    let file = await fs.readFile(addressesDirectory + 'regions.json', 'utf8')
+    return JSON.parse(file)
 }
 
 export const getProvinces = async(region_code:any) => {
-    let file = await fs.readFile(addressesDirectory + 'provinces.json', 'utf8');
-        const provinces = JSON.parse(file);
+    let file = await fs.readFile(addressesDirectory + 'provinces.json', 'utf8')
+        const provinces = JSON.parse(file)
         return provinces.filter( (province:any)  => province.region_code === region_code).map( (filtered:any) => {
             return {
                 psgc_code : filtered.psgc_code,
@@ -22,8 +22,8 @@ export const getProvinces = async(region_code:any) => {
 }
 
 export const getCities = async(province_code:any) => {
-    let file = await fs.readFile(addressesDirectory + 'cities.json', 'utf8');
-        const cities = JSON.parse(file);
+    let file = await fs.readFile(addressesDirectory + 'cities.json', 'utf8')
+        const cities = JSON.parse(file)
         return cities.filter( (city:any)  => city.province_code === province_code).map( (filtered:any) => {
             return {
                 city_name: filtered.city_name,
@@ -35,8 +35,8 @@ export const getCities = async(province_code:any) => {
 }
 
 export const getBarangays = async(city_code:any) => {
-    let file = await fs.readFile(addressesDirectory + 'barangays.json', 'utf8');
-    const barangays = JSON.parse(file);
+    let file = await fs.readFile(addressesDirectory + 'barangays.json', 'utf8')
+    const barangays = JSON.parse(file)
     return barangays.filter( (barangay:any)  => barangay.city_code === city_code).map( (filtered:any) => {
         return {
             brgy_name: filtered.brgy_name,
@@ -45,4 +45,16 @@ export const getBarangays = async(city_code:any) => {
             region_code: filtered.region_code,
         }
     })
+}
+
+export const getZipCode = async(city:any) => {
+    let file = await fs.readFile(addressesDirectory + 'zipcodes.json', 'utf8')
+    const zipcodes = JSON.parse(file)
+    return Object.keys(zipcodes).find((zipcode) => {
+        const value = zipcodes[zipcode];
+        if (typeof value === 'string') {
+            return value === city;
+        }
+        return value.includes(city);
+    }) || null;
 }

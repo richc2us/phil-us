@@ -130,3 +130,9 @@ export const initialStateReservation = {
     years: 1,
     active: 1
 }
+
+export const initialAcceptablePayment = {
+    mode_of_payment : "",
+    name: "",
+    description: ""
+}

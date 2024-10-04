@@ -50,15 +50,20 @@ const nextAuthOptions : AuthOptions = {
     },
     callbacks: {
         async jwt({token, account}) {
+            await dbConnect() 
             // console.dir({'jwt callbacks' : 'jwt',token, account})
             if(account?.provider === "google") {
                 const registerIfNotExists = await registerAfterSignIn(token)
+            }
+            const dbUser = await User.findOne({email: token?.email})
+            if(dbUser) {
+                token.user_id = dbUser._id.toString()
             }
             return token ?? account?.access_token
         },
         async session({session, token, user}) {
             // console.dir({'sessions callbacks' : 'sessions',session, token, user})
-            return session
+            return {...session, user_id: token?.user_id}
         },
         async signIn({ user,  profile}) {
             // console.dir({'signIn callbacks' : 'signIn',user, profile})
@@ -123,8 +128,8 @@ const nextAuthOptions : AuthOptions = {
 
 export default nextAuthOptions
 
-export function auth(...args :  [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
+export async function auth(...args :  [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
     | [NextApiRequest, NextApiResponse]
     | []) {
-    return getServerSession(...args, nextAuthOptions)
+    return await getServerSession(...args, nextAuthOptions)
 }

@@ -83,6 +83,17 @@ const menuGroups = [
         icon: <SvgExpense/>
       },
       {
+        label: "Collections",
+        route: "#",
+        icon: <SvgExpense/>,
+        children: [
+          { label: "Accept Payment", route: "/payments/accept-payment"},
+          { label: "Acceptable Payment", route: "/payments/acceptable-payment" },
+          // { label: "Mode of Payment", route: "/payments/mode-of-payment" },
+          { label: "Receiver Account", route: "/payments/receiver-account" },
+        ],
+      },
+      {
         label: "Users",
         route: "/users",
         icon: (<svg
