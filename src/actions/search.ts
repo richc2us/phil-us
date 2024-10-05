@@ -3,8 +3,6 @@ import dbConnect from "@/lib/mongodb";
 import  User  from "@/models/users"
 import  Project  from "@/models/projects"
 
-import { ServerActionResponse } from "@/types/server-action-reply";
-
 export const searchBuyer = async(text: string) => {
     await dbConnect()
     let buyers :any = []
@@ -28,6 +26,18 @@ export const searchBuyer = async(text: string) => {
     //     { value: 'slate', label: 'Slate', color: '#253858' },
     //     { value: 'silver', label: 'Silver', color: '#666666' },
     //   ];
+}
+
+export const searchUsers = async(text: string, exclude = 0) => {
+    await dbConnect()
+    let users :any = []
+    const b  = await User.find({ _id: {$ne : exclude}, $text : {$search : text}})
+    b.map( (i:any) => users.push({
+        value : i._id.toString(),
+        label: i.fullName,
+        data: i.toJSON()
+    }))
+    return users
 }
 
 export const searchProject = async(text: string = "") => {

@@ -8,6 +8,10 @@ import { useEffect, useState } from "react"
 import NormalButton from "@/components/FormElements/Buttons/NormalButton"
 import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton"
 import AsyncSelect from 'react-select/async'
+import SvgPlus from "@/components/common/svg/plus"
+import SvgDelete from "@/components/common/svg/svg-delete"
+import AsyncCreatableSelect from 'react-select/async-creatable';
+import { searchUsers } from "@/actions/search"
 
 export function DetailTab({document} : any) {
     const updateForm = (value : any) =>  setForm( (prev: any) =>  { return {...prev, ...value} }  )
@@ -28,11 +32,29 @@ export function DetailTab({document} : any) {
         }
     }
 
+    const updateReference = (name:any, value: any, index:any) => {
+        form.references[index] = {...form.references[index], [name] : value }
+        updateForm( { references : [ ...form.references ] } )
+    }
+
     useEffect(() => {
         if(form.spouse_user_id) {
             fetch('/api/users/' + form.spouse_user_id).then( async(res) =>  updateForm({spouse : await res.json() }) )
         }
     },[form.spouse_user_id])
+
+    const nameOptions = (
+        inputValue: string,
+        callback: (options: any[]) => void
+    ) => {
+        setTimeout( async() => {
+            callback(await searchUser(inputValue ))
+        }, 500)
+    }
+
+    const searchUser = async(inputValue: string) => {
+        return await searchUsers(inputValue, form.id)
+      };
 
     return (
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-4">
@@ -534,9 +556,100 @@ export function DetailTab({document} : any) {
                                     />
                         </div>
                     </div></>
-                }
+                    }
+
+                    <div className="border-b border-stroke py-4 dark:border-strokedark overflow-hidden">
+                        <h3 className="font-medium text-black dark:text-white float-start">References</h3>
+                        <div className="float-end flex flex-cols-2 gap-2">
+                            {
+                                form.edit && <button
+                                    className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
+                                    type="button"
+                                    onClick={ (e) => updateForm( { references : [...form.references , {} ]} ) }
+                                >
+                                <SvgPlus/>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                    {
+                        form.references && form.references.length > 0 && form.references.map( (reference:any, index:any) => <div key={index}>
+                        <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row mt-4">
+                            <div className="w-full sm:w-1/3">
+                                <InputTextLabel id="name">
+                                    Name
+                                </InputTextLabel>
+                                <AsyncCreatableSelect
+                                    id="name"
+                                    placeholder="Full Name"
+                                    isDisabled={!form.edit}
+                                    loadOptions={nameOptions}
+                                    required
+                                    onChange={
+                                        async({ data ,label , value} : any, b : any) => {
+                                            console.dir(data)
+                                            updateReference( 'name' ,  data.first_name + " " + data.middle_name + " " + data.last_name, index)
+                                            updateReference( 'contact' ,  data.phone , index)
+                                        }
+                                    }
+                                />
+                            </div>
+                            <div className="w-full sm:w-1/3">
+                                <InputTextLabel id="first_name">
+                                    Relation
+                                </InputTextLabel>
+
+                                <InputTextField
+                                    id="relation"
+                                    placeholder="Relation"
+                                    disabled={!form.edit}
+                                    value={ reference.relation }
+                                    required
+                                    onChange={ (e) => {
+                                        updateReference( 'relation' ,  e.target.value, index)
+                                    }
+                                    }
+                                />
+                            </div>
+                            <div className="w-full sm:w-1/3">
+                                <InputTextLabel id="first_name">
+                                    Contact
+                                </InputTextLabel>
+
+                                <InputTextField
+                                    id="contact"
+                                    placeholder="Contact Information"
+                                    autoComplete="off"
+                                    disabled={!form.edit}
+                                    value={ reference.contact }
+                                    required
+                                    onChange={ (e) => {
+                                        updateReference( 'contact' ,  e.target.value, index)
+                                    }
+                                    }
+                                />
+                            </div>
+                            <div className="w-full sm:w-1/3">
+                                {
+                                    index >= 0 && form.edit && <>
+                                    <button
+                                        className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
+                                        type="button"
+                                        onClick={ (e) => {
+                                            if(confirm('Are you sure to remove this reference?')) {
+                                                updateForm( { references : form.references.filter( (r:any,i:any) => i !== index  ) })
+                                            }
+                                        } }
+                                        >
+                                        <SvgDelete/>
+                                        </button>
+                                    </>
+                                }
+                            </div>
+                        </div>
+                        </div>)
+                    }
                 </div>
-                
             </div>
         </form>
         </div>

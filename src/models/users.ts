@@ -55,7 +55,7 @@ const userSchema = new Schema<User>({
     account_type:{type : String, default: 'admin'},
     verified: {type : Boolean, default: false},
     active: {type : Boolean, default: true},
-    references: [{type : {}}]
+    references: [{type : {}}] // {name: "", relationship: "", contact: ""}
 },{
     timestamps : true
 });
