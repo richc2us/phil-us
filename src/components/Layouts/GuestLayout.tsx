@@ -11,13 +11,13 @@ export default function GuestLayout({
     <>
       {/* <AuthProvider> */}
       {/* <!-- ===== Page Wrapper Start ===== --> */}
-      <div className="flex">
+      {/* <div className="flex"> */}
         {/* <!-- ===== Sidebar Start ===== --> */}
         {/* <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> */}
         {/* <!-- ===== Sidebar End ===== --> */}
 
         {/* <!-- ===== Content Area Start ===== --> */}
-        <div className="relative flex flex-1 flex-col">
+        {/* <div className="relative flex flex-1 flex-col"> */}
           {/* <!-- ===== Header Start ===== --> */}
           {/* <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> */}
           {/* <!-- ===== Header End ===== --> */}
@@ -29,9 +29,9 @@ export default function GuestLayout({
             </div>
           </main>
           {/* <!-- ===== Main Content End ===== --> */}
-        </div>
+        {/* </div> */}
         {/* <!-- ===== Content Area End ===== --> */}
-      </div>
+      {/* </div> */}
       {/* </AuthProvider> */}
       {/* <!-- ===== Page Wrapper End ===== --> */}
     </>

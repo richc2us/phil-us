@@ -17,10 +17,10 @@ export default async function({ params }: { params: { id: string } }) {
     const document = await getRealty(params.id)
 
     return (
-    <>
+    <DefaultLayout>
         <div className="mx-auto">
             <Breadcrumb pageName={document.name} deepPages={[entity ,document.name]} />
             { params.id && <PageClient id={params.id} document={document.toJSON()} /> }
         </div>
-    </>)
+    </DefaultLayout>)
 }

@@ -21,7 +21,14 @@ const AmortizationBorrowerSchema = new Schema<AmortizationBorrower>({
     address : {type: String, required : true},
     tin : {type: String, required : true},
 },{
-    timestamps : true
+    timestamps : true,
+    toJSON: { virtuals: true },
 });
-// amortSchema.index({'email' : 'text','first_name': 'text','middle_name' : 'text', 'last_name' : 'text'})
+// AmortizationBorrowerSchema.index({'email' : 'text','first_name': 'text','middle_name' : 'text', 'last_name' : 'text'})
+AmortizationBorrowerSchema.virtual('user',{
+    ref:"User",
+    localField:"user_id",
+    foreignField:"_id",
+    justOne: true
+})
 export default mongoose.models?.AmortizationBorrower || mongoose.model<AmortizationBorrower>("AmortizationBorrower",AmortizationBorrowerSchema, 'amortization_borrowers')

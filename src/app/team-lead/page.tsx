@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     const documents = await getTeamLeads()
 
     return (
-        <>
+        <DefaultLayout>
             <Breadcrumb pageName="List of Team Leads" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-4">
                     <div className="px-4 py-4 md:px-6 xl:px-7.5">
@@ -92,6 +92,6 @@ export const metadata: Metadata = {
                                     </div>)
                     }) }
               </div>
-        </>
+        </DefaultLayout>
     )
 }

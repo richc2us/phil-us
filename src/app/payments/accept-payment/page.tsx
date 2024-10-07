@@ -3,8 +3,9 @@ import Link from "next/link";
 import { BSON } from "mongodb"
 import { DEFAULT_COMPANY } from "@/actions/const";
 import { Metadata } from "next"
-// import { getAcceptablePaymentsAction } from "@/actions/acceptable_payments";
+import { getAcceptablePaymentsAction } from "@/actions/acceptable_payments";
 import { DeleteButton } from "./DeleteButton";
+import DefaultLayout from "@/components/Layouts/DefaultLayout";
 
 export const metadata: Metadata = {
     title:
@@ -13,16 +14,16 @@ export const metadata: Metadata = {
 };
 
 
-const getDataPayment = async() => {
-    const resp = await fetch('http://localhost:4000/api/payments/accept-payments')
-    return resp.json()
-}
+// const getDataPayment = async() => {
+//     const resp = await fetch('http://localhost:4000/api/payments/accept-payments')
+//     return resp.json()
+// }
 
 export default async function() {
 
-  const documents = await getDataPayment()
+  const documents = await getAcceptablePaymentsAction()
     return (
-      <>
+      <DefaultLayout>
             <Breadcrumb pageName="Recent Payments" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div className="px-4 py-4 md:px-6 xl:px-7.5">
@@ -115,6 +116,6 @@ export default async function() {
                 </div>
               ))}
             </div>
-        </>
+        </DefaultLayout>
     )
 }

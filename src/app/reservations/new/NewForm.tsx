@@ -17,7 +17,7 @@ import { saveAmortizationAction } from "@/actions/amortizations";
 import DatePicker from "react-datepicker";
 
 
-export default function NewForm() {
+export default function NewForm(){
 
     const [form, setForm] = useState({...initialStateReservation})
     const [requesting, setRequesting] = useState(false)

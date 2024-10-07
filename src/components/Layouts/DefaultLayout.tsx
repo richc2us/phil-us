@@ -1,17 +1,12 @@
 import React from "react";
-import DefaultInnerLayout from "./DefaultInnerLayout";
 import { auth } from "@/lib/nextAuthOptions";
+import { redirect } from "next/navigation";
+import MainPageLayout from "./MainPageLayout";
 
 export default async function DefaultLayout({children}: {children: React.ReactNode}) {
   const user = await auth()
-
-  return (
-    <>
-      {/* <!-- ===== Page Wrapper Start ===== --> */}
-      <div className="flex">
-        <DefaultInnerLayout user={user}>{children}</DefaultInnerLayout>
-      </div>
-      {/* <!-- ===== Page Wrapper End ===== --> */}
-    </>
-  );
+  if(!user) {
+      redirect("/user/signin")
+  }
+  return ( <MainPageLayout user={user}>{children}</MainPageLayout> );
 }

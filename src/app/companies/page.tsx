@@ -19,7 +19,7 @@ export default async function() {
 
   const companies = await getCompanies()
     return (
-        <>
+        <DefaultLayout>
             <Breadcrumb pageName="Companies" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div className="px-4 py-4 md:px-6 xl:px-7.5">
@@ -108,6 +108,6 @@ export default async function() {
                 </div>
               ))}
             </div>
-        </>
+        </DefaultLayout>
     )
 }

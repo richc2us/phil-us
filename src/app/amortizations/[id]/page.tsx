@@ -1,19 +1,15 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
-import { Metadata } from "next"
-import NewForm from "./NewForm";
+import Link from "next/link";
+import { getAmortizations } from "@/actions/amortizations";
 
-export const metadata: Metadata = {
-    title:"New Buyers",
-    description: "Buyers",
-};
+export default async function(){
 
-export default function (){
+  const colletions = await getAmortizations()
     return (
         <DefaultLayout>
-            <Breadcrumb pageName="New Buyer" />
+            <Breadcrumb pageName="Amortizations" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-4">
-                <NewForm/>
             </div>
         </DefaultLayout>
     )

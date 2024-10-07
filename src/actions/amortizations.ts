@@ -8,14 +8,31 @@ import AmortizationSchedule from "@/models/amortization_schedules";
 import Project from "@/models/projects";
 import Block from "@/models/blocks";
 import Lot from "@/models/lots";
+import Realty from "@/models/realties";
+import User from "@/models/users";
 
 export const getAmortizations = async() => {
     await dbConnect()
-    await Project.findOne({})
-    await Block.findOne({})
-    await Lot.findOne({})
+    await Project.findOne()
+    await Block.findOne()
+    await Lot.findOne()
+    await Realty.findOne()
+    await User.findOne()
     revalidatePath('/')
-    return await Amortization.find({}).populate('project_id').populate('block_id').populate('lot_id').populate('borrowers')
+    return await Amortization.find()
+    .populate([
+        {path:'project_id'},
+        {path:'block_id'},
+        {path:'lot_id'},
+        {path:'realty_id'},
+        {path:'agent_id'},
+        {
+            path:'borrowers',
+            populate:{
+                path: 'user'
+            }
+        },
+    ])
 }
 
 export const getAmortization = async(id: string) => {

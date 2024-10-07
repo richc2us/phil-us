@@ -8,7 +8,7 @@ export default async function(){
 
   const colletions = await getRealties()
     return (
-        <>
+        <DefaultLayout>
             <Breadcrumb pageName="Realties" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-4">
         <div className="px-4 py-4 md:px-6 xl:px-7.5">
@@ -101,6 +101,6 @@ export default async function(){
           </div>
         ))}
       </div>
-        </>
+        </DefaultLayout>
     )
 }

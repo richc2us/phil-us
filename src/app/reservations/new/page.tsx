@@ -5,11 +5,11 @@ import NewForm from "./NewForm";
 
 export default function(){
     return (
-        <>
+        <DefaultLayout>
             <Breadcrumb pageName="New Reservation" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <NewForm/>
             </div>
-        </>
+        </DefaultLayout>
     )
 }

@@ -1,25 +1,22 @@
-"use client"
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import React from "react"
+import Link from "next/link"
+import Image from "next/image"
+import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 
-// import { Metadata } from "next";
-import DefaultLayout from "@/components/Layouts/DefaultLayout";
+import { Metadata } from "next"
 import SigUpForm from "./SignUpForm";
+import GuestLayout from "@/components/Layouts/GuestLayout"
 
-// export const metadata: Metadata = {
-//   title: "Metaland SignUp Page",
-//   description: "Signup Page",
-//   // other metadata
-// };
-
+export const metadata: Metadata = {
+  title: "Metaland Sign Up Page",
+  description: "Sign up Page",
+};
 
 
 const SignUp: React.FC = () => {
 
   return (
-    <DefaultLayout>
+    <GuestLayout>
       <Breadcrumb pageName="Sign Up" />
 
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -182,7 +179,7 @@ const SignUp: React.FC = () => {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+    </GuestLayout>
   );
 };
 

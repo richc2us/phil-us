@@ -8,7 +8,7 @@ export default async function(){
 
   const colletions = await getAmortizations()
     return (
-        <>
+        <DefaultLayout>
             <Breadcrumb pageName="Amortizations" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-4">
         <div className="px-4 py-4 md:px-6 xl:px-7.5">
@@ -102,7 +102,7 @@ export default async function(){
               </p>
             </div>
             <div className="col-span-1 flex items-center">
-              <DeleteButton id={doc._id.toString()}/>
+              {/* <DeleteButton id={doc._id.toString()}/> */}
               <Link key={doc._id} href={"/amortizations/" + doc._id} className="mx-2" >
                 <button
                   className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
@@ -115,6 +115,6 @@ export default async function(){
           </div>
         ))}
       </div>
-        </>
+        </DefaultLayout>
     )
 }

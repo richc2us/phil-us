@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import GoogleButton from "../GoogleButton";
 import { useState } from "react";

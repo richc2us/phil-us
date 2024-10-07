@@ -21,6 +21,7 @@ export default function({user, setDropdownOpen, dropdownOpen}:any){
           <Image
             width={112}
             height={112}
+            // src={ user.image ?? "/images/user/user-01.png"}
             src={"/images/user/user-01.png"}
             style={{
               width: "auto",

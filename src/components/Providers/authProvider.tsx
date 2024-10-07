@@ -8,9 +8,5 @@ export interface AuthProviderProps {
     user:any
 }
 export const AuthProvider = ({children, user} : AuthProviderProps) => {
-    // const session = await auth()
-    if(!user) {
-        redirect("/user/signin")
-    }
-    return (<AuthSessionProvider session={user}>{children}</AuthSessionProvider>)
+    return (<AuthSessionProvider session={user.user}>{children}</AuthSessionProvider>)
 }

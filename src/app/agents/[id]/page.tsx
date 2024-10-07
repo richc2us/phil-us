@@ -14,10 +14,10 @@ export const metadata: Metadata = {
   export default async function({params : {id}} : any ){
   const document = await getBuyer(id)
     return (
-    <>
+    <DefaultLayout>
         <div className="mx-auto">
             <Breadcrumb pageName={document.fullName} deepPages={["Agent", document.fullName]}/>
             <PageClient id={id} document={document.toJSON()} />
         </div>
-    </>)
+    </DefaultLayout>)
 }

@@ -9,7 +9,7 @@ const DropdownUser = ({user}:any) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
-      <DropDownLoginUser setDropdownOpen={setDropdownOpen} dropdownOpen={dropdownOpen}  user={user} s/>
+      <DropDownLoginUser setDropdownOpen={setDropdownOpen} dropdownOpen={dropdownOpen}  user={user} />
 
       {/* <!-- Dropdown Start --> */}
       {dropdownOpen && (
