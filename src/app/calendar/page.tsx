@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 
 const CalendarPage = () => {
   return (
-    <DefaultLayout>
+    <>
       <Calendar />
-    </DefaultLayout>
+    </>
   );
 };
 

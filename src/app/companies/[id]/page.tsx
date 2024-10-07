@@ -14,10 +14,10 @@ export default async function({ params }: { params: { id: string } }) {
     const document = await getCompany(params.id)
 
     return (
-    <DefaultLayout>
+    <>
         <div className="mx-auto">
             <Breadcrumb pageName={document.name} deepPages={["Companies",document.name]} />
             { params.id && <PageClient id={params.id} company={document.toJSON()} /> }
         </div>
-    </DefaultLayout>)
+    </>)
 }

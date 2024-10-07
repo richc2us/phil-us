@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default async function() {
   const projects = await getProjects()
     return (
-        <DefaultLayout>
+      <>
             <Breadcrumb pageName="Projects" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-4">
               <div className="px-4 py-4 md:px-6 xl:px-7.5">
@@ -107,7 +107,6 @@ export default async function() {
                   </div>
                 </div>
               ))}
-            </div>
-        </DefaultLayout>
+            </div></>
     )
 }

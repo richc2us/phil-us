@@ -12,11 +12,11 @@ export const metadata: Metadata = {
 
 export default function (){
     return (
-        <DefaultLayout>
+        <>
             <Breadcrumb pageName="New Team Lead" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-4">
                 <NewForm/>
             </div>
-        </DefaultLayout>
+        </>
     )
 }

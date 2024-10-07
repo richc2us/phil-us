@@ -3,10 +3,11 @@ import dbConnect from "@/lib/mongodb";
 import  User  from "@/models/users"
 import  Project  from "@/models/projects"
 
-export const searchBuyer = async(text: string) => {
+export const searchBuyer = async(text: string, all_type : boolean = false) => {
     await dbConnect()
     let buyers :any = []
-    const b  = await User.find({account_type: 'buyer', $text : {$search : text}}).populate('spouse_user_id')
+    let condition =  all_type ? { $ne : ''} :   {$in : ['buyer']};
+    const b  = await User.find({account_type: {...condition} , $text : {$search : text}}).populate('spouse_user_id')
     b.map( (i:any) => buyers.push({
         value : i._id.toString(),
         label: i.fullName + " [ " + i.email + " ]",

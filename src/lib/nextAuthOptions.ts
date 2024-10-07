@@ -51,14 +51,15 @@ const nextAuthOptions : AuthOptions = {
     callbacks: {
         async jwt({token, account}) {
             await dbConnect() 
-            // console.dir({'jwt callbacks' : 'jwt',token, account})
             if(account?.provider === "google") {
                 const registerIfNotExists = await registerAfterSignIn(token)
             }
             const dbUser = await User.findOne({email: token?.email})
             if(dbUser) {
-                token.user_id = dbUser._id.toString()
+                token = {...token, ...dbUser, user_id : dbUser._id.toString() }
             }
+            // console.dir({'jwt callbacks' : 'jwt',token, account})
+
             return token ?? account?.access_token
         },
         async session({session, token, user}) {
@@ -122,14 +123,18 @@ const nextAuthOptions : AuthOptions = {
         }
     }
 }
-// const b = NextAuth(nextAuthOptions);
-// console.dir(b);
-// export const { handlers, auth, signIn, signOut } =  b
 
 export default nextAuthOptions
 
 export async function auth(...args :  [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
     | [NextApiRequest, NextApiResponse]
     | []) {
+        await dbConnect()
     return await getServerSession(...args, nextAuthOptions)
+}
+
+export async function isLogin() {
+    await dbConnect()
+    const login = await auth()
+    return login && login?.user_id
 }

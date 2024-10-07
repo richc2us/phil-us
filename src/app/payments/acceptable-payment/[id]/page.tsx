@@ -12,11 +12,11 @@ export const metadata: Metadata = {
 export default async function({ params : {id } }: { params: { id: string } }){
     const document = await getAcceptablePaymentAction(id)
     return (
-        <DefaultLayout>
+        <>
             <Breadcrumb pageName="View Acceptable Payments" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <PageClient document={document.toJSON()}/>
             </div>
-        </DefaultLayout>
+        </>
     )
 }

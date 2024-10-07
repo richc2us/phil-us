@@ -13,12 +13,12 @@ export const metadata: Metadata = {
 
 export default function() {
     return (
-    <DefaultLayout>
+    <>
         <div className="mx-auto">
             <Breadcrumb pageName="New Project" />
             <div>
                 <NewProjectForm/>
             </div>
         </div>
-    </DefaultLayout>)
+    </>)
 }

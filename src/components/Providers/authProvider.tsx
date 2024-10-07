@@ -1,15 +1,16 @@
-import  { auth } from "@/lib/nextAuthOptions"
+// import  { auth } from "@/lib/nextAuthOptions"
 import React  from "react"
 import { AuthSessionProvider } from "./authSessionProvider"
 import { redirect } from "next/navigation"
 
 export interface AuthProviderProps {
-    children: React.ReactNode
+    children: React.ReactNode,
+    user:any
 }
-export const AuthProvider = async({children} : AuthProviderProps) => {
-    const session = await auth()
-    if(!session) {
+export const AuthProvider = ({children, user} : AuthProviderProps) => {
+    // const session = await auth()
+    if(!user) {
         redirect("/user/signin")
     }
-    return (<AuthSessionProvider session={session}>{children}</AuthSessionProvider>)
+    return (<AuthSessionProvider session={user}>{children}</AuthSessionProvider>)
 }

@@ -39,7 +39,7 @@ export default function NewForm() {
     }
 
     const searchBuyerCallback = async(inputValue: string) => {
-        return await searchBuyer(inputValue)
+        return await searchBuyer(inputValue, true)
     }
 
     const getProjectsCallback = async(inputValue: string) => {

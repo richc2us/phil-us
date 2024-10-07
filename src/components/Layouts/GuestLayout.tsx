@@ -1,8 +1,5 @@
 "use client";
-import React, { useState, ReactNode } from "react";
-import Sidebar from "@/components/Sidebar";
-import Header from "@/components/Header";
-import { AuthProvider } from "../Providers/authProvider";
+import React from "react";
 
 export default function GuestLayout({
   children,

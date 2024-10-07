@@ -1,16 +1,16 @@
 import React from "react";
-import { AuthProvider } from "../Providers/authProvider";
 import DefaultInnerLayout from "./DefaultInnerLayout";
+import { auth } from "@/lib/nextAuthOptions";
 
-export default function DefaultLayout({children}: {children: React.ReactNode}) {
+export default async function DefaultLayout({children}: {children: React.ReactNode}) {
+  const user = await auth()
+
   return (
     <>
-      <AuthProvider>
       {/* <!-- ===== Page Wrapper Start ===== --> */}
       <div className="flex">
-        <DefaultInnerLayout>{children}</DefaultInnerLayout>
+        <DefaultInnerLayout user={user}>{children}</DefaultInnerLayout>
       </div>
-      </AuthProvider>
       {/* <!-- ===== Page Wrapper End ===== --> */}
     </>
   );

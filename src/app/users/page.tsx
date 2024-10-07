@@ -1,7 +1,6 @@
 import { getUsers } from "@/actions/actions";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import Loader from "@/components/common/Loader";
-import DefaultLayout from "@/components/Layouts/DefaultLayout"
 
 
 import { Metadata } from "next"
@@ -16,7 +15,7 @@ export default async function(){
   const users = await getUsers()
 
     return (
-        <DefaultLayout>
+        <>
             <Breadcrumb pageName="Users" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div className="px-4 py-4 md:px-6 xl:px-7.5">
@@ -80,6 +79,6 @@ export default async function(){
                 </div>
               )) : <Loader isFormLoading={true} /> }
             </div>
-        </DefaultLayout>
+        </>
     )
 }
