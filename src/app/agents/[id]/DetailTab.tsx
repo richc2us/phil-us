@@ -9,6 +9,7 @@ import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButt
 import SvgRealty from "@/components/common/svg/svg-realty"
 import InputSelectField from "@/components/FormElements/Fields/inputSelectField"
 import AsyncSelect from 'react-select/async'
+import { getRealtiesApi } from "@/components/common/api"
 
 export function DetailTab({document} : any) {
     const updateForm = (value : any) =>  setForm( (prev: any) =>  { return {...prev, ...value} }  )
@@ -30,7 +31,7 @@ export function DetailTab({document} : any) {
     }
 
     useEffect(()=> {
-        fetch("/api/realties").then( async(res) => updateForm({realties : await res.json() })  )
+        getRealtiesApi((res:any) => updateForm({realties : res }))
     },[])
 
 

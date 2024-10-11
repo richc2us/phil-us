@@ -62,10 +62,11 @@ export async function updateTeamLeadAction(state: any) {
 }
 
 
-export const deleteTeamLeadAction = async(id: any) : Promise <ServerActionResponse> => {
+export const deleteTeamLeadAction = async(id: any, isActive: boolean = false) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {
-        await User.deleteOne({_id: id, account_type: ACCOUNT_TYPE_TEAM_LEAD })
+        // await User.deleteOne({_id: id, account_type: ACCOUNT_TYPE_TEAM_LEAD })
+        await User.updateOne({_id : id, account_type: ACCOUNT_TYPE_TEAM_LEAD}, {active: isActive})
         revalidatePath("/");
         return {success: true, message: 'deleted', document: null}
     } catch (e:any) {

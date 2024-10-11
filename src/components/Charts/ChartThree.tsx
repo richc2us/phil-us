@@ -63,8 +63,8 @@ const ChartThree: React.FC = () => {
         <div>
           <div className="relative z-20 inline-block">
             <select
-              name=""
-              id=""
+              name="scope"
+              id="scope"
               className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
             >
               <option value="" className="dark:bg-boxdark">

@@ -18,7 +18,7 @@ export default async function() {
 
   const documents = await getAcceptablePaymentsAction()
     return (
-        <>
+        <DefaultLayout>
             <Breadcrumb pageName="Acceptable Payments" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div className="px-4 py-4 md:px-6 xl:px-7.5">
@@ -111,6 +111,6 @@ export default async function() {
                 </div>
               ))}
             </div>
-        </>
+        </DefaultLayout>
     )
 }

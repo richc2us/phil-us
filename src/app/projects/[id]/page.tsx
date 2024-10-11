@@ -1,9 +1,12 @@
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
-import ProjectDetailTabs from "./ProjectDetailTabs"
 import { getProject } from "@/actions/projects"
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
-
 import { Metadata } from "next"
+import dynamic from "next/dynamic"
+
+const PageClient = dynamic(() => import("./PageClient"), {
+    ssr: false
+})
 
 export const metadata: Metadata = {
     title:
@@ -20,7 +23,7 @@ export default async function({ params }: { params: { id: string } }){
     <DefaultLayout>
         <div className="mx-auto">
             <Breadcrumb pageName={project.name} deepPages={["Project",project.name]} />
-            { params.id && <ProjectDetailTabs projectID={params.id}/> }
+            { params.id && <PageClient projectID={params.id}/> }
         </div>
     </DefaultLayout>)
 }

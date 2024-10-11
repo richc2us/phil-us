@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { initialLot, useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext"
 import { updateLotAction } from "@/actions/blocks";
+import ActivateButton from "./ActivateButton";
 
 export default function ProjectDetailTabBlockUpdateLot() {
     const { blocks, currentLot, projectID } = useBlocks()
@@ -130,7 +131,7 @@ export default function ProjectDetailTabBlockUpdateLot() {
                             {/* <span className="absolute left-4.5 top-4">
                             </span> */}
                             <input
-                            className="w-full rounded border border-stroke bg-gray py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            className="w-full rounded border border-stroke py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="text"
                             name="lot_name"
                             id="lot_name"
@@ -158,7 +159,7 @@ export default function ProjectDetailTabBlockUpdateLot() {
                             {/* <span className="absolute left-4.5 top-4">
                             </span> */}
                             <input
-                            className="w-full rounded border border-stroke bg-gray py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            className="w-full rounded border border-stroke py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="number"
                             min="10"
                             name="lot_area"
@@ -175,6 +176,7 @@ export default function ProjectDetailTabBlockUpdateLot() {
                     </div>
                 </div>
                 <div className="flex justify-end gap-4.5">
+                    <ActivateButton/>
                     <button
                         className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
                         type="submit"

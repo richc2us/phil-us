@@ -1,11 +1,11 @@
 "use server"
-import dbConnect from "@/lib/mongodb";
-import "jsvectormap/dist/jsvectormap.css";
-import "flatpickr/dist/flatpickr.min.css";
-import "@/css/satoshi.css";
-import "@/css/style.css";
-import MainClientLayout from "./MainClientLayout";
-import { auth } from "@/lib/nextAuthOptions";
+import dbConnect from "@/lib/mongodb"
+import "jsvectormap/dist/jsvectormap.css"
+import "flatpickr/dist/flatpickr.min.css"
+import "@/css/satoshi.css"
+import "@/css/style.css"
+import MainClientLayout from "./MainClientLayout"
+import { auth } from "@/lib/nextAuthOptions"
 
 export default async function RootLayout({
   children,

@@ -1,21 +1,22 @@
 import { useState } from "react";
 import { useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext";
-import DeleteBlockSubmit from "./DeleteBlockSubmit";
 import { updateBlockAction } from "@/actions/blocks";
+import ActivateButton from "./ActivateButton";
 
 export default function ProjectDetailTabBlockUpdateBlock() {
     const {currentBlock} = useBlocks()
     const dispatch = useBlocksDispatchContext()
-    const [block, setBlock] = useState(currentBlock)
+    const [block, setBlock] = useState({...currentBlock})
 
     return (
-        <form 
-            className="col-span-4 xl:col-span-2" 
-            action={ async() => {
-                await updateBlockAction(currentBlock)
-                dispatch({type:""})
+        <form
+            className="col-span-4 xl:col-span-2"
+            action={ async(e) => {
+                    await updateBlockAction(block)
+                    dispatch({type:"refresh"})
+                }
             }
-        }>
+        >
         <div className="">
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
@@ -32,7 +33,7 @@ export default function ProjectDetailTabBlockUpdateBlock() {
                             {/* <span className="absolute left-4.5 top-4">
                             </span> */}
                             <input
-                            className="w-full rounded border border-stroke bg-gray py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            className="w-full rounded border border-stroke py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="text"
                             name="block_name"
                             id="block_name"
@@ -59,11 +60,11 @@ export default function ProjectDetailTabBlockUpdateBlock() {
                             {/* <span className="absolute left-4.5 top-4">
                             </span> */}
                             <input
-                            className="w-full rounded border border-stroke bg-gray py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            className="w-full rounded border border-stroke py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="text"
                             name="lot_name"
                             id="lot_name"
-                            placeholder="Lot Name"
+                            placeholder="Description"
                             autoComplete="off"
                             value={block.description}
                             onChange={ (e) =>
@@ -75,13 +76,15 @@ export default function ProjectDetailTabBlockUpdateBlock() {
                 </div>
                 
                 <div className="flex justify-end gap-4.5">
-                    <DeleteBlockSubmit/>
+                    <ActivateButton/>
                     <button
                         className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
                         type="submit"
-                        onClick={e => {
-                            dispatch({type:"setCurrentBlock", currentBlock: { ...currentBlock, ...block} })
-                        }}
+                        onClick={
+                            async() => {
+                                await dispatch({type:"setCurrentBlock", currentBlock: { ...currentBlock, ...block} })
+                            }
+                        }
                         >
                         Update
                     </button>
@@ -90,8 +93,6 @@ export default function ProjectDetailTabBlockUpdateBlock() {
                 </div>
             </div>
         </div>
-
-            
-        </form>
+    </form>
     )
 }

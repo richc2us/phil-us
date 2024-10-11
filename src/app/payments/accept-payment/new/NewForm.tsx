@@ -4,9 +4,11 @@ import { searchBuyer } from "@/actions/search"
 import Link from "next/link"
 import { useEffect, useState } from 'react'
 import Loader from '@/components/common/Loader'
+import { useRouter } from 'next/navigation'
+import { getBuyerAmortizationsApi } from '@/components/common/api'
 
 export default function NewForm() {
-
+    const router = useRouter()
     const [form, setForm] = useState({
         buyer_id: 0 ,
         amortizations: []
@@ -27,7 +29,12 @@ export default function NewForm() {
     const getBuyerAmortizations = async() => {
         if(form.buyer_id) {
             setRequesting(true)
-            fetch("/api/amortizations/" + form.buyer_id).then( res =>  res.json() ).then( res => { updateForm({amortizations : res}), setRequesting(false)}  )
+            getBuyerAmortizationsApi(
+                form.buyer_id,
+                (res:any) =>  {
+                    updateForm({amortizations : res})
+                    setRequesting(false) 
+                })
         }
     }
 
@@ -79,7 +86,7 @@ export default function NewForm() {
                 <div className="grid grid-cols-4 gap-6 mb-4">
                     {
                         form.amortizations.length > 0 && form.amortizations.map((amort:any,key:any) => <div key={key} className="cursor-pointer border-b-2 pb-3">
-                            <table className="text-sm">
+                            <table className="text-sm w-full" onClick={ e => router.push("/amortizations/" + amort._id.toString())}>
                                 <tbody>
                                 <tr>
                                     <td>Project Name: </td>
@@ -100,7 +107,7 @@ export default function NewForm() {
                                 {
                                     amort.area && <tr>
                                     <td>Area/Price: </td>
-                                    <td>{ [amort?.area,"sqm / ", formatDecimal(amort?.price_per_sqm)].join("") }</td>
+                                    <td>{ [formatDecimal(amort?.area,false)," sqm / ", formatDecimal(amort?.price_per_sqm)].join("") }</td>
                                      
                                     </tr>
                                 }

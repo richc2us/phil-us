@@ -1,9 +1,10 @@
-import { getAgents } from "@/actions/agents"
+// import { getAgents } from "@/actions/agents"
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Link from "next/link"
 import { Metadata } from "next"
-import { DeleteButton } from "./DeleteButton"
+import PageClient from "./PageClient";
+// import { ActiveButton } from "./ActiveButton"
 
 export const metadata: Metadata = {
     title:
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 
 
   export default async function() {
-    const documents = await getAgents()
+    // const documents = await getAgents()
 
     return (
         <DefaultLayout>
@@ -34,8 +35,8 @@ export const metadata: Metadata = {
                             </div>
                         </div>
                     </div>
-
-                    <div className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-6 md:px-6 2xl:px-7.5">
+                    <PageClient/>
+                    {/* <div className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-6 md:px-6 2xl:px-7.5">
                         <div className="col-span-2 flex items-center">
                             <p className="font-medium">Name</p>
                         </div>
@@ -74,11 +75,17 @@ export const metadata: Metadata = {
 
                                         <div className="col-span-1 flex items-center">
                                             <p className="text-sm dark:text-white">
-                                                { (document.createdAt.getMonth() + 1) + "/" +  document.createdAt.getDate() + "/" + document.createdAt.getFullYear() + " " + document.createdAt.getHours() + ":" + document.createdAt.getMinutes()}
+                                            { new Intl.DateTimeFormat('en-GB',{
+                                                       year: "numeric",
+                                                       month: "long",
+                                                       day: "numeric",
+                                                       hour: "numeric",
+                                                       minute: "numeric"
+                                                }).format(document.createdAt)}
                                             </p>
                                         </div>
                                         <div className="col-span-1 flex items-center">
-                                            <DeleteButton id={JSON.parse(JSON.stringify(document._id))} />
+                                            <ActiveButton id={JSON.parse(JSON.stringify(document._id))} active={!document.active}/>
                                             <Link key={document._id} href={"/agents/" + document._id} className="mx-2" >
                                                 <button
                                                 className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
@@ -90,7 +97,7 @@ export const metadata: Metadata = {
 
                                         </div>
                                     </div>)
-                    }) }
+                    }) } */}
               </div>
         </DefaultLayout>
     )

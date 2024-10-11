@@ -25,7 +25,7 @@ export interface User extends Document {
     tin_issuance?: string,
     verified?: boolean,
     references: [],
-    active: boolean
+    active?: boolean
 }
 
 const userSchema = new Schema<User>({

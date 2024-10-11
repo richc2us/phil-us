@@ -30,7 +30,6 @@ export default function PageClient({document} : any){
             action={ async() => {
                     setRequesting(true)
                     let response  =  await updateReceiverAccountAction(form)
-                    console.dir(response)
                     setRequesting(false)
                     setReply({...response})
                     if(response.success) {

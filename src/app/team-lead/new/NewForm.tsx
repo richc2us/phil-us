@@ -296,6 +296,11 @@ export default function NewForm() {
                         <button
                             className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                             type="submit"
+                            onClick={ (e:any) => {
+                                if(!confirm("Are you sure to cancel?")) {
+                                    e.preventDefault()
+                                }
+                            }}
                             >
                             Cancel
                         </button>

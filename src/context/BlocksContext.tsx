@@ -5,7 +5,8 @@ const initialBlock = {
     name:"",
     description: "",
     id: "",
-    _id: ""
+    _id: "",
+    active: false
 }
 const initialLot = {
     id:"",
@@ -13,6 +14,7 @@ const initialLot = {
     block_id:"",
     name:"",
     area:0,
+    active: false
 }
 const initialBlocks = {
     currentBlock:initialBlock,

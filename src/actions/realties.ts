@@ -60,10 +60,11 @@ export async function saveRealtyAction(state: any) {
     }
 }
 
-export const deleteRealtyAction = async(id: any) : Promise <ServerActionResponse> => {
+export const deleteRealtyAction = async(id: any, isActive: boolean = false) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {
-        await Realty.deleteOne({_id: id})
+        // await Realty.deleteOne({_id: id})
+        await Realty.updateOne({_id : id}, {active: isActive})
         revalidatePath("/");
         return {success: true, message: 'deleted', document: null}
     } catch (e:any) {

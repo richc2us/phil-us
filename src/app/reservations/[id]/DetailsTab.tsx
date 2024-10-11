@@ -1,6 +1,7 @@
 "use client"
 import { updateRealtyAction } from "@/actions/realties"
 import { initialStateRealty } from "@/actions/state"
+import { getTeamLeadsIndexApi } from "@/components/common/api"
 import SvgAgent from "@/components/common/svg/svg-agent"
 import NormalButton from "@/components/FormElements/Buttons/NormalButton"
 import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton"
@@ -22,8 +23,8 @@ export default function DetailsTab({document} : any) {
     }
 
     useEffect(()=> {
-        fetch("/api/team-lead").then(res => res.json()).then(r => updateForm({leads: r}) )
-      }, [])
+        getTeamLeadsIndexApi((res:any) => updateForm({leads: res}))
+    }, [])
 
 
     return(<>

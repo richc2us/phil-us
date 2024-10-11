@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Link from "next/link";
-import { DeleteButton } from "./DeleteButton";
+import { ActiveButton } from "./ActiveButton";
 import { getAmortizations } from "@/actions/amortizations";
 
 export default async function(){
@@ -28,23 +28,17 @@ export default async function(){
         </div>
   
       <div className="grid grid-cols-7 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-1 flex items-center">
-            <p className="font-medium">ID</p>
-          </div>
           <div className="col-span-1 flex items-center">
             <p className="font-medium">Borrowers</p>
           </div>
-          <div className="col-span-1 hidden items-center sm:flex">
+          <div className="col-span-2 items-center sm:flex">
             <p className="font-medium">Project / Block / Lot</p>
           </div>
           <div className="col-span-1 flex items-center">
             <p className="font-medium">Reservation</p>
           </div>
           <div className="col-span-1 flex items-center">
-            <p className="font-medium">Terms</p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p className="font-medium">Monthly</p>
+            <p className="font-medium">Terms / Monthly</p>
           </div>
           <div className="col-span-1 flex items-center">
             <p className="font-medium">Created</p>
@@ -57,28 +51,21 @@ export default async function(){
         {colletions.map((doc :any, key:any) => (
           <div
             className="grid grid-cols-7 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5" key={key}>
-            <div className="col-span-1 hidden items-center sm:flex">
-              <p className="text-sm text-black dark:text-white">
-                {key + 1}
-              </p>
-            </div>
             <div className="col-span-1 flex items-center">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                <ul>
-                  {/* { doc.borrowers[0].toString()} */}
+                  {key + 1}
                   {
                     doc.borrowers.map( (borrower:any,k:any) =>
-                        <li key={k}>
-                            {borrower.email} {borrower.last_name}
-                        </li>
+                        <p className="break-all" key={k}>
+                            {borrower.user.first_name} {borrower.user.last_name}
+                        </p>
                     )
                   }
-                </ul>
               </div>
             </div>
-            <div className="col-span-1 flex items-center">
+            <div className="col-span-2 flex items-center">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                <p className="text-sm text-black dark:text-white">
+                <p className="text-sm text-black dark:text-white break-all">
                   {doc.project_id.name} / {doc.block_id.name} / {doc.lot_id.name}
                 </p>
               </div>
@@ -88,21 +75,18 @@ export default async function(){
               ₱ {doc.reservation}
               </p>
             </div>
+
             <div className="col-span-1 flex items-center">
-              <p className="text-sm text-black dark:text-white">
-                {doc.terms}
-              </p>
+              <p className="text-sm text-black dark:text-white">{doc.terms} months @ ₱ {doc.monthly}</p>
             </div>
-            <div className="col-span-1 flex items-center">
-              <p className="text-sm text-black dark:text-white">₱ {doc.monthly}</p>
-            </div>
+
             <div className="col-span-1 flex items-center">
               <p className="text-sm dark:text-white">
                   { (doc.createdAt.getMonth() + 1) + "/" +  doc.createdAt.getDate() + "/" + doc.createdAt.getFullYear() + " " + doc.createdAt.getHours() + ":" + doc.createdAt.getMinutes()}
               </p>
             </div>
             <div className="col-span-1 flex items-center">
-              {/* <DeleteButton id={doc._id.toString()}/> */}
+              <ActiveButton id={JSON.parse(JSON.stringify(doc._id))} active={!doc.active}/>
               <Link key={doc._id} href={"/amortizations/" + doc._id} className="mx-2" >
                 <button
                   className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"

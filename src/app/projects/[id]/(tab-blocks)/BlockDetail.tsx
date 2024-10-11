@@ -6,6 +6,7 @@ import ProjectDetailTabBlockUpdateLot from "./(lot)/ProjectDetailTabBlockUpdateL
 import SvgPlus from "@/components/common/svg/plus"
 import Loader from "@/components/common/Loader"
 import { initialLot, useBlocks, useBlocksDispatchContext } from "../../../../context/BlocksContext"
+import Image from "next/image"
 
 
 type defaultState = {
@@ -15,7 +16,7 @@ type defaultState = {
     isEditingLot: boolean
 }
 
-export default function ProjectDetailTabBlockWrapper({projectID = "", loading = false} : any) {
+export default function BlockDetail({projectID = "", loading = false} : any) {
     const {blocks} = useBlocks()
     const dispatch = useBlocksDispatchContext()
     const [currentBlock, setCurrentBlock] = useState(null)
@@ -63,6 +64,7 @@ export default function ProjectDetailTabBlockWrapper({projectID = "", loading = 
                                                     aria-controls={"#collapse" + index}
                                                     >
                                                     {block.name} {block.description && "[ " + block.description + " ]" }
+                                                    {!block.active && " [ inactive ]"}
                                                     <span
                                                     className="-me-1 ms-auto h-5 w-5 shrink-0 rotate-[-180deg] transition-transform duration-200 ease-in-out group-data-[twe-collapse-collapsed]:me-0 group-data-[twe-collapse-collapsed]:rotate-0 motion-reduce:transition-none [&>svg]:h-6 [&>svg]:w-6">
                                                     <svg
@@ -106,13 +108,13 @@ export default function ProjectDetailTabBlockWrapper({projectID = "", loading = 
                                                                 return (<div 
                                                                         onClick={(e) => {
                                                                             toggle('isEditingLot', true)
-                                                                            dispatch({type:'setCurrentLot', currentLot : {...lot} })
+                                                                            dispatch({type:'setCurrentLot', currentLot : {...lot, id: lot._id.toString()} })
                                                                         }
                                                                 } className="cursor-pointer rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark" key={key}>
                                                                     <div className="mt-4 flex items-end justify-between">
                                                                         <div>
                                                                             <h4 className="text-title-md font-bold text-black dark:text-white">{lot.area} sqm</h4>
-                                                                            <span className="text-sm font-medium">{lot.name}</span>
+                                                                            <span className="text-sm font-medium">{lot.name} {!lot.active ? "inactive" : ""}</span>
                                                                         </div>
                                                                     </div>
                                                                 </div>)
@@ -128,7 +130,8 @@ export default function ProjectDetailTabBlockWrapper({projectID = "", loading = 
                                                             }
                                                             className="cursor-pointer rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
                                                             <div className="flex h-12.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
-                                                                <SvgPlus/>
+                                                                {/* <SvgPlus/> */}
+                                                                <Image width={18} height={18} alt="Add New Black" src="/icons/plus-black.svg"/>
                                                             </div>
                                                         </div>
                                                     </div>

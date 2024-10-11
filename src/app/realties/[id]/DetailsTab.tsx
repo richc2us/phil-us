@@ -1,6 +1,7 @@
 "use client"
 import { updateRealtyAction } from "@/actions/realties"
 import { initialStateRealty } from "@/actions/state"
+import { getTeamLeadsIndexApi } from "@/components/common/api"
 import SvgAgent from "@/components/common/svg/svg-agent"
 import NormalButton from "@/components/FormElements/Buttons/NormalButton"
 import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton"
@@ -22,8 +23,8 @@ export default function DetailsTab({document} : any) {
     }
 
     useEffect(()=> {
-        fetch("/api/team-lead").then(res => res.json()).then(r => updateForm({leads: r}) )
-      }, [])
+        getTeamLeadsIndexApi((res:any) => updateForm({leads: res}))
+    }, [])
 
 
     return(<>
@@ -185,8 +186,8 @@ export default function DetailsTab({document} : any) {
                                                     </option>
                                                     {
                                                         form.leads && form.leads.map( (doc:any, key:any) => <>
-                                                            <option value={doc._id} className="text-body dark:text-bodydark">
-                                                                {doc.first_name} {doc.middle_name} {doc.last_name} - {doc.email}
+                                                            <option value={doc._id} className="text-body dark:text-bodydark" disabled={!doc.active}>
+                                                                {doc.first_name} {doc.middle_name} {doc.last_name} - {doc.email} { !doc.active ? " - inactive " : "" }
                                                             </option>
                                                         </>)
                                                     }

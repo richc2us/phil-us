@@ -23,7 +23,7 @@ export interface Amortization extends Document {
     monthly:Number,
     terms:Number,
     years: Number,
-    active: Boolean
+    active?: Boolean
 }
 
 const amortSchema = new Schema<Amortization>({
@@ -47,7 +47,7 @@ const amortSchema = new Schema<Amortization>({
     monthly: {type: Number},
     terms: {type: Number},
     years: {type: Number},
-    active: {type: Boolean}
+    active: {type: Boolean, default: true}
 },{
     timestamps : true,
     toJSON: { virtuals: true },

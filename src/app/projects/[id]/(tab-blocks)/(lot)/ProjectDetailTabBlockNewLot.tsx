@@ -131,7 +131,7 @@ export default function ProjectDetailTabBlockNewLot() {
                             {/* <span className="absolute left-4.5 top-4">
                             </span> */}
                             <input
-                            className="w-full rounded border border-stroke bg-gray py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            className="w-full rounded border border-stroke py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="text"
                             name="lot_name"
                             id="lot_name"
@@ -159,7 +159,7 @@ export default function ProjectDetailTabBlockNewLot() {
                             {/* <span className="absolute left-4.5 top-4">
                             </span> */}
                             <input
-                            className="w-full rounded border border-stroke bg-gray py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            className="w-full rounded border border-stroke py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="number"
                             min="10"
                             name="lot_area"

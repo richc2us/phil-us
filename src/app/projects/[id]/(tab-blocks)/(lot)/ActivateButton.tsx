@@ -1,13 +1,13 @@
 "use client"
-import { deleteBlockAction } from "@/actions/blocks"
+import { deleteLotAction } from "@/actions/blocks"
 import { useFormStatus } from "react-dom"
 import { useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext"
 import { useState } from "react"
 
-export default function DeleteBlockSubmit() {
+export default function ActivateButton() {
     const {pending} = useFormStatus()
     const dispatch = useBlocksDispatchContext()
-    const {currentBlock} = useBlocks()
+    const {currentLot} = useBlocks()
     const [isClicked, setIsClicked] = useState(false)
     
     return (
@@ -15,17 +15,18 @@ export default function DeleteBlockSubmit() {
         type="button"
     
         onClick={
-            async() => {
+            async(e) => {
+                e.preventDefault()
                 setIsClicked(true)
                 if(confirm('Are you sure?')) {
-                    await deleteBlockAction(currentBlock.id)
+                    await deleteLotAction(currentLot.id,!currentLot.active)
                 }
                 await dispatch({type:'refresh'})
                 setIsClicked(false)
             }
         }
         >
-            {pending && isClicked ? 'Deleting...' : 'Delete Block'}
+            {pending && isClicked ?  (!currentLot.active ? 'Activating...' : 'Inactivating...')  : ( !currentLot.active ? 'Activate Lot' : 'Inactivate Lot') }
         </button>
     )
 }

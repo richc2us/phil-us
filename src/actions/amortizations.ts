@@ -37,8 +37,58 @@ export const getAmortizations = async() => {
 
 export const getAmortization = async(id: string) => {
     await dbConnect()
+    await Project.findOne()
+    await Block.findOne()
+    await Lot.findOne()
+    await Realty.findOne()
+    await User.findOne()
     revalidatePath('/')
     return await Amortization.findById(id)
+    .populate([
+        {path:'project_id'},
+        {path:'block_id'},
+        {path:'lot_id'},
+        {path:'realty_id'},
+        {path:'agent_id'},
+        {
+            path:'borrowers',
+            populate:{
+                path: 'user'
+            }
+        },
+    ])
+}
+
+export const getBuyerAmortizations = async(buyer_id:string) => {
+    await dbConnect()
+    await Project.findOne()
+    await Block.findOne()
+    await Lot.findOne()
+    await Realty.findOne()
+    await User.findOne()
+    revalidatePath('/')
+    let borrowers = await AmortizationBorrower.find({user_id: buyer_id}).select("amortization_id")
+    let arrayBorrowers:any[] = []
+    borrowers.map( (b:any) => arrayBorrowers.push(b.amortization_id.toString()) )
+    return await Amortization.find({_id: {$in : arrayBorrowers} })
+    .populate([
+        {path:'project_id'},
+        {path:'block_id'},
+        {path:'lot_id'},
+        {path:'realty_id'},
+        {path:'agent_id'},
+        {
+            path:'borrowers',
+            populate:{
+                path: 'user'
+            }
+        },
+    ])
+}
+
+export const getAmortizationSchedules = async(id: string) => {
+    await dbConnect()
+    return await AmortizationSchedule.find({amortization_id : id})
 }
 
 export async function updateAmortizationAction(form: any) {
@@ -103,12 +153,13 @@ export async function saveAmortizationAction(state: any) {
     }
 }
 
-export const deleteAmortizationAction = async(id: any) : Promise <ServerActionResponse> => {
+export const deleteAmortizationAction = async(id: any, isActive:boolean = false) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {
-        await Amortization.deleteOne({_id: id})
-        await AmortizationBorrower.deleteMany({amortization_id: id})
-        await AmortizationSchedule.deleteMany({amortization_id: id})
+        // await Amortization.deleteOne({_id: id})
+        await Amortization.updateOne({_id : id}, {active: isActive})
+        // await AmortizationBorrower.deleteMany({amortization_id: id})
+        // await AmortizationSchedule.deleteMany({amortization_id: id})
         revalidatePath("/");
         return {success: true, message: 'deleted', document: null}
     } catch (e:any) {

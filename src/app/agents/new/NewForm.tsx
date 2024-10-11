@@ -8,9 +8,9 @@ import { initialStateAgent } from "@/actions/state"
 import InputTextField from "@/components/FormElements/Fields/InputTextField"
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel"
 import SvgRealty from "@/components/common/svg/svg-realty"
-import SVGArrowDown from "@/components/common/svg/svg-arrow-down"
 import InputSelectField from "@/components/FormElements/Fields/inputSelectField"
 import AsyncSelect from 'react-select/async'
+import { getRealtiesApi } from "@/components/common/api"
 
 
 export default function NewForm() {
@@ -29,7 +29,7 @@ export default function NewForm() {
     }
 
     useEffect(()=> {
-        fetch("/api/realties").then( async(res) => updateForm({realties : await res.json() })  )
+        getRealtiesApi((res:any) => updateForm({realties : res }))
     },[])
 
     return (<>
@@ -337,6 +337,12 @@ export default function NewForm() {
                         <button
                             className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                             type="submit"
+                            onClick={ (e:any) => {
+                                    if(!confirm("Are you sure to cancel?")) {
+                                        e.preventDefault()
+                                    }
+                                }
+                            }
                             >
                             Cancel
                         </button>

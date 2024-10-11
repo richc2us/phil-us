@@ -60,10 +60,11 @@ export async function updateAgentAction(state: any) {
 }
 
 
-export const deleteAgentAction = async(id: any) : Promise <ServerActionResponse> => {
+export const deleteAgentAction = async(id: any, isActive : boolean = false) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {
-        await User.deleteOne({_id: id, account_type: "agent" })
+        // await User.deleteOne({_id: id, account_type: "agent" })
+        await User.updateOne({_id : id}, {active: isActive})
         revalidatePath("/");
         return {success: true, message: 'deleted', document: null}
     } catch (e:any) {

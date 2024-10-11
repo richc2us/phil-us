@@ -6,6 +6,7 @@ export default function TabDetail({children, index = 0, active = false} : {child
         id={"tabs-"+index}
         role="tabpanel"
         aria-labelledby={"tabs-"+ index +"-tab"}
+        key={"tab-index-"+index}
         {...isActive}
         >
             {children}

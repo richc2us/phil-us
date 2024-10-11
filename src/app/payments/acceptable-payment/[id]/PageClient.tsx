@@ -30,7 +30,6 @@ export default function PageClient({document} : any){
             action={ async() => {
                     setRequesting(true)
                     let response  =  await updateAcceptablePaymentsAction(form)
-                    console.dir(response)
                     setReply(response)
                     if(response.success) {
                         updateForm({...response.document, edit:false})

@@ -58,7 +58,6 @@ export default function NewForm(){
                             action={ async() => {
                                     setRequesting(true)
                                     let response  =  await saveReceiverAccountAction(form)
-                                    console.dir(response)
                                     setReply(response)
                                     if(response.success) {
                                         updateForm({...initialReceiverAccount})
@@ -158,7 +157,13 @@ export default function NewForm(){
                             <Link href="/payments/acceptable-payment">
                                 <button
                                 className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                                type="button"
+                                type="submit"
+                                onClick={ (e:any) => {
+                                        if(!confirm("Are you sure to cancel?")) {
+                                            e.preventDefault()
+                                        }
+                                    }
+                                }
                                 >
                                 Cancel
                                 </button>

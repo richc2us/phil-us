@@ -29,7 +29,10 @@ export interface Project extends Document {
     geographic_layer_file?: string,
     bulk_discount_scheme?: Number,
     LTS?: string,
-    legends?: []
+    project_type ?: string,
+    project_status?:string,
+    legends?: [],
+    active?: boolean
 }
 
 const projectSchema = new Schema<Project>({
@@ -139,9 +142,14 @@ const projectSchema = new Schema<Project>({
     LTS: {
         type: String,
     },
+    project_type: {type: String, default: ""},
+    project_status: {type: String, default: ""},
     legends:[
         {type: String,}
-    ]
+    ],
+    active: {
+        type : Boolean, default: true
+    }
 }, {
     timestamps : true
 })

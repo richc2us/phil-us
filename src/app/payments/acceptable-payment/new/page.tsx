@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 
 export default async function(){
     return (
-        <>
+        <DefaultLayout>
             <Breadcrumb pageName="New Acceptable Payments" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <NewForm/>
             </div>
-        </>
+        </DefaultLayout>
     )
 }

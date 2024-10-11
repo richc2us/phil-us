@@ -6,7 +6,8 @@ export interface Block extends Document {
     project_id : Schema.Types.ObjectId,
     name: string,
     area?: Number,
-    description?: string
+    description?: string,
+    active?: boolean
 }
 
 const blockSchema = new Schema<Block>({
@@ -22,7 +23,8 @@ const blockSchema = new Schema<Block>({
     },
     area: {
         type: Number,
-    }
+    },
+    active: {type: Boolean, default: true}
 }, {
     timestamps : true,
     toJSON: { virtuals: true },

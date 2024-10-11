@@ -64,10 +64,11 @@ export async function updateReceiverAccountAction(state: any) {
 }
 
 
-export const deleteReceiverAccountAction = async(id: any) : Promise <ServerActionResponse> => {
+export const deleteReceiverAccountAction = async(id: any, isActive : boolean = false) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {
-        await ReceiverAccount.deleteOne({_id: id})
+        // await ReceiverAccount.deleteOne({_id: id})
+        await ReceiverAccount.updateOne({_id : id}, {active: isActive})
         revalidatePath("/");
         return {success: true, message: 'deleted', document: null}
     } catch (e:any) {

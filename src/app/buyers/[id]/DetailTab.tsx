@@ -12,6 +12,7 @@ import SvgPlus from "@/components/common/svg/plus"
 import SvgDelete from "@/components/common/svg/svg-delete"
 import AsyncCreatableSelect from 'react-select/async-creatable';
 import { searchUsers } from "@/actions/search"
+import { getUserSingleApi } from "@/components/common/api"
 
 export function DetailTab({document} : any) {
     const updateForm = (value : any) =>  setForm( (prev: any) =>  { return {...prev, ...value} }  )
@@ -39,7 +40,7 @@ export function DetailTab({document} : any) {
 
     useEffect(() => {
         if(form.spouse_user_id) {
-            fetch('/api/users/' + form.spouse_user_id).then( async(res) =>  updateForm({spouse : await res.json() }) )
+            getUserSingleApi(form.spouse_user_id,  (res:any) =>  updateForm({spouse : res}) )
         }
     },[form.spouse_user_id])
 
@@ -587,7 +588,6 @@ export function DetailTab({document} : any) {
                                     required
                                     onChange={
                                         async({ data ,label , value} : any, b : any) => {
-                                            console.dir(data)
                                             updateReference( 'name' ,  data.first_name + " " + data.middle_name + " " + data.last_name, index)
                                             updateReference( 'contact' ,  data.phone , index)
                                         }

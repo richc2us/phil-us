@@ -11,6 +11,7 @@ export interface Realty extends Document {
     description?: string,
     contact_number?: string
     address2?: string,
+    active?: boolean
 }
 
 const realSchema = new Schema<Realty>({
@@ -41,6 +42,7 @@ const realSchema = new Schema<Realty>({
     contact_number: {
         type: String
     },
+    active: {type : Boolean, default: true},
 
 }, {
     timestamps : true,

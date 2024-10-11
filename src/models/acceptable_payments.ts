@@ -7,7 +7,8 @@ export interface AcceptablePayment extends Document {
     created_by: Schema.Types.ObjectId,
     mode_of_payment: String,
     name: String,
-    description?: String
+    description?: String,
+    active?: boolean
 }
 
 const acceptablePaymentSchema = new Schema<AcceptablePayment>({
@@ -16,6 +17,7 @@ const acceptablePaymentSchema = new Schema<AcceptablePayment>({
     mode_of_payment : {type: String, required : true},
     name : {type: String, required : true},
     description : {type: String},
+    active: {type: Boolean, default: true}
 },{
     timestamps : true
 });

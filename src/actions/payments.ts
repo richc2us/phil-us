@@ -64,10 +64,11 @@ export async function updateAcceptablePaymentsAction(state: any) {
 }
 
 
-export const deleteAcceptablePaymentsAction = async(id: any) : Promise <ServerActionResponse> => {
+export const deleteAcceptablePaymentsAction = async(id: any, isActive : boolean = false) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {
         await AcceptablePayment.deleteOne({_id: id})
+        await AcceptablePayment.updateOne({_id : id}, {active: isActive})
         revalidatePath("/");
         return {success: true, message: 'deleted', document: null}
     } catch (e:any) {

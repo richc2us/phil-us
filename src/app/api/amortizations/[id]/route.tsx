@@ -1,4 +1,4 @@
-import { getAmortizations } from "@/actions/amortizations"
+import { getBuyerAmortizations } from "@/actions/amortizations"
 import dbConnect from "@/lib/mongodb"
 import { NextRequest, NextResponse } from "next/server"
 
@@ -7,7 +7,7 @@ const getBuyerAmortizationsRoute = async(
 ) => {
     await dbConnect()
     return NextResponse.json(
-        await getAmortizations()
+        await getBuyerAmortizations(params.id)
     )
 }
 

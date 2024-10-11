@@ -61,10 +61,28 @@ export async function updateBlockAction(state: any) {
 }
 
 
-export const deleteBlockAction = async(id: any) : Promise <ServerActionResponse> => {
+export const deleteBlockAction = async(id: any, isActive : boolean =  false) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {
-        await Block.deleteOne({_id: id})
+        // await Block.deleteOne({_id: id})
+        await Block.updateOne({_id : id}, {active: isActive})
+        revalidatePath("/");
+        return {success: true, message: 'deleted', document: null}
+    } catch (e:any) {
+        let errors = []
+        console.dir(e);
+        for(let field in e.errors) {
+            errors.push(e.errors[field].message)
+        }
+        return {success: false, message: 'Error in deleting', document: null, errors: errors}
+    }
+}
+
+export const deleteLotAction = async(id: any, isActive : boolean =  false) : Promise <ServerActionResponse> => {
+    await dbConnect()
+    try {
+        // await Block.deleteOne({_id: id})
+        await Lot.updateOne({_id : id}, {active: isActive})
         revalidatePath("/");
         return {success: true, message: 'deleted', document: null}
     } catch (e:any) {

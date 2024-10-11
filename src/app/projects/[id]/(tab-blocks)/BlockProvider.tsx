@@ -1,12 +1,12 @@
 import { useEffect, useReducer } from "react"
 import { BlocksContext, BlocksDispatchContext,  initialBlocks } from "../../../../context/BlocksContext";
-import { useProject } from "../../../../context/ProjectContext";
+import { usePageID } from "@/context/IDContext";
 
 
 
-const ProjectDetailTabBlockProvider = ({ parentBlocks  , refreshBlocks = {} ,children}:any) => {
+const BlockProvider = ({ parentBlocks  , refreshBlocks = {} ,children}:any) => {
     
-    const {projectID} = useProject()
+    const projectID = usePageID()
     const [blocks, blockDispatch] = useReducer( blocksReducer, {...initialBlocks, projectID})
 
     useEffect(() => {
@@ -39,4 +39,4 @@ const ProjectDetailTabBlockProvider = ({ parentBlocks  , refreshBlocks = {} ,chi
     </>)
 }
 
-export default ProjectDetailTabBlockProvider
+export default BlockProvider

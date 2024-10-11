@@ -57,11 +57,12 @@ export const saveCompanyAction = async(form: any) : Promise<ServerActionResponse
     }
 }
 
-export const deleteCompanyAction = async(id: any) : Promise <ServerActionResponse> => {
+export const deleteCompanyAction = async(id: any, isActive:boolean = false) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {
         if(id !== DEFAULT_COMPANY) {
-            await Company.deleteOne({_id: id})
+            // await Company.deleteOne({_id: id})
+            await Company.updateOne({_id : id}, {active: isActive})
             revalidatePath("/");
             return {success: true, message: 'company deleted', document: null}
         }

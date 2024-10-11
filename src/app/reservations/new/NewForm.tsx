@@ -15,6 +15,7 @@ import { initTWE, Collapse } from "tw-elements";
 import { getAgents } from "@/actions/agents";
 import { saveAmortizationAction } from "@/actions/amortizations";
 import DatePicker from "react-datepicker";
+import { getProjectBlocksApi,  getProjectsSearchApi } from "@/components/common/api";
 
 
 export default function NewForm(){
@@ -70,9 +71,9 @@ export default function NewForm(){
 
     useEffect(() => {
         setProjectRequesting(true)
-        fetch("/api/projects").then(res => res.json()).then(res => {
+        getProjectsSearchApi((res:any) => {
             updateForm({projects: res})
-            setProjectRequesting(false) 
+            setProjectRequesting(false)
         })
     },[])
 
@@ -84,7 +85,8 @@ export default function NewForm(){
             const selectAgents:any = []
             agents.map( item => selectAgents.push({
                 value : item._id,
-                label: item.first_name + " " + item.last_name + " " + item.email
+                label: item.first_name + " " + item.last_name + " " + item.email,
+                isDisabled: !item.active
             }) )
             updateForm({ agents: selectAgents})
         }
@@ -105,30 +107,27 @@ export default function NewForm(){
     useEffect(() => {
         if(form.project_id) {
             setBlockRequesting(true)
-            fetch("/api/projects/blocks/"+form.project_id)
-            .then(res => res.json())
-            .then(res => {
+            getProjectBlocksApi(form.project_id, (res:any) => {
                 let blocks:any= []
-                    res.map( (item:any, key:any) => {
+                res.map( (item:any, key:any) => {
 
-                        item.blockLots.map( (b:any, k: any) => {
-                            item.blockLots[k] = {
-                                value: b._id,
-                                label: b.name,
-                                data: b
-                            }
-                        })
-
-                        blocks.push({
-                            value: item._id,
-                            label: item.name,
-                            data: item
-                        })
+                    item.blockLots.map( (b:any, k: any) => {
+                        item.blockLots[k] = {
+                            value: b._id,
+                            label: b.name,
+                            data: b
+                        }
                     })
-                    updateForm({blocks: blocks})
-                    setBlockRequesting(false)
-                }
-            )
+
+                    blocks.push({
+                        value: item._id,
+                        label: item.name,
+                        data: item
+                    })
+                })
+                updateForm({blocks: blocks})
+                setBlockRequesting(false)
+            } )
         }
     },[form.project_id])
 

@@ -2,11 +2,12 @@ import { getCompanies } from "@/actions/companies";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Link from "next/link";
-import { CompanyDeleteButton } from "./CompanyDeleteButton";
+import { ActiveButton } from "./ActiveButton";
 import { BSON } from "mongodb"
 import { DEFAULT_COMPANY } from "@/actions/const";
 
 import { Metadata } from "next"
+import PageClient from "./PageClient";
 
 export const metadata: Metadata = {
     title:
@@ -38,11 +39,11 @@ export default async function() {
                   </div>
               </div>
 
-              <div className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
+              {/* <div className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
                 <div className="col-span-1 flex items-center">
                     <p className="font-medium">Id</p>
                 </div>
-                <div className="col-span-2 flex items-center">
+                <div className="col-span-1 flex items-center">
                   <p className="font-medium">Name</p>
                 </div>
 
@@ -53,15 +54,15 @@ export default async function() {
                 <div className="col-span-1 flex items-center">
                   <p className="font-medium">Alternative Address</p>
                 </div>
-                <div className="col-span-2 hidden items-center sm:flex">
+                <div className="col-span-1 hidden items-center sm:flex">
                   <p className="font-medium">Description</p>
                 </div>
                 <div className="col-span-1 hidden items-center sm:flex">
                   <p className="font-medium">Action</p>
                 </div>
-              </div>
-
-              {companies.map((company:any, key:any) => (
+              </div> */}
+              <PageClient/>
+              {/* {companies.map((company:any, key:any) => (
                 <div
                   className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5"
                   key={key}
@@ -72,7 +73,7 @@ export default async function() {
                     </p>
                   </div>
 
-                  <div className="col-span-2 flex items-center">
+                  <div className="col-span-1 flex items-center">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                       <p className="text-sm text-black dark:text-white">
                         {company.name}
@@ -89,13 +90,13 @@ export default async function() {
                       {company.address2}
                     </p>
                   </div>
-                  <div className="col-span-2 flex items-center">
+                  <div className="col-span-1 flex items-center">
                     <p className="text-sm text-black dark:text-white">
                       {company.description}
                     </p>
                   </div>
                   <div className="col-span-1 flex items-center">
-                    { new BSON.ObjectId(DEFAULT_COMPANY).equals(company._id) ? "" : <CompanyDeleteButton companyId={JSON.parse(JSON.stringify(company._id))}/>  }
+                    { new BSON.ObjectId(DEFAULT_COMPANY).equals(company._id) ? "" : <ActiveButton id={JSON.parse(JSON.stringify(company._id))} active={!company.active}/>}
                     <Link key={company._id} href={"/companies/" + company._id} className="mx-2" >
                       <button
                         className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
@@ -106,7 +107,7 @@ export default async function() {
                       </Link>
                   </div>
                 </div>
-              ))}
+              ))} */}
             </div>
         </DefaultLayout>
     )

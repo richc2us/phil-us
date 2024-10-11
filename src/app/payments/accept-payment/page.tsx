@@ -13,12 +13,6 @@ export const metadata: Metadata = {
     description: "Recent Payments",
 };
 
-
-// const getDataPayment = async() => {
-//     const resp = await fetch('http://localhost:4000/api/payments/accept-payments')
-//     return resp.json()
-// }
-
 export default async function() {
 
   const documents = await getAcceptablePaymentsAction()

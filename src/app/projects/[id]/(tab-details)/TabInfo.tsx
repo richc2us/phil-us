@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useProject } from "../../../../context/ProjectContext";
 import { updateProject } from "@/actions/projects";
 import { initialStateProject } from "@/actions/state";
 import SvgPlus from "@/components/common/svg/plus";
@@ -8,15 +7,18 @@ import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButt
 import NormalButton from "@/components/FormElements/Buttons/NormalButton";
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel";
 import InputTextField from "@/components/FormElements/Fields/InputTextField";
+import { usePageID } from "@/context/IDContext";
+import { getProjectSingleApi } from "@/components/common/api";
+import { SidebarIcon } from "@/components/common/functions";
 
 
 
-export default function ProjectDetailTabDetail() {
+export default function TabInfo() {
 
-    const {projectID} = useProject()
+    const projectID = usePageID()
     const [form, setForm] = useState({...initialStateProject, edit: false, id: projectID})
     useEffect(() => {
-        fetch('/api/projects/' + projectID ).then( (res) => res.json()).then((project) => {
+        getProjectSingleApi(projectID,(project:any) => {
             if(project.original_owners && project.original_owners.length == 0) {
                 project.original_owners = [{}]
             }
@@ -201,7 +203,7 @@ export default function ProjectDetailTabDetail() {
                                         </div>
 
                                         <div className="w-full sm:w-1/3">
-                                                <InputTextLabel id="Zip">
+                                                <InputTextLabel id="zip">
                                                     Zip
                                                 </InputTextLabel>
                                             
@@ -235,7 +237,7 @@ export default function ProjectDetailTabDetail() {
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
                                         <div className="w-full sm:w-1/2">
-                                                <InputTextLabel id="Latitude">
+                                                <InputTextLabel id="latitude">
                                                     Latitude
                                                 </InputTextLabel>
                                             
@@ -455,16 +457,16 @@ export default function ProjectDetailTabDetail() {
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
                                         <div className="w-full sm:w-1/2">
-                                                <InputTextLabel id="bulk_discount_scheme">
-                                                    Bulk Discount Scheme
+                                                <InputTextLabel id="project_status">
+                                                    Project Status
                                                 </InputTextLabel>
 
                                                 <InputTextField
-                                                    id="bulk_discount_scheme"
-                                                    placeholder="Bulk Discount Scheme"
+                                                    id="project_status"
+                                                    placeholder="ex. underconstruction"
                                                     autoComplete="off"
                                                     disabled={!form.edit}
-                                                    value={form.bulk_discount_scheme}
+                                                    value={form.project_status}
                                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                                 />
                                         </div>
@@ -480,6 +482,21 @@ export default function ProjectDetailTabDetail() {
                                                     autoComplete="off"
                                                     disabled={!form.edit}
                                                     value={form.LTS}
+                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                                />
+                                        </div>
+
+                                        <div className="w-full sm:w-1/2">
+                                                <InputTextLabel id="project_type">
+                                                    Project Typr
+                                                </InputTextLabel>
+
+                                                <InputTextField
+                                                    id="project_type"
+                                                    placeholder="subdivision, farmlot, etc"
+                                                    autoComplete="off"
+                                                    disabled={!form.edit}
+                                                    value={form.project_type}
                                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                                 />
                                         </div>
@@ -501,17 +518,20 @@ export default function ProjectDetailTabDetail() {
                                         </div>
                                         <div className="float-end flex flex-cols-2 gap-2">
                                             {
-                                                <button
+                                                form.edit && <button
                                                     className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                                                     type="button"
                                                     onClick={ (e) => updateForm( { original_owners : [...form.original_owners , {} ]} ) }
                                                 >
-                                                <SvgPlus/>
+                                                    {
+                                                        SidebarIcon('plus-black')
+                                                    }
+                                                
                                                 </button>
                                             }
 
                                             {
-                                            index > 0 && <button
+                                            index > 0 && form.edit &&  <button
                                                 className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                                                 type="button"
                                                 onClick={ (e) => { 
@@ -520,7 +540,9 @@ export default function ProjectDetailTabDetail() {
                                                     }
                                                 } }
                                                 >
-                                                <SvgDelete/>
+                                                     {
+                                                        SidebarIcon('delete')
+                                                    }
                                                 </button>
                                             }
                                         </div>
@@ -530,12 +552,12 @@ export default function ProjectDetailTabDetail() {
                                 <div className="p-7">
                                     <div className="mb-4 flex items-center gap-3">
                                             <div className="w-full sm:w-1/2">
-                                                        <InputTextLabel id="first_name">
+                                                        <InputTextLabel id={"first_name"+index}>
                                                             First Name
                                                         </InputTextLabel>
 
                                                         <InputTextField
-                                                            id="first_name"
+                                                            id={"first_name"+index}
                                                             placeholder="First Name"
                                                             autoComplete="off"
                                                             disabled={!form.edit}
@@ -545,12 +567,12 @@ export default function ProjectDetailTabDetail() {
                                                 </div>
 
                                                 <div className="w-full sm:w-1/2">
-                                                        <InputTextLabel id="middle_name">
+                                                        <InputTextLabel id={"middle_name"+index}>
                                                             Middle Name
                                                         </InputTextLabel>
 
                                                         <InputTextField
-                                                            id="middle_name"
+                                                            id={"middle_name"+index}
                                                             placeholder="Middle Name"
                                                             autoComplete="off"
                                                             disabled={!form.edit}
@@ -560,12 +582,12 @@ export default function ProjectDetailTabDetail() {
                                                 </div>
 
                                                 <div className="w-full sm:w-1/2">
-                                                        <InputTextLabel id="middle_name">
+                                                        <InputTextLabel id={"last_name"+index}>
                                                             Last Name
                                                         </InputTextLabel>
 
                                                         <InputTextField
-                                                            id="last_name"
+                                                            id={"last_name"+index}
                                                             placeholder="Last Name"
                                                             autoComplete="off"
                                                             disabled={!form.edit}
@@ -578,13 +600,13 @@ export default function ProjectDetailTabDetail() {
 
                                         <div className="mb-4 flex items-center gap-3">
                                                 <div className="w-full sm:w-1/2">
-                                                        <InputTextLabel id="email_address">
+                                                        <InputTextLabel id={"email_address"+index}>
                                                             Email
                                                         </InputTextLabel>
 
                                                         <InputTextField
                                                             type="email"
-                                                            id="email_address"
+                                                            id={"email_address"+index}
                                                             placeholder="Email Address"
                                                             autoComplete="off"
                                                             disabled={!form.edit}
@@ -593,12 +615,12 @@ export default function ProjectDetailTabDetail() {
                                                         />
                                                 </div>
                                                 <div className="w-full sm:w-1/2">
-                                                        <InputTextLabel id="email_address">
+                                                        <InputTextLabel id={"phone_remark"+index}>
                                                             Phone / Remarks
                                                         </InputTextLabel>
 
                                                         <InputTextField
-                                                            id="phone_remark"
+                                                            id={"phone_remark"+index}
                                                             placeholder="Phone / Remarks"
                                                             autoComplete="off"
                                                             disabled={!form.edit}

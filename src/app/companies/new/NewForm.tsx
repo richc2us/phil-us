@@ -43,7 +43,6 @@ export default function NewForm(){
                 action={ async() => {
                     setRequesting(true)
                     let response  =  await saveCompanyAction(form)
-                    console.dir(response)
                     setReply(response)
                     if(response.success) {
                         setForm(initialSateCompany)
@@ -87,7 +86,7 @@ export default function NewForm(){
                             </svg>
                             </span>
                             <input
-                            className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            className="w-full rounded border border-stroke  py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="text"
                             name="name"
                             id="name"
@@ -110,7 +109,7 @@ export default function NewForm(){
                                 Address
                             </label>
                             <input
-                                className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                                className="w-full rounded border border-stroke  px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                 type="text"
                                 name="address"
                                 id="address"
@@ -129,7 +128,7 @@ export default function NewForm(){
                                 Alternative Address
                             </label>
                             <input
-                                className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                                className="w-full rounded border border-stroke  px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                 type="text"
                                 name="address2"
                                 id="address2"
@@ -161,7 +160,13 @@ export default function NewForm(){
                     <Link href="/companies">
                         <button
                         className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                        type="button"
+                        type="submit"
+                        onClick={ (e:any) => {
+                                if(!confirm("Are you sure to cancel?")) {
+                                    e.preventDefault()
+                                }
+                            }
+                        }
                         >
                         Cancel
                         </button>
@@ -171,7 +176,6 @@ export default function NewForm(){
                       type="submit"
                       {...{disabled: requesting || form.name.length == 0 || form.address.length == 0}}
                       onClick={(e:any) => {
-                        console.dir(e)
                         e.preventDefault()
                         setRequesting(true)
                         e.target?.form?.requestSubmit()

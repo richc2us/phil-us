@@ -8,7 +8,8 @@ export interface ReceiverAccount extends Document {
     mode_of_payment: String,
     name: String,
     account_number: String,
-    description?: String
+    description?: String,
+    active?: boolean
 }
 
 const receiverAccountSchema = new Schema<ReceiverAccount>({
@@ -18,6 +19,7 @@ const receiverAccountSchema = new Schema<ReceiverAccount>({
     name : {type: String, required : true},
     account_number : {type: String, required : true},
     description : {type: String},
+    active: {type: Boolean, default: true}
 },{
     timestamps : true
 });

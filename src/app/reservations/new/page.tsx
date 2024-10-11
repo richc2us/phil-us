@@ -1,8 +1,11 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
-import NewForm from "./NewForm";
 
+import dynamic from "next/dynamic";
 
+const NewForm = dynamic(() => import("./NewForm"), {
+    ssr: false
+  })
 export default function(){
     return (
         <DefaultLayout>

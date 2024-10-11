@@ -11,6 +11,7 @@ import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel";
 import SvgPlus from "@/components/common/svg/plus";
 import SvgDelete from "@/components/common/svg/svg-delete";
 import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton";
+import Link from "next/link";
 
 
 export default  function NewProjectForm() {
@@ -47,9 +48,7 @@ export default  function NewProjectForm() {
                                         Project Information
                                         </div>
                                         <div className="float-end">
-                                            {
                                                 <PrimarySaveButton/>
-                                            }
                                         </div>
                                     </h3>
                                 </div>
@@ -426,15 +425,15 @@ export default  function NewProjectForm() {
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
                                         <div className="w-full sm:w-1/2">
-                                                <InputTextLabel id="bulk_discount_scheme">
-                                                    Bulk Discount Scheme
+                                                <InputTextLabel id="project_status">
+                                                    Project Status
                                                 </InputTextLabel>
 
                                                 <InputTextField
-                                                    id="bulk_discount_scheme"
-                                                    placeholder="Bulk Discount Scheme"
+                                                    id="project_status"
+                                                    placeholder="ex. underconstruction"
                                                     autoComplete="off"
-                                                    value={form.bulk_discount_scheme}
+                                                    value={form.project_status}
                                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                                 />
                                         </div>
@@ -449,6 +448,19 @@ export default  function NewProjectForm() {
                                                     placeholder="License to Sell"
                                                     autoComplete="off"
                                                     value={form.LTS}
+                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                                />
+                                        </div>
+                                        <div className="w-full sm:w-1/2">
+                                                <InputTextLabel id="project_type">
+                                                    Project Typr
+                                                </InputTextLabel>
+
+                                                <InputTextField
+                                                    id="project_type"
+                                                    placeholder="subdivision, farmlot, etc"
+                                                    autoComplete="off"
+                                                    value={form.project_type}
                                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                                 />
                                         </div>

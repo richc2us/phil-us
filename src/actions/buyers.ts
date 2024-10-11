@@ -66,10 +66,11 @@ export async function updateBuyerAction(state: any) {
 }
 
 
-export const deleteBuyerAction = async(id: any) : Promise <ServerActionResponse> => {
+export const deleteBuyerAction = async(id: any, isActive:boolean = false) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {
-        await User.deleteOne({_id: id, account_type: "buyer" })
+        // await User.deleteOne({_id: id, account_type: "buyer" })
+        await User.updateOne({_id : id}, {active: isActive})
         revalidatePath("/");
         return {success: true, message: 'deleted', document: null}
     } catch (e:any) {

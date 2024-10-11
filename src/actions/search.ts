@@ -11,7 +11,8 @@ export const searchBuyer = async(text: string, all_type : boolean = false) => {
     b.map( (i:any) => buyers.push({
         value : i._id.toString(),
         label: i.fullName + " [ " + i.email + " ]",
-        data: i.toJSON()
+        data: i.toJSON(),
+        isDisabled: !i.active
     }))
 
     return buyers
@@ -36,7 +37,8 @@ export const searchUsers = async(text: string, exclude = 0) => {
     b.map( (i:any) => users.push({
         value : i._id.toString(),
         label: i.fullName,
-        data: i.toJSON()
+        data: i.toJSON(),
+        isDisabled: !i.active
     }))
     return users
 }
@@ -52,8 +54,9 @@ export const searchProject = async(text: string = "") => {
     }
     q.map( (i:any) => projects.push({
         value : i._id.toString(),
-        label: i.name,
-        data: i.toJSON()
+        label: i.name + (!i.active ?  " - (inactive)" : "") ,
+        data: i.toJSON(),
+        isDisabled: !i.active
     }))
 
     return projects

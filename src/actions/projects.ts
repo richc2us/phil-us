@@ -36,7 +36,6 @@ export const updateProject = async(form:any) => {
     await dbConnect()
     try {
         const document = await Project.findByIdAndUpdate( form.id , { ...form })
-        console.dir(document)
         if(document) {
             revalidatePath("/")
             return {success: true, message:'updated', document : {} }
@@ -56,10 +55,11 @@ export const updateProject = async(form:any) => {
     }
 }
 
-export const deleteProjectAction = async(id: any) : Promise <ServerActionResponse> => {
+export const deleteProjectAction = async(id: any, isActive : boolean = false) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {
-        await Project.deleteOne({_id: id})
+        // await Project.deleteOne({_id: id})
+        await Project.updateOne({_id : id}, {active: isActive})
         revalidatePath("/");
         return {success: true, message: 'deleted', document: null}
     } catch (e:any) {

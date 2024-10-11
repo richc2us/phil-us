@@ -97,6 +97,8 @@ const Header = (props: {
 
               <input
                 type="text"
+                name="global-search"
+                id="global-search"
                 placeholder="Type to search..."
                 className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
               />

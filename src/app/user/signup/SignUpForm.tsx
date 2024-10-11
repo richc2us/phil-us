@@ -37,6 +37,7 @@ export default  function SigUpForm() {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify(form),
+              cache: "no-cache"
           });
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

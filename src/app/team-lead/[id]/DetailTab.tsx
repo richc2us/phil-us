@@ -7,6 +7,7 @@ import NormalButton from "@/components/FormElements/Buttons/NormalButton"
 import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton"
 import { updateTeamLeadAction, checkEmailExists } from "@/actions/team-lead"
 import AsyncSelect from 'react-select/async'
+import { getRealtiesApi } from "@/components/common/api"
 
 
 export function DetailTab({document} : any) {
@@ -29,7 +30,7 @@ export function DetailTab({document} : any) {
     }
 
     useEffect(()=> {
-        fetch("/api/realties").then( async(res) => updateForm({realties : await res.json() })  )
+        getRealtiesApi((res:any) => updateForm({realties : res }))
     },[])
 
 

@@ -40,6 +40,8 @@ export const initialStateProject : any = {
     geographic_layer_file: "",
     bulk_discount_scheme: 0,
     LTS: "",
+    project_type:"",
+    project_status: ""
 }
 
 export const  initialStateRealty = {
@@ -140,4 +142,12 @@ export const initialAcceptablePayment = {
 export const initialReceiverAccount = {
     ...initialAcceptablePayment,
     account_number: ""
+}
+
+export const dataTableOptions = {
+    download : false,
+    filter: false,
+    print: false,
+    viewColumns : false,
+    rowsPerPage: 10
 }

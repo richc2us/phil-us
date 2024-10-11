@@ -1,7 +1,7 @@
 import React from "react";
 import { TECarousel, TECarouselItem } from "tw-elements-react";
 
-export default function VideoCarouselBasicExample() {
+export default function TabMedia() {
   return (
     <>
       <TECarousel showControls showIndicators crossfade ride="carousel">

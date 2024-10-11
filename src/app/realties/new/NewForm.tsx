@@ -12,6 +12,7 @@ import NormalButton from "@/components/FormElements/Buttons/NormalButton";
 import { initialStateRealty } from "@/actions/state";
 import SvgAgent from "@/components/common/svg/svg-agent";
 import InputSelectField from "@/components/FormElements/Fields/inputSelectField";
+import { getTeamLeadsIndexApi } from "@/components/common/api";
 
 
 export default function NewForm() {
@@ -27,7 +28,7 @@ export default function NewForm() {
       }
 
       useEffect(()=> {
-        fetch("/api/team-lead").then(res => res.json()).then(r => updateForm({leads: r}) )
+        getTeamLeadsIndexApi((res:any) => updateForm({leads: res}))
       }, [])
 
       return (
@@ -181,8 +182,8 @@ export default function NewForm() {
                                         </option>
                                         {
                                             form.leads && form.leads.map( (doc:any, key:any) => <>
-                                                <option value={doc._id} className="text-body dark:text-bodydark">
-                                                    {doc.first_name} {doc.middle_name} {doc.last_name} - {doc.email}
+                                                <option value={doc._id} className="text-body dark:text-bodydark" disabled={!doc.active}>
+                                                    {doc.first_name} {doc.middle_name} {doc.last_name} - {doc.email} { !doc.active ? " - inactive " : "" }
                                                 </option>
                                             </>)
                                         }
@@ -227,7 +228,12 @@ export default function NewForm() {
                         <div className="flex justify-end gap-4.5">
                             <Link
                             href="/realties">
-                                <NormalButton>
+                                <NormalButton type="submit" onClick={ (e:any) => {
+                                        if(!confirm("Are you sure to cancel?")) {
+                                            e.preventDefault()
+                                        }
+                                    }
+                                }>
                                     Cancel
                                 </NormalButton>
                             </Link>
