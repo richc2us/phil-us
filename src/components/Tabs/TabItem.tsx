@@ -1,8 +1,10 @@
+import { useTab } from "@/context/TabsContext"
 
 export default function TabItem({children,  index = 1, active = false} : {children: any, index : number,active? : boolean}) {
-    const isActive =  {"data-twe-nav-active" : active? true : null}
+    const overrideIndex = useTab()
+    const finalActive = active || index == parseInt(overrideIndex)
+    const isActive =  finalActive ? {"data-twe-nav-active" : true } :  {}
 
-    
     return (
         <li role="presentation">
             <a
@@ -11,7 +13,7 @@ export default function TabItem({children,  index = 1, active = false} : {childr
             data-twe-toggle="pill"
             data-twe-target={"#tabs-" + index}
             aria-controls={"tabs-" + index}
-            aria-selected={active}
+            aria-selected={finalActive}
             role="tab"
             {...isActive}
             >

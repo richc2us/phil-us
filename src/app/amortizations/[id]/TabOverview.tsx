@@ -23,7 +23,7 @@ export default function({document}: any) {
 
     return (
         <div className="flex w-full gap-4">
-            <div className="flex-auto w-30">
+            <div className="border-r border-stroke flex-auto w-2/5 pt-4">
                 <table className="table-auto w-full">
                     <caption>Amortization Details</caption>
                     <tbody>
@@ -86,82 +86,42 @@ export default function({document}: any) {
                             </tr>
                     </tbody>
                 </table>
-                <hr className="mt-8 mb-8" />
-                <table className="table-auto w-full">
-                    <caption>Recent Payments</caption>
-                    <tbody>
-                        <tr>
-                            <td>#1</td>
-                            <td>May 20 204</td>
-                            <td>{formatDecimal(3000)}</td>
-                            <td>View</td>
-                        </tr>
-                        <tr>
-                            <td>#2</td>
-                            <td>May 20 204</td>
-                            <td>{formatDecimal(4000)}</td>
-                            <td>View</td>
-                        </tr>
-                        <tr>
-                            <td>#3</td>
-                            <td>May 20 204</td>
-                            <td>{formatDecimal(5000)}</td>
-                            <td>View</td>
-                        </tr>
-                        <tr>
-                            <td>#4</td>
-                            <td>May 20 204</td>
-                            <td>{formatDecimal(6000)}</td>
-                            <td>View</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div className="w-full border-t-2 border-stroke pt-4 mt-4">
+                    <table className="table-auto w-full">
+                        <caption>Recent Payments</caption>
+                        <tbody>
+                            <tr>
+                                <td>#1</td>
+                                <td>May 20 204</td>
+                                <td>{formatDecimal(3000)}</td>
+                                <td>View</td>
+                            </tr>
+                            <tr>
+                                <td>#2</td>
+                                <td>May 20 204</td>
+                                <td>{formatDecimal(4000)}</td>
+                                <td>View</td>
+                            </tr>
+                            <tr>
+                                <td>#3</td>
+                                <td>May 20 204</td>
+                                <td>{formatDecimal(5000)}</td>
+                                <td>View</td>
+                            </tr>
+                            <tr>
+                                <td>#4</td>
+                                <td>May 20 204</td>
+                                <td>{formatDecimal(6000)}</td>
+                                <td>View</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+               
             </div>
 
-            <div className="flex-auto w-70">
-                <div className="grid grid-cols-2 gap-2">
-                    <div>
-                        <h2>Schedules</h2>
-                        <table className="table-auto w-full text-center">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Due Date</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    schedules && schedules.length > 0 && schedules.map((schedule:any, key:any) =>
-                                    <tr key={key}>
-                                        <td>
-                                            {key + 1}
-                                        </td>
-                                        <td>
-                                            { new Intl.DateTimeFormat().format(schedule.due_date)}
-                                        </td>
-                                        <td>
-                                            {formatDecimal(schedule.amount)}
-                                        </td>
-                                        <td>
-                                            {"Unpaid"}
-                                        </td>
-                                        <td>
-                                            <button>Pay</button>
-                                        </td>
-                                    </tr>
-                                )
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div>
-                        <h2>Payments</h2>
-                    </div>
-                </div>
+            <div className="flex-auto w-3/5">
+                
             </div>
         </div>
     )

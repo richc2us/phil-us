@@ -19,6 +19,7 @@ const AmortizationScheduleSchema = new Schema<AmortizationSchedule>({
     amount : {type: Number, required : true},
     paid : {type: Boolean, default: false}
 },{
+    toJSON: { virtuals: true },
     timestamps : true
 });
 // amortSchema.index({'email' : 'text','first_name': 'text','middle_name' : 'text', 'last_name' : 'text'})

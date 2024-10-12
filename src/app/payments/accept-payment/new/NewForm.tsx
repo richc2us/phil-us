@@ -86,7 +86,7 @@ export default function NewForm() {
                 <div className="grid grid-cols-4 gap-6 mb-4">
                     {
                         form.amortizations.length > 0 && form.amortizations.map((amort:any,key:any) => <div key={key} className="cursor-pointer border-b-2 pb-3">
-                            <table className="text-sm w-full" onClick={ e => router.push("/amortizations/" + amort._id.toString())}>
+                            <table className="text-sm w-full" onClick={ e => router.push("/amortizations/" + amort._id.toString() + "?tab=2")}>
                                 <tbody>
                                 <tr>
                                     <td>Project Name: </td>
@@ -148,7 +148,7 @@ export default function NewForm() {
                                 <tfoot>
                                     <tr>
                                         <td colSpan={2} className="text-center">
-                                            <Link href={"/amortizations/" + amort._id.toString()}>View</Link>
+                                            <Link href={"/amortizations/" + amort._id.toString() + "?tab=2"}>View</Link>
                                         </td>
                                     </tr>
                                 </tfoot>
