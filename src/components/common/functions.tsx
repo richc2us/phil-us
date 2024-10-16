@@ -7,3 +7,7 @@ export function requestApi(url:any,callback:any) {
 export function SidebarIcon(name: string) {
     return <Image alt={name} width={18} height={18} src={`/icons/${name}.svg`} />
   }
+
+export function formatDecimal(val:any, sign:boolean = true) {
+return (sign ? "₱ " : "") + new Intl.NumberFormat().format(val)
+}

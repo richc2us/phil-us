@@ -8,7 +8,7 @@ import PageClient from "./PageClient"
 
 export const metadata: Metadata = {
     title:
-      "List of Buyers",
+      "Buyers",
     description: "Buyers",
   };
 
@@ -17,7 +17,7 @@ export default async function() {
     const buyers = await getBuyers()
     return (
         <DefaultLayout>
-            <Breadcrumb pageName="List of Buyers" />
+            <Breadcrumb pageName="" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-4">
                     <div className="px-4 py-4 md:px-6 xl:px-7.5">
                         <div className="grid grid-cols-2">

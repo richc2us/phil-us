@@ -31,7 +31,8 @@ const companySchema = new mongoose.Schema<Company>({
     },
     active: {type: Boolean, default: true}
 }, {
-    timestamps : true
+    timestamps : true,
+    toJSON:{virtuals: true}
 })
 
 export default mongoose.models?.Company || mongoose.model<Company>("Company", companySchema)

@@ -10,7 +10,7 @@ export default function() {
 const [collections, setCollections] = useState([])
 const router = useRouter()
 const columns: ColumnType[] = [
-  { field: { title: 'first_name' }, label: 'Borrowers' },
+  { field: { title: 'name' }, label: 'Borrowers' },
   { field: { title: 'project_id.name' }, label: 'Project' },
   { field: { title: 'block_id.name' }, label: 'Block' },
   { field: { title: 'lot_id.name' }, label: 'Lot' },
@@ -32,10 +32,10 @@ useEffect(() => {
   getAmortizationsIndexApi( (resp:any) => setCollections(resp))
 },[])
     return(
-        <>
+      <div className="p-4">
           {
           collections.length == 0 ? <Loader isFormLoading={true} /> : <ReactDataTable rows={collections} columns={columns} options={dataOptions} />
         }
-        </>
+        </div>
     )
 }

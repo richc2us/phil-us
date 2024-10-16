@@ -21,7 +21,7 @@ export interface Lot extends Document {
     premium?: Boolean,
     discount_percentage?: Number,
     discount_price?: Number,
-    status?: String,
+    status?: String, // available, sold, onhold
     latitude?: String,
     longitude?: String
     date_sold?: Date,
@@ -37,11 +37,11 @@ export interface Lot extends Document {
 
 const lotSchema = new Schema<Lot>({
     company_id : { type : Schema.Types.ObjectId, ref: "Company", default: DEFAULT_COMPANY },
-    project_id : { type : Schema.Types.ObjectId, ref: "Project" },
-    block_id : { type : Schema.Types.ObjectId, ref: "Block" },
-    buyer_id : { type : Schema.Types.ObjectId, ref: "User" },
-    agent_id : { type : Schema.Types.ObjectId, ref: "User" },
-    transfer_by: { type : Schema.Types.ObjectId, ref: "User" },
+    project_id : { type : Schema.Types.ObjectId, ref: "Project", required: true },
+    block_id : { type : Schema.Types.ObjectId, ref: "Block",  required: true },
+    buyer_id : { type : Schema.Types.ObjectId, ref: "User", default:null },
+    agent_id : { type : Schema.Types.ObjectId, ref: "User", default:null },
+    transfer_by: { type : Schema.Types.ObjectId, ref: "User", default:null },
     legend: {type: Schema.Types.ObjectId, ref : "ProjectLegend"},
     name : {
         type: String,
@@ -56,7 +56,7 @@ const lotSchema = new Schema<Lot>({
     premium:   {type: Boolean, default: false},
     discount_percentage:   {type: Number},
     discount_price:   {type: Number},
-    status:   {type: String},
+    status:   {type: String, default:"available"},
     latitude:   {type: String},
     longitude:   {type: String},
     date_sold:   {type: Date},

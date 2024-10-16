@@ -6,7 +6,7 @@ import PageClient from "./PageClient"
 
 export const metadata: Metadata = {
     title:
-      "List of Projects",
+      "Projects",
     description: "Projects",
 };
 

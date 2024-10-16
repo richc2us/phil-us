@@ -30,13 +30,14 @@ export const searchBuyer = async(text: string, all_type : boolean = false) => {
     //   ];
 }
 
-export const searchUsers = async(text: string, exclude = 0) => {
+export const searchUsers = async(text: string="", exclude:string = "0") => {
     await dbConnect()
     let users :any = []
-    const b  = await User.find({ _id: {$ne : exclude}, $text : {$search : text}})
+
+    const b  = text.length == 0 ? await User.find() : await User.find({  $text : {$search : text}})
     b.map( (i:any) => users.push({
-        value : i._id.toString(),
-        label: i.fullName,
+        value : i._id?.toString(),
+        label: i.fullName + " ["+ i?.account_type +"]",
         data: i.toJSON(),
         isDisabled: !i.active
     }))

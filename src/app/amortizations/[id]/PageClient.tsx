@@ -9,12 +9,10 @@ import { useSearchParams } from "next/navigation";
 
 
 export default function PageClient({ id, document } : {id: string, document:any}) {
-    const searchParams = useSearchParams()
-    const tabDefault = searchParams.get('tab')?? "0"
 
     return(
         <IDContextProvider id={id}>
-            <Tab defaultIndex={tabDefault}>
+            <Tab>
                 <TabItemContainer >
                     <TabItem index={0}>
                         Overview

@@ -3,7 +3,8 @@ export const  initialSateCompany = {
     name: "",
     address: "",
     address2: "",
-    description: ""
+    description: "",
+    active: false
 }
 
 export const initialStateProject : any = {
@@ -41,7 +42,8 @@ export const initialStateProject : any = {
     bulk_discount_scheme: 0,
     LTS: "",
     project_type:"",
-    project_status: ""
+    project_status: "",
+    total_area: 0
 }
 
 export const  initialStateRealty = {
@@ -150,4 +152,13 @@ export const dataTableOptions = {
     print: false,
     viewColumns : false,
     rowsPerPage: 10
+}
+
+export const initialStateLot = {
+    name: "",
+    area: 0,
+    project_id:"",
+    block_id: "",
+    price_per_sqm:0,
+    status:"available"
 }

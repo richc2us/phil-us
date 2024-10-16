@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 
 const initialBlock = {
-    projectID:null,
+    projectID:"",
     name:"",
     description: "",
     id: "",
@@ -12,9 +12,14 @@ const initialLot = {
     id:"",
     _id:"",
     block_id:"",
+    agent_id:"",
+    projectID:"",
     name:"",
     area:0,
-    active: false
+    price_per_sqm: 0,
+    status: "available",
+    active: false,
+    agentName: ""
 }
 const initialBlocks = {
     currentBlock:initialBlock,

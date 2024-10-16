@@ -14,7 +14,7 @@ const BlockProvider = ({ parentBlocks  , refreshBlocks = {} ,children}:any) => {
     }, [parentBlocks])
 
     function blocksReducer(params : any , action:any) : typeof initialBlocks {
-        switch(action.type) {
+        switch(action?.type) {
             case "updateList":
                 return {...params, blocks : action.blocks}
 

@@ -14,7 +14,7 @@ const columns: ColumnType[] = [
   { field: { title: 'description' }, label: 'Description' },
   { field: { title: 'tin' }, label: 'Tin' },
   { field: { title: 'contact_number' }, label: 'Contact Number' },
-  { field: { title: 'createdAt' }, label: 'Created' },
+  { field: { title: 'address' }, label: 'Address' },
 ]
 
 const dataOptions : OptionType = {
@@ -30,10 +30,10 @@ useEffect(() => {
   
 },[])
     return(
-        <>
+      <div className="p-4">
           {
           collections.length == 0 ? <Loader isFormLoading={true} /> : <ReactDataTable rows={collections} columns={columns} options={dataOptions} />
         }
-        </>
+        </div>
     )
 }

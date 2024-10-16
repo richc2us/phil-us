@@ -124,6 +124,7 @@ export async function saveAmortizationAction(state: any) {
     try {
         const newDocument = await Amortization.create( {...state } )
         if(newDocument) {
+            await Lot.updateOne({_id: state.lot_id},{status: "sold"})
             state.borrowers.map( async(borrower:any) => {
                 const {_id ,...rest} = borrower
                 await AmortizationBorrower.create({

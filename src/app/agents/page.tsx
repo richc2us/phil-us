@@ -1,24 +1,21 @@
-// import { getAgents } from "@/actions/agents"
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Link from "next/link"
 import { Metadata } from "next"
 import PageClient from "./PageClient";
-// import { ActiveButton } from "./ActiveButton"
 
 export const metadata: Metadata = {
     title:
-      "List of Agents",
+      "Agents",
     description: "Agents",
   };
 
 
   export default async function() {
-    // const documents = await getAgents()
 
     return (
         <DefaultLayout>
-            <Breadcrumb pageName="List of Agents" />
+            <Breadcrumb pageName="Agents" />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-4">
                     <div className="px-4 py-4 md:px-6 xl:px-7.5">
                         <div className="grid grid-cols-2">

@@ -1,33 +1,53 @@
 import { useEffect, useState } from "react";
 import { initialLot, useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext"
-import { updateLotAction } from "@/actions/blocks";
-import ActivateButton from "./ActivateButton";
+import { onHoldLotAction } from "@/actions/blocks";
+import { SidebarIcon } from "@/components/common/functions";
+import Select from 'react-select';
+import { searchUsers } from "@/actions/search";
+import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel";
 
-export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) {
+
+export default function ProjectDetailTabBlockHoldLot() {
     const { blocks, currentLot, projectID } = useBlocks()
     const dispatch = useBlocksDispatchContext()
 
-    const [selectedOption, setSelectedOption] = useState<string>(currentLot.block_id);
-    const [lot, setLot] = useState({...currentLot});
-    const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
+    const [selectedOption] = useState<string>(currentLot.block_id);
+    const [lot, setLot] = useState({...currentLot, agentName : ""});
+    const [isOptionSelected] = useState<boolean>(false);
+    const [requesting, setRequesting] = useState(false)
+    const [agents, setAgents] = useState([])
 
     useEffect(()=> {
         setLot({...currentLot})
+        setRequesting(true)
+        const AsyncAgents = async() => {
+            const agents = await searchUsers("")
+            const selectAgents:any = []
+            agents.map( (item:any) => {
+                if(item.data._id.toString() == lot.agent_id) {
+                    setLot({...lot, agentName: item.label})
+                }
+                selectAgents.push(item)
+            })
+            console.dir(agents)
+            setAgents(agents)
+        }
+        AsyncAgents()
+        setRequesting(false)
     },[currentLot])
-  
-    const changeTextColor = () => {
-      setIsOptionSelected(true);
-    };
+
 
     return (
-        <form 
+        <form  
         className="col-span-4 xl:col-span-2"
         action={
             async() => {
-                await updateLotAction({...lot,
+                await onHoldLotAction({...lot,
                     project_id:projectID,
                     block_id: selectedOption,
-                    id: lot._id
+                    id: lot._id,
+                    onhold: lot.status == "available",
+                    agent_id: lot.agent_id
                 })
                 setLot(initialLot)
                 dispatch({type:""})
@@ -36,9 +56,11 @@ export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) 
         <div className="">
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
-                <h4 className="text-title-md font-bold text-black dark:text-white mb-5.5">Update Lot</h4>
+                <h4 className="text-title-md font-bold text-black dark:text-white mb-5.5">
+                        {lot.status == "available" ? "Hold" : "Cancel Hold"} Lot
+                    </h4>
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                    <div className="w-full sm:w-1/1">
+                    <div className="w-full sm:w-1/2">
                         <div>
                         <label className="mb-3 block text-sm font-medium text-black dark:text-white">
                             Block
@@ -46,48 +68,14 @@ export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) 
 
                         <div className="relative z-20 bg-white dark:bg-form-input">
                             <span className="absolute left-4 top-1/2 z-30 -translate-y-1/2">
-                            <svg
-                                width="20"
-                                height="20"
-                                viewBox="0 0 20 20"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <g opacity="0.8">
-                                <path
-                                    fillRule="evenodd"
-                                    clipRule="evenodd"
-                                    d="M10.0007 2.50065C5.85852 2.50065 2.50065 5.85852 2.50065 10.0007C2.50065 14.1428 5.85852 17.5007 10.0007 17.5007C14.1428 17.5007 17.5007 14.1428 17.5007 10.0007C17.5007 5.85852 14.1428 2.50065 10.0007 2.50065ZM0.833984 10.0007C0.833984 4.93804 4.93804 0.833984 10.0007 0.833984C15.0633 0.833984 19.1673 4.93804 19.1673 10.0007C19.1673 15.0633 15.0633 19.1673 10.0007 19.1673C4.93804 19.1673 0.833984 15.0633 0.833984 10.0007Z"
-                                    fill="#637381"
-                                ></path>
-                                <path
-                                    fillRule="evenodd"
-                                    clipRule="evenodd"
-                                    d="M0.833984 9.99935C0.833984 9.53911 1.20708 9.16602 1.66732 9.16602H18.334C18.7942 9.16602 19.1673 9.53911 19.1673 9.99935C19.1673 10.4596 18.7942 10.8327 18.334 10.8327H1.66732C1.20708 10.8327 0.833984 10.4596 0.833984 9.99935Z"
-                                    fill="#637381"
-                                ></path>
-                                <path
-                                    fillRule="evenodd"
-                                    clipRule="evenodd"
-                                    d="M7.50084 10.0008C7.55796 12.5632 8.4392 15.0301 10.0006 17.0418C11.5621 15.0301 12.4433 12.5632 12.5005 10.0008C12.4433 7.43845 11.5621 4.97153 10.0007 2.95982C8.4392 4.97153 7.55796 7.43845 7.50084 10.0008ZM10.0007 1.66749L9.38536 1.10547C7.16473 3.53658 5.90275 6.69153 5.83417 9.98346C5.83392 9.99503 5.83392 10.0066 5.83417 10.0182C5.90275 13.3101 7.16473 16.4651 9.38536 18.8962C9.54325 19.069 9.76655 19.1675 10.0007 19.1675C10.2348 19.1675 10.4581 19.069 10.6159 18.8962C12.8366 16.4651 14.0986 13.3101 14.1671 10.0182C14.1674 10.0066 14.1674 9.99503 14.1671 9.98346C14.0986 6.69153 12.8366 3.53658 10.6159 1.10547L10.0007 1.66749Z"
-                                    fill="#637381"
-                                ></path>
-                                </g>
-                            </svg>
+                                {SidebarIcon('block')}
                             </span>
                             <select
                             value={selectedOption}
-                            onChange={(e) => {
-                                setSelectedOption(e.target.value);
-                                changeTextColor();
-                            }}
                             className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-12 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${
                                 isOptionSelected ? "text-black dark:text-white" : ""
-                            }`}
+                            }`} disabled={true}
                             >
-                            <option value="" disabled className="text-body dark:text-bodydark">
-                                Select a block
-                            </option>
                             {
                                 blocks.map( (block:any, index) => {
                                 return <option value={block._id} className="text-body dark:text-bodydark" key={index}> {block.name}</option>
@@ -116,9 +104,7 @@ export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) 
                         </div>
 
                     </div>
-                </div>
-                <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                    <div className="w-full sm:w-1/1">
+                    <div className="w-full sm:w-1/2">
                         <label
                             className="mb-3 block text-sm font-medium text-black dark:text-white"
                             htmlFor="lot_name"
@@ -140,13 +126,14 @@ export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) 
                                 setLot({...lot, name: e.target.value})
                             }}
                             required
+                            disabled={true}
                             />
                         </div>
                     </div>
                 </div>
                 
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                    <div className="w-full sm:w-1/1">
+                    <div className="w-full sm:w-1/2">
                         <label
                             className="mb-3 block text-sm font-medium text-black dark:text-white"
                             htmlFor="lot_area"
@@ -169,13 +156,11 @@ export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) 
                                 setLot({...lot, area: parseInt( e.target.value )})
                             }}
                             required
+                            disabled={true}
                             />
                         </div>
                     </div>
-                </div>
-
-                <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                    <div className="w-full sm:w-1/1">
+                    <div className="w-full sm:w-1/2">
                         <label
                             className="mb-3 block text-sm font-medium text-black dark:text-white"
                             htmlFor="price_per_sqm"
@@ -198,46 +183,51 @@ export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) 
                                 setLot({...lot, price_per_sqm: parseInt( e.target.value )})
                             }}
                             required
+                            disabled={true}
                             />
                         </div>
                     </div>
                 </div>
-
-                <div className="flex justify-end gap-4.5">
-                    {
-                        lot.status == "available" && <button className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                        type="button"
-                        onClick={
-                            (e) => {
-                                onHoldCallback()
-                            }
-                        }
-                        >
-                            On-Hold
-                        </button>
-                    }
-
-                    {
-                        lot.status == "onhold" && <button className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                        type="button"
-                        onClick={
-                            (e) => {
-                                onHoldCallback()
-                            }
-                        }
-                        >
-                            Cancel Hold
-                        </button>
-                    }
-                    
-                    <ActivateButton/>
-                    <button
-                        className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
-                        type="submit"
-                        >
-                        Update Lot
-                    </button>
+                <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                            <div className="w-full sm:w-1/1">
+                                <InputTextLabel htmlFor="agent_id" >
+                                        Agent
+                                </InputTextLabel>
+                                <Select
+                                    required
+                                    id="agent_id"
+                                    className="border-b"
+                                    styles={{
+                                        control: (baseStyles, state) => ({
+                                            ...baseStyles,
+                                            border: 'none'
+                                        })
+                                    }}
+                                    options={agents}
+                                    value={{
+                                        value:lot.agent_id,
+                                        label: lot.agentName}
+                                    }
+                                    isDisabled={lot.status == "onhold"}
+                                    isLoading={requesting}
+                                    onChange={
+                                        ({label,value} : any, b : any) => {
+                                            setLot({ ...lot ,agent_id: value, agentName: label })
+                                        }
+                                    }
+                                />
+                            </div>
                 </div>
+
+                    <div className="flex justify-end gap-4.5">
+                        <button
+                            className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90 disabled:bg-whiter disabled:text-black"
+                            disabled={lot.status == "available" && lot.agent_id == null}
+                            type="submit"
+                            >
+                            {lot.status == "available" ? "Hold Lot" : "Cancel Hold"}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -98,6 +98,7 @@ export const deleteLotAction = async(id: any, isActive : boolean =  false) : Pro
 export const saveLotAction = async(state:any) => {
     await dbConnect()
     try {
+        console.dir(state)
         const document = await Lot.create({...state })
         revalidatePath("/")
         return {success: true, message: document.name + ' created', document : { id: document._id.toString() }}
@@ -122,6 +123,31 @@ export const updateLotAction = async(state:any) => {
             document.name = state.name
             document.area = state.area
             document.block_id = state.block_id
+            document.price_per_sqm = state.price_per_sqm
+            document.save()
+        }
+        revalidatePath("/")
+        return {success: true, message: document.name + ' updated', document : { id: document._id.toString() }}
+    } catch (e: any) {
+        let errors = []
+        for(let field in e.errors) {
+            errors.push(e.errors[field].message)
+        }
+        if(errors.length == 0) {
+            errors.push(e.toString())
+        }
+        console.dir(errors);
+        return {success: false, message: 'Error updating' , document: null, errors : errors}
+    }
+}
+
+export const onHoldLotAction = async(state:any) => {
+    await dbConnect()
+    try {
+        const document = await Lot.findById(state.id)
+        if(document) {
+            document.status = state.onhold ? "onhold" : "available"
+            document.agent_id = state.onhold ? state.agent_id : null
             document.save()
         }
         revalidatePath("/")

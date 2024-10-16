@@ -30,10 +30,10 @@ useEffect(() => {
   getBuyersIndexApi((res:any) =>  setCollections(res))
 },[])
     return(
-        <>
+      <div className="p-4">
           {
           collections.length == 0 ? <Loader isFormLoading={true} /> : <ReactDataTable rows={collections} columns={columns} options={dataOptions} />
         }
-        </>
+        </div>
     )
 }

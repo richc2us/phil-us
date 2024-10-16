@@ -32,7 +32,8 @@ export interface Project extends Document {
     project_type ?: string,
     project_status?:string,
     legends?: [],
-    active?: boolean
+    active?: boolean,
+    total_area: Number
 }
 
 const projectSchema = new Schema<Project>({
@@ -149,7 +150,8 @@ const projectSchema = new Schema<Project>({
     ],
     active: {
         type : Boolean, default: true
-    }
+    },
+    total_area: {type: Number, required: true}
 }, {
     timestamps : true
 })

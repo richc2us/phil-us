@@ -1,7 +1,7 @@
 "use client"
 import { checkEmailExists, saveAgentAction } from "@/actions/agents"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import NewSubmit from "./NewSubmit"
 import { ServerActionResponse } from "@/types/server-action-reply"
 import { initialStateAgent } from "@/actions/state"
@@ -9,6 +9,8 @@ import InputTextField from "@/components/FormElements/Fields/InputTextField"
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel"
 import { saveTeamLeadAction } from "@/actions/team-lead"
 import AsyncSelect from 'react-select/async'
+import Select from 'react-select'
+import { getBarangays, getCities, getProvinces, getRegions, getZipCode } from "@/actions/addresses"
 
 export default function NewForm() {
 
@@ -24,6 +26,108 @@ export default function NewForm() {
         setEmailCheckAgent(checker)
         setEmailExists(checker.success)
     }
+
+    const [addressDropdown, setAddressDropdown] = useState({
+        regions: [],
+        provinces: [],
+        cities: [],
+        barangays:  [],
+        regionsSpouse: [],
+        provincesSpouse: [],
+        citiesSpouse: [],
+        barangaysSpouse:  [],
+    })
+
+    const [addressData, setAddressData] = useState({
+        region_code: "",
+        province_code : "",
+        city_code: "",
+        barangay_code: "",
+        region_code_spouse: "",
+        province_code_spouse : "",
+        city_code_spouse: "",
+        barangay_code_spouse: ""
+    })
+
+    const [request, setRequest] = useState({
+        regionRequest: false,
+        provinceRequest:false,
+        cityRequest:false,
+        barangayRequest:false,
+        zipCodeRequest: false,
+        emailBuyerExists : false,
+        emailSpouseExists : false,
+        regionRequestSpouse: false,
+        provinceRequestSpouse:false,
+        cityRequestSpouse:false,
+        barangayRequestSpouse:false,
+
+    })
+
+    useEffect(()=> {
+        setRequest({...request, regionRequest : true})
+        const getRegionAction = async () => {
+            const resp = await getRegions()
+            let tempRegions = resp.map( ( region:any, key:any) => {
+                return {
+                    value: region.region_code,
+                    label: region.region_name,
+                    data: region
+                }
+            })
+            setRequest({...request, regionRequest : false})
+            setAddressDropdown( {...addressDropdown, regions: tempRegions, regionsSpouse: tempRegions})
+        }
+        getRegionAction()
+    },[])
+
+    const getRegionProvinces = async(region_code:any) => {
+        const resp = await getProvinces(region_code)
+            let tempProvinces = resp.map( ( province:any, key:any) => {
+                return {
+                    value: province.province_code,
+                    label: province.province_name,
+                    data: province
+                }
+            })
+        return tempProvinces
+    }
+
+    const getProvinceCities = async(province_code:any) => {
+        setRequest({...request, cityRequest: true})
+        const resp = await getCities(province_code)
+            let tempCities = resp.map( ( city:any, key:any) => {
+                return {
+                    value: city.city_code,
+                    label: city.city_name,
+                    data: city
+                }
+            })
+        setRequest({...request, cityRequest: false})
+        return tempCities
+    }
+
+    const getCityBarangays = async(city_code:any) => {
+        setRequest({...request, barangayRequest: true})
+        const resp = await getBarangays(city_code)
+            let tempBarangay = resp.map( ( city:any, key:any) => {
+                return {
+                    value: city.brgy_code,
+                    label: city.brgy_name,
+                    data: city
+                }
+            })
+        setRequest({...request, barangayRequest: false})
+        return tempBarangay
+    }
+
+    const getBarangayZipCode = async(city_name:any) => {
+        setRequest({...request, zipCodeRequest: true})
+        const resp = await getZipCode(city_name)
+        setRequest({...request, zipCodeRequest: false})
+        return resp
+    }
+
 
     return (<>
        <form action={
@@ -188,12 +292,27 @@ export default function NewForm() {
                                 <InputTextLabel htmlFor="region">
                                     Region
                                 </InputTextLabel>
-                                <InputTextField
+                                {/* <InputTextField
                                     id="region"
                                     value={form.region}
                                     autoComplete="off"
                                     placeholder="Region"
                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                /> */}
+                                <Select
+                                id="region"
+                                isLoading={request.regionRequest}
+                                options={addressDropdown.regions}
+                                placeholder="Region"
+                                onChange={
+                                    async({ data ,label , value} : any, b : any) => {
+                                        setRequest({...request, provinceRequest: true})
+                                        updateForm({ region: label, province: "", city: "", barangay : ""})
+                                        setAddressData({...addressData, region_code : data.region_code})
+                                        setAddressDropdown( {...addressDropdown, provinces: await getRegionProvinces(value) })
+                                        setRequest({...request, provinceRequest: false})
+                                    }
+                                }
                                 />
                     </div>
 
@@ -201,14 +320,82 @@ export default function NewForm() {
                                 <InputTextLabel htmlFor="province">
                                     Province
                                 </InputTextLabel>
+                                <Select
+                                id="province"
+                                options={addressDropdown.provinces}
+                                isLoading={request.provinceRequest}
+                                placeholder="Province"
+                                onChange={
+                                    async({ data,label , value} : any, b : any) => {
+                                        setRequest({...request, cityRequest: true})
+                                        updateForm({ province: label, city: ""})
+                                        setAddressData({...addressData, province_code : data.province_code})
+                                        setAddressDropdown( {...addressDropdown, cities: await getProvinceCities(value) })
+                                        setRequest({...request, cityRequest: false})
+                                    }
+                                }
+                                />
+                    </div>
+
+                    <div className="w-full sm:w-1/3">
+                                <InputTextLabel htmlFor="city">
+                                    City
+                                </InputTextLabel>
+                                <Select
+                                id="city"
+                                options={addressDropdown.cities}
+                                isLoading={request.cityRequest}
+                                placeholder="City"
+                                onChange={
+                                    async({ data,label , value} : any, b : any) => {
+                                        setRequest({...request, barangayRequest: true})
+                                        updateForm({ city: label, barangay: ""})
+                                        setAddressData({...addressData, city_code : data.city_code})
+                                        setAddressDropdown( {...addressDropdown, barangays: await getCityBarangays(value) })
+                                        updateForm({zip: await getBarangayZipCode(label)})
+                                        setRequest({...request, barangayRequest: false})
+                                    }
+                                }
+                                />
+                    </div>
+                   
+                </div>
+                <div className="mb-5 5 flex flex-col gap-5.5 sm:flex-row">
+
+                   
+
+
+                    <div className="w-full sm:w-1/3">
+                                <InputTextLabel htmlFor="barangay">
+                                    Barangay
+                                </InputTextLabel>
+                                <Select
+                                id="barangay"
+                                options={addressDropdown.barangays}
+                                isLoading={request.barangayRequest}
+                                placeholder="Barangay"
+                                onChange={
+                                    async({ data,label , value} : any, b : any) => {
+                                        updateForm({ barangay: label})
+                                        setAddressData({...addressData, barangay_code : data.barangay_code})
+                                    }
+                                }
+                                />
+                    </div>
+
+                    <div className="w-full sm:w-1/3">
+                                <InputTextLabel htmlFor="zip">
+                                    Zip
+                                </InputTextLabel>
                                 <InputTextField
-                                    id="province"
-                                    value={form.province}
+                                    id="zip"
+                                    value={form.zip}
                                     autoComplete="off"
-                                    placeholder="Province"
+                                    placeholder="Zip"
                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
                                 />
                     </div>
+
                     <div className="w-full sm:w-1/3">
                         <InputTextLabel htmlFor="gender">
                             Gender
@@ -228,46 +415,8 @@ export default function NewForm() {
                             }
                         />
                     </div>
-                </div>
-                <div className="mb-5 5 flex flex-col gap-5.5 sm:flex-row">
-                    <div className="w-full sm:w-1/3">
-                                <InputTextLabel htmlFor="city">
-                                    City
-                                </InputTextLabel>
-                                <InputTextField
-                                    id="city"
-                                    value={form.city}
-                                    autoComplete="off"
-                                    placeholder="City"
-                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                />
-                    </div>
 
-                    <div className="w-full sm:w-1/3">
-                                <InputTextLabel htmlFor="barangay">
-                                    Barangay
-                                </InputTextLabel>
-                                <InputTextField
-                                    id="barangay"
-                                    value={form.barangay}
-                                    autoComplete="off"
-                                    placeholder="Barangay"
-                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                />
-                    </div>
 
-                    <div className="w-full sm:w-1/3">
-                                <InputTextLabel htmlFor="zip">
-                                    Zip
-                                </InputTextLabel>
-                                <InputTextField
-                                    id="zip"
-                                    value={form.zip}
-                                    autoComplete="off"
-                                    placeholder="Zip"
-                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                />
-                    </div>
                     <div className="w-full sm:w-1/3">
                                 <InputTextLabel htmlFor="civil_status">
                                     Civil Status

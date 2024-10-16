@@ -1,6 +1,5 @@
 "use client"
 import { saveProjectAction } from "@/actions/projects"
-import NewProjectSubmit from "./NewProjectSubmit";
 import { useState } from "react";
 import { ServerActionResponse } from "@/types/server-action-reply";
 import { useRouter } from "next/navigation";
@@ -8,10 +7,8 @@ import { AlertError, AlertSuccess } from "@/app/ui/alerts/alerts";
 import { initialStateProject } from "@/actions/state";
 import InputTextField from "@/components/FormElements/Fields/InputTextField";
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel";
-import SvgPlus from "@/components/common/svg/plus";
-import SvgDelete from "@/components/common/svg/svg-delete";
 import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton";
-import Link from "next/link";
+import { SidebarIcon } from "@/components/common/functions";
 
 
 export default  function NewProjectForm() {
@@ -21,8 +18,8 @@ export default  function NewProjectForm() {
     const updateForm = (value : any) =>  setForm( (prev: any) =>  { return {...prev, ...value} }  )
     const router = useRouter()
 
-    const updateOwners = (e:any, index:any) => {
-        form.original_owners[index] = {...form.original_owners[index], [e.target.name] : e.target.value }
+    const updateOwners = (e:any, index:any, name:any) => {
+        form.original_owners[index] = {...form.original_owners[index], [name] : e.target.value }
         updateForm( { original_owners : [ ...form.original_owners ] } )
     }
 
@@ -217,114 +214,6 @@ export default  function NewProjectForm() {
 
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
-                                        <div className="w-full sm:w-1/2">
-                                                <InputTextLabel id="Latitude">
-                                                    Latitude
-                                                </InputTextLabel>
-                                            
-                                                <InputTextField
-                                                    id="latitude"
-                                                    placeholder="Latitude"
-                                                    autoComplete="off"
-                                                    value={form.latitude}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-
-                                        <div className="w-full sm:w-1/2">
-                                                <InputTextLabel id="longitude">
-                                                    Longitude
-                                                </InputTextLabel>
-                                            
-                                                <InputTextField
-                                                    id="longitude"
-                                                    placeholder="Longitude"
-                                                    autoComplete="off"
-                                                    value={form.longitude}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-
-                                    </div>
-
-                                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-
-                                        <div className="w-full sm:w-1/2">
-                                                <InputTextLabel id="longitude">
-                                                    Purchase Scheme
-                                                </InputTextLabel>
-                                            
-                                                <InputTextField
-                                                    id="purchase_scheme"
-                                                    placeholder="Purchase Scheme"
-                                                    autoComplete="off"
-                                                    value={form.purchase_scheme}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-
-                                        <div className="w-full sm:w-1/2">
-                                                <InputTextLabel id="title_information">
-                                                    Title Information
-                                                </InputTextLabel>
-
-                                                <InputTextField
-                                                    id="title_information"
-                                                    placeholder="Title Information"
-                                                    autoComplete="off"
-                                                    value={form.title_information}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-                                    </div>
-
-                                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-
-                                        <div className="w-full sm:w-1/3">
-                                                <InputTextLabel id="legal_documentation">
-                                                    Legal Documentation
-                                                </InputTextLabel>
-
-                                                <InputTextField
-                                                    id="legal_documentation"
-                                                    placeholder="Legal Documentation"
-                                                    autoComplete="off"
-                                                    value={form.legal_documentation}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-                                        <div className="w-full sm:w-1/3">
-                                                <InputTextLabel id="restrictions">
-                                                    Restrictions
-                                                </InputTextLabel>
-
-                                                <InputTextField
-                                                    id="restrictions"
-                                                    placeholder="Restrictions"
-                                                    autoComplete="off"
-                                                    value={form.restrictions}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-
-                                        <div className="w-full sm:w-1/3">
-                                                <InputTextLabel id="terrane_information">
-                                                    Terrane Information
-                                                </InputTextLabel>
-
-                                                <InputTextField
-                                                    id="terrane_information"
-                                                    placeholder="Terrane Information"
-                                                    autoComplete="off"
-                                                    value={form.terrane_information}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-
-                                    </div>
-
-                                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-
                                         <div className="w-full sm:w-1/3">
                                                 <InputTextLabel id="date_bought">
                                                     Date Bought
@@ -373,57 +262,6 @@ export default  function NewProjectForm() {
 
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
-                                        <div className="w-full sm:w-1/3">
-                                                <InputTextLabel id="total_number_of_lots">
-                                                    Expected Total Lots
-                                                </InputTextLabel>
-
-                                                <InputTextField
-                                                    type="number"
-                                                    name="total_number_of_lots"
-                                                    id="total_number_of_lots"
-                                                    placeholder="Total Lots"
-                                                    autoComplete="off"
-                                                    min="1"
-                                                    value={form.total_number_of_lots}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-                                        <div className="w-full sm:w-1/3">
-                                                <InputTextLabel id="investment_amount">
-                                                    Investment Amount
-                                                </InputTextLabel>
-
-                                                <InputTextField
-                                                    type="number"
-                                                    name="investment_amount"
-                                                    id="investment_amount"
-                                                    placeholder="Investment Amount"
-                                                    autoComplete="off"
-                                                    min="100"
-                                                    value={form.investment_amount}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-
-                                        <div className="w-full sm:w-1/3">
-                                                <InputTextLabel id="geographic_layer_file">
-                                                    Geographic Layer File
-                                                </InputTextLabel>
-
-                                                <InputTextField
-                                                    id="geographic_layer_file"
-                                                    placeholder="Geographic Layer File"
-                                                    autoComplete="off"
-                                                    value={form.geographic_layer_file}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-
-                                    </div>
-
-                                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-
                                         <div className="w-full sm:w-1/2">
                                                 <InputTextLabel id="project_status">
                                                     Project Status
@@ -431,7 +269,7 @@ export default  function NewProjectForm() {
 
                                                 <InputTextField
                                                     id="project_status"
-                                                    placeholder="ex. underconstruction"
+                                                    placeholder="ex. under construction"
                                                     autoComplete="off"
                                                     value={form.project_status}
                                                     onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
@@ -453,7 +291,7 @@ export default  function NewProjectForm() {
                                         </div>
                                         <div className="w-full sm:w-1/2">
                                                 <InputTextLabel id="project_type">
-                                                    Project Typr
+                                                    Project Type
                                                 </InputTextLabel>
 
                                                 <InputTextField
@@ -466,6 +304,64 @@ export default  function NewProjectForm() {
                                         </div>
 
                                     </div>
+
+                                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                                    
+                                        <div className="w-full sm:w-1/3">
+                                                <InputTextLabel id="total_area">
+                                                    Total Area (hectare)
+                                                </InputTextLabel>
+
+                                                <InputTextField
+                                                    type="number"
+                                                    name="total_area"
+                                                    id="total_area"
+                                                    placeholder="Total Area"
+                                                    autoComplete="off"
+                                                    min="1"
+                                                    value={form.total_area}
+                                                    required
+                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                                />
+                                        </div>
+                                        <div className="w-full sm:w-1/3">
+                                                <InputTextLabel id="total_number_of_lots">
+                                                    Expected Total Lots
+                                                </InputTextLabel>
+
+                                                <InputTextField
+                                                    type="number"
+                                                    name="total_number_of_lots"
+                                                    id="total_number_of_lots"
+                                                    placeholder="Total Lots"
+                                                    autoComplete="off"
+                                                    min="1"
+                                                    value={form.total_number_of_lots}
+                                                    required
+                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                                />
+                                        </div>
+                                        <div className="w-full sm:w-1/3">
+                                                <InputTextLabel id="investment_amount">
+                                                    Investment Amount
+                                                </InputTextLabel>
+
+                                                <InputTextField
+                                                    type="number"
+                                                    name="investment_amount"
+                                                    id="investment_amount"
+                                                    placeholder="Investment Amount"
+                                                    autoComplete="off"
+                                                    min="100"
+                                                    value={form.investment_amount}
+                                                    required
+                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                                />
+                                        </div>
+
+                                    </div>
+
+                                 
                                 </div>
                             </div>
                         </div>
@@ -487,7 +383,9 @@ export default  function NewProjectForm() {
                                                     type="button"
                                                     onClick={ (e) => updateForm( { original_owners : [...form.original_owners , {} ]} ) }
                                                 >
-                                                <SvgPlus/>
+                                                {
+                                                    SidebarIcon('plus-black')
+                                                }
                                                 </button>
                                             }
 
@@ -495,13 +393,15 @@ export default  function NewProjectForm() {
                                             index > 0 && <button
                                                 className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                                                 type="button"
-                                                onClick={ (e) => { 
+                                                onClick={ (e) => {
                                                     if(confirm('Are you sure to remove this owner?')) {
                                                         updateForm( { original_owners : form.original_owners.filter( (own:any,i:any) => i !== index  ) })
                                                     }
                                                 } }
                                                 >
-                                                <SvgDelete/>
+                                                {
+                                                        SidebarIcon('delete')
+                                                    }
                                                 </button>
                                             }
                                         </div>
@@ -520,7 +420,7 @@ export default  function NewProjectForm() {
                                                             placeholder="First Name"
                                                             autoComplete="off"
                                                             value={ owner.first_name }
-                                                            onChange={ (e) =>  updateOwners(e, index) }
+                                                            onChange={ (e) =>  updateOwners(e, index,"first_name") }
                                                         />
                                                 </div>
 
@@ -534,7 +434,7 @@ export default  function NewProjectForm() {
                                                             placeholder="Middle Name"
                                                             autoComplete="off"
                                                             value={ owner.middle_name }
-                                                            onChange={ (e) =>  updateOwners(e, index) }
+                                                            onChange={ (e) =>  updateOwners(e, index,"middle_name") }
                                                         />
                                                 </div>
 
@@ -548,7 +448,7 @@ export default  function NewProjectForm() {
                                                             placeholder="Last Name"
                                                             autoComplete="off"
                                                             value={ owner.last_name }
-                                                            onChange={ (e) =>  updateOwners(e, index) }
+                                                            onChange={ (e) =>  updateOwners(e, index,"last_name") }
                                                         />
                                                 </div>
 
@@ -566,7 +466,7 @@ export default  function NewProjectForm() {
                                                             placeholder="Email Address"
                                                             autoComplete="off"
                                                             value={ owner.email_address }
-                                                            onChange={ (e) =>  updateOwners(e, index) }
+                                                            onChange={ (e) =>  updateOwners(e, index, "email_address") }
                                                         />
                                                 </div>
                                                 <div className="w-full sm:w-1/2">
@@ -579,7 +479,7 @@ export default  function NewProjectForm() {
                                                             placeholder="Phone / Remarks"
                                                             autoComplete="off"
                                                             value={ owner.phone_remark }
-                                                            onChange={ (e) =>  updateOwners(e, index) }
+                                                            onChange={ (e) =>  updateOwners(e, index, "phone_remark") }
                                                         />
                                                 </div>
                                         </div>

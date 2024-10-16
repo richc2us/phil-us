@@ -15,7 +15,7 @@ const columns: ColumnType[] = [
   { field: { title: 'total_number_of_lots' }, label: 'Total Units' },
   { field: { title: 'project_type' }, label: 'Type' },
   { field: { title: 'project_status' }, label: 'Status' },
-  { field: { title: 'createdAt' }, label: 'Created' },
+  { field: { title: 'total_area' }, label: 'Total Area (hectare)' },
 ]
 
 const dataOptions : OptionType = {

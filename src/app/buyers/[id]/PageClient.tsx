@@ -8,16 +8,11 @@ export default function PageClient({ id, document } : {id: string, document:any}
     return(
         <IDContextProvider id={id}>
             <Tab>
-                <TabItemContainer>
-                    <TabItem index={0} >
-                        Overview
-                    </TabItem>
-                    <TabItem index={1} active={true}>
-                        Details
-                    </TabItem>
-                    <TabItem index={2}>
-                        Amortization(s)
-                    </TabItem>
+                <TabItemContainer defaultTab={1} items={[
+                        "Overview",
+                        "Details",
+                        "Amortization(s)"
+                ]}>
                 </TabItemContainer>
 
                 <TabDetailContainer>

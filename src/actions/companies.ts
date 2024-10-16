@@ -60,13 +60,13 @@ export const saveCompanyAction = async(form: any) : Promise<ServerActionResponse
 export const deleteCompanyAction = async(id: any, isActive:boolean = false) : Promise <ServerActionResponse> => {
     await dbConnect()
     try {
-        if(id !== DEFAULT_COMPANY) {
+        // if(id !== DEFAULT_COMPANY) {
             // await Company.deleteOne({_id: id})
             await Company.updateOne({_id : id}, {active: isActive})
             revalidatePath("/");
-            return {success: true, message: 'company deleted', document: null}
-        }
-        return {success: false, message: 'Company cannot be deleted', document: null}
+            return {success: true, message: 'company deactivated', document: null}
+        // }
+        // return {success: false, message: 'Company cannot be deleted', document: null}
     } catch (e:any) {
         console.dir(e);
         let errors = []

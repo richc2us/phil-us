@@ -1,19 +1,10 @@
 "use client"
 import {  useEffect, useState } from "react";
-import { AlertError, AlertSuccess } from "@/app/ui/alerts/alerts";
-import { ServerActionResponse } from "@/types/server-action-reply";
-import { getRealties } from "@/actions/realties";
 import Link from "next/link";
-import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton";
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel";
 import InputTextField from "@/components/FormElements/Fields/InputTextField";
 import NormalButton from "@/components/FormElements/Buttons/NormalButton";
 import {  initialStateAmortizationSchedule, initialStateReservation } from "@/actions/state";
-import AsyncSelect from 'react-select/async';
-import { searchBuyer, searchProject } from "@/actions/search";
-import { initTWE, Collapse } from "tw-elements";
-import { getAgents } from "@/actions/agents";
-import { saveAmortizationAction } from "@/actions/amortizations";
 import DatePicker from "react-datepicker";
 
 

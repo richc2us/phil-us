@@ -114,8 +114,9 @@ export default function NewForm(){
                     item.blockLots.map( (b:any, k: any) => {
                         item.blockLots[k] = {
                             value: b._id,
-                            label: b.name,
-                            data: b
+                            label: b.name + " " + b.status,
+                            data: b,
+                            isDisabled : ["sold","onhold"].includes(b.status)
                         }
                     })
 

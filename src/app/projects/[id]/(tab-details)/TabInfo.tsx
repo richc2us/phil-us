@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { updateProject } from "@/actions/projects";
 import { initialStateProject } from "@/actions/state";
-import SvgPlus from "@/components/common/svg/plus";
-import SvgDelete from "@/components/common/svg/svg-delete";
 import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton";
 import NormalButton from "@/components/FormElements/Buttons/NormalButton";
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel";
@@ -28,8 +26,8 @@ export default function TabInfo() {
 
     const updateForm = (value : any) =>  setForm( (prev: any) =>  { return {...prev, ...value} }  )
 
-    const updateOwners = (e:any, index:any) => {
-        form.original_owners[index] = {...form.original_owners[index], [e.target.name] : e.target.value }
+    const updateOwners = (e:any, index:any, name:any) => {
+        form.original_owners[index] = {...form.original_owners[index], [name] : e.target.value }
         updateForm( { original_owners : [ ...form.original_owners ] } )
     }
 
@@ -236,121 +234,6 @@ export default function TabInfo() {
 
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
-                                        <div className="w-full sm:w-1/2">
-                                                <InputTextLabel id="latitude">
-                                                    Latitude
-                                                </InputTextLabel>
-                                            
-                                                <InputTextField
-                                                    id="latitude"
-                                                    placeholder="Latitude"
-                                                    autoComplete="off"
-                                                    disabled={!form.edit}
-                                                    value={form.latitude}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-
-                                        <div className="w-full sm:w-1/2">
-                                                <InputTextLabel id="longitude">
-                                                    Longitude
-                                                </InputTextLabel>
-                                            
-                                                <InputTextField
-                                                    id="longitude"
-                                                    placeholder="Longitude"
-                                                    autoComplete="off"
-                                                    disabled={!form.edit}
-                                                    value={form.longitude}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-
-                                    </div>
-
-                                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-
-                                        <div className="w-full sm:w-1/2">
-                                                <InputTextLabel id="longitude">
-                                                    Purchase Scheme
-                                                </InputTextLabel>
-                                            
-                                                <InputTextField
-                                                    id="purchase_scheme"
-                                                    placeholder="Purchase Scheme"
-                                                    autoComplete="off"
-                                                    disabled={!form.edit}
-                                                    value={form.purchase_scheme}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-
-                                        <div className="w-full sm:w-1/2">
-                                                <InputTextLabel id="title_information">
-                                                    Title Information
-                                                </InputTextLabel>
-
-                                                <InputTextField
-                                                    id="title_information"
-                                                    placeholder="Title Information"
-                                                    autoComplete="off"
-                                                    disabled={!form.edit}
-                                                    value={form.title_information}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-                                    </div>
-
-                                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-
-                                        <div className="w-full sm:w-1/3">
-                                                <InputTextLabel id="legal_documentation">
-                                                    Legal Documentation
-                                                </InputTextLabel>
-
-                                                <InputTextField
-                                                    id="legal_documentation"
-                                                    placeholder="Legal Documentation"
-                                                    autoComplete="off"
-                                                    disabled={!form.edit}
-                                                    value={form.legal_documentation}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-                                        <div className="w-full sm:w-1/3">
-                                                <InputTextLabel id="restrictions">
-                                                    Restrictions
-                                                </InputTextLabel>
-
-                                                <InputTextField
-                                                    id="restrictions"
-                                                    placeholder="Restrictions"
-                                                    autoComplete="off"
-                                                    disabled={!form.edit}
-                                                    value={form.restrictions}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-
-                                        <div className="w-full sm:w-1/3">
-                                                <InputTextLabel id="terrane_information">
-                                                    Terrane Information
-                                                </InputTextLabel>
-
-                                                <InputTextField
-                                                    id="terrane_information"
-                                                    placeholder="Terrane Information"
-                                                    autoComplete="off"
-                                                    disabled={!form.edit}
-                                                    value={form.terrane_information}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-
-                                    </div>
-
-                                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-
                                         <div className="w-full sm:w-1/3">
                                                 <InputTextLabel id="date_bought">
                                                     Date Bought
@@ -400,59 +283,6 @@ export default function TabInfo() {
 
                                     </div>
 
-                                    <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-
-                                        <div className="w-full sm:w-1/3">
-                                                <InputTextLabel id="total_number_of_lots">
-                                                    Expected Total Lots
-                                                </InputTextLabel>
-
-                                                <InputTextField
-                                                    type="number"
-                                                    name="total_number_of_lots"
-                                                    id="total_number_of_lots"
-                                                    placeholder="Total Lots"
-                                                    autoComplete="off"
-                                                    disabled={!form.edit}
-                                                    min="1"
-                                                    value={form.total_number_of_lots}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-                                        <div className="w-full sm:w-1/3">
-                                                <InputTextLabel id="investment_amount">
-                                                    Investment Amount
-                                                </InputTextLabel>
-
-                                                <InputTextField
-                                                    type="number"
-                                                    name="investment_amount"
-                                                    id="investment_amount"
-                                                    placeholder="Investment Amount"
-                                                    autoComplete="off"
-                                                    disabled={!form.edit}
-                                                    min="100"
-                                                    value={form.investment_amount}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-
-                                        <div className="w-full sm:w-1/3">
-                                                <InputTextLabel id="geographic_layer_file">
-                                                    Geographic Layer File
-                                                </InputTextLabel>
-
-                                                <InputTextField
-                                                    id="geographic_layer_file"
-                                                    placeholder="Geographic Layer File"
-                                                    autoComplete="off"
-                                                    disabled={!form.edit}
-                                                    value={form.geographic_layer_file}
-                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
-                                                />
-                                        </div>
-
-                                    </div>
 
                                     <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
@@ -488,7 +318,7 @@ export default function TabInfo() {
 
                                         <div className="w-full sm:w-1/2">
                                                 <InputTextLabel id="project_type">
-                                                    Project Typr
+                                                    Project Type
                                                 </InputTextLabel>
 
                                                 <InputTextField
@@ -501,6 +331,60 @@ export default function TabInfo() {
                                                 />
                                         </div>
 
+                                    </div>
+                                    <div className="mb-5 5 flex flex-col gap-5.5 sm:flex-row">
+                                        <div className="w-full sm:w-1/3">
+                                                    <InputTextLabel id="total_area">
+                                                        Total Area (hectare)
+                                                    </InputTextLabel>
+
+                                                    <InputTextField
+                                                        type="number"
+                                                        name="total_area"
+                                                        id="total_area"
+                                                        placeholder="Total Area"
+                                                        autoComplete="off"
+                                                        min="1"
+                                                        value={form.total_area}
+                                                        required
+                                                        onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                                    />
+                                            </div>
+
+                                            <div className="w-full sm:w-1/3">
+                                                <InputTextLabel id="total_number_of_lots">
+                                                    Expected Total Lots
+                                                </InputTextLabel>
+
+                                                <InputTextField
+                                                    type="number"
+                                                    name="total_number_of_lots"
+                                                    id="total_number_of_lots"
+                                                    placeholder="Total Lots"
+                                                    autoComplete="off"
+                                                    disabled={!form.edit}
+                                                    min="1"
+                                                    value={form.total_number_of_lots}
+                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                                />
+                                        </div>
+                                        <div className="w-full sm:w-1/3">
+                                                <InputTextLabel id="investment_amount">
+                                                    Investment Amount
+                                                </InputTextLabel>
+
+                                                <InputTextField
+                                                    type="number"
+                                                    name="investment_amount"
+                                                    id="investment_amount"
+                                                    placeholder="Investment Amount"
+                                                    autoComplete="off"
+                                                    disabled={!form.edit}
+                                                    min="100"
+                                                    value={form.investment_amount}
+                                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                                />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -562,7 +446,7 @@ export default function TabInfo() {
                                                             autoComplete="off"
                                                             disabled={!form.edit}
                                                             value={ owner.first_name }
-                                                            onChange={ (e) =>  updateOwners(e, index) }
+                                                            onChange={ (e) =>  updateOwners(e, index, "first_name") }
                                                         />
                                                 </div>
 
@@ -577,7 +461,7 @@ export default function TabInfo() {
                                                             autoComplete="off"
                                                             disabled={!form.edit}
                                                             value={ owner.middle_name }
-                                                            onChange={ (e) =>  updateOwners(e, index) }
+                                                            onChange={ (e) =>  updateOwners(e, index,"middle_name") }
                                                         />
                                                 </div>
 
@@ -592,7 +476,7 @@ export default function TabInfo() {
                                                             autoComplete="off"
                                                             disabled={!form.edit}
                                                             value={ owner.last_name }
-                                                            onChange={ (e) =>  updateOwners(e, index) }
+                                                            onChange={ (e) =>  updateOwners(e, index, "last_name") }
                                                         />
                                                 </div>
 
@@ -611,7 +495,7 @@ export default function TabInfo() {
                                                             autoComplete="off"
                                                             disabled={!form.edit}
                                                             value={ owner.email_address }
-                                                            onChange={ (e) =>  updateOwners(e, index) }
+                                                            onChange={ (e) =>  updateOwners(e, index, "email_address") }
                                                         />
                                                 </div>
                                                 <div className="w-full sm:w-1/2">
@@ -625,7 +509,7 @@ export default function TabInfo() {
                                                             autoComplete="off"
                                                             disabled={!form.edit}
                                                             value={ owner.phone_remark }
-                                                            onChange={ (e) =>  updateOwners(e, index) }
+                                                            onChange={ (e) =>  updateOwners(e, index, "phone_remark") }
                                                         />
                                                 </div>
                                         </div>

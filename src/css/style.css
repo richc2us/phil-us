@@ -242,6 +242,34 @@ input[type="search"]::-webkit-search-cancel-button {
     display: none !important;
 }
 
+
+.rdttable-header--res {
+    @apply flex border-y border-stroke dark:border-strokedark items-center
+}
+
+    .rdttable-resizable-column {
+        resize:none !important;
+        @apply py-6 pl-4 pr-4 resize-none overflow-hidden w-[17%]
+    }
+
 .rdttable-row--res {
-    cursor: pointer;
+    @apply flex cursor-pointer items-center hover:bg-whiten dark:hover:bg-boxdark-2 cursor-pointer 
+}
+
+.rdttable-row__select--res,  .rdttable-header--res th:first-child  {
+    border-bottom: none !important;
+    @apply pl-4
+}
+    .rdttable-row__data--res {
+        @apply py-4 pl-4 pr-4  text-center border-b-0 w-[17%] break-all
+    }
+
+.bg-sold {
+    background:#cf1627;
+    @apply text-white
+}
+
+.bg-onhold {
+    background:#569ff7;
+    @apply text-white
 }

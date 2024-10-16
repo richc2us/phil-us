@@ -6,7 +6,7 @@ export default function PrimarySaveButton(props : React.DetailedHTMLProps<React.
     const {children} = props
     return (
         <button
-            className={"flex justify-center " + (pending ? "" : "bg-primary") + " rounded border border-stroke px-6 py-1 font-medium text-white hover:shadow-1 dark:border-strokedark dark:text-white disabled:bg-whiter disabled:text-black"}
+            className={"flex justify-center " + (pending ? "" : "bg-primary") + " rounded border border-stroke px-6 py-2 font-medium text-white hover:shadow-1 dark:border-strokedark dark:text-white disabled:bg-whiter disabled:text-black"}
             type="submit"
             {...props}
             disabled={pending || props?.disabled}

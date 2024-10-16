@@ -350,7 +350,7 @@ export default function NewForm() {
                                         setAddressData({...addressData, city_code : data.city_code})
                                         setAddressDropdown( {...addressDropdown, barangays: await getCityBarangays(value) })
                                         updateForm({zip: await getBarangayZipCode(label)})
-                                        setRequest({...request, barangayRequest: true})
+                                        setRequest({...request, barangayRequest: false})
                                     }
                                 }
                                 />

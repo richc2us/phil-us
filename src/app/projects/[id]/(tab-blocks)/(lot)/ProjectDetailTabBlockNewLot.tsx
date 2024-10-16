@@ -1,16 +1,14 @@
 import { useState } from "react";
 import { useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext"
 import { saveLotAction } from "@/actions/blocks";
+import { initialStateLot } from "@/actions/state";
 
 export default function ProjectDetailTabBlockNewLot() {
     const { blocks, currentLot, projectID } = useBlocks()
     const dispatch = useBlocksDispatchContext()
 
     const [selectedOption, setSelectedOption] = useState<string>(currentLot.block_id);
-    const [lot, setLot] = useState({
-        name:"",
-        area: ""
-    });
+    const [lot, setLot] = useState({...initialStateLot, project_id:projectID, block_id: currentLot.block_id});
     const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
   
     const changeTextColor = () => {
@@ -22,16 +20,8 @@ export default function ProjectDetailTabBlockNewLot() {
         className="col-span-4 xl:col-span-2"
         action={
             async() => {
-                await saveLotAction({
-                    name: lot.name,
-                    area: lot.area,
-                    project_id:projectID,
-                    block_id: selectedOption
-                })
-                setLot({
-                    name:"",
-                    area: ""
-                })
+                await saveLotAction({...lot, project_id:projectID, block_id: currentLot.block_id})
+                setLot({...initialStateLot})
                 dispatch({type:""})
             }
         }>
@@ -153,7 +143,7 @@ export default function ProjectDetailTabBlockNewLot() {
                             className="mb-3 block text-sm font-medium text-black dark:text-white"
                             htmlFor="lot_area"
                         >
-                            Lot Area
+                            Lot Area (sqm)
                         </label>
                         <div className="relative">
                             {/* <span className="absolute left-4.5 top-4">
@@ -168,13 +158,44 @@ export default function ProjectDetailTabBlockNewLot() {
                             autoComplete="off"
                             value={lot.area}
                             onChange={(e) => {
-                                setLot({...lot, area: e.target.value})
+                                setLot({...lot, area: parseFloat(e.target.value)})
                             }}
                             required
                             />
                         </div>
                     </div>
                 </div>
+
+                <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                    <div className="w-full sm:w-1/1">
+                        <label
+                            className="mb-3 block text-sm font-medium text-black dark:text-white"
+                            htmlFor="price_per_sqm"
+                        >
+                            Price Per sqm
+                        </label>
+                        <div className="relative">
+                            {/* <span className="absolute left-4.5 top-4">
+                            </span> */}
+                            <input
+                            className="w-full rounded border border-stroke py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            type="number"
+                            min="10"
+                            name="price_per_sqm"
+                            id="price_per_sqm"
+                            placeholder="Lot Area sqm"
+                            autoComplete="off"
+                            value={lot.price_per_sqm}
+                            onChange={(e) => {
+                                setLot({...lot, price_per_sqm: parseFloat(e.target.value) })
+                            }}
+                            required
+                            />
+                        </div>
+                    </div>
+                </div>
+
+
                 <div className="flex justify-end gap-4.5">
                     <button
                         className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
