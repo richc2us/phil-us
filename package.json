@@ -6,6 +6,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@pdfme/common": "^5.1.5",
+    "@pdfme/generator": "^5.1.5",
     "apexcharts": "^3.45.2",
     "bcryptjs": "^2.4.3",
     "flatpickr": "^4.6.13",
