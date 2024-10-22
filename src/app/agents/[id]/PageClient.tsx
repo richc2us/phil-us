@@ -20,7 +20,7 @@ export default function PageClient({ id, document } : {id: string, document:any}
                         </div>
                     </TabDetail>
 
-                    <TabDetail index={1} active={true}>
+                    <TabDetail index={1} defaultTab={1}>
                         <DetailTab document={document} />
                     </TabDetail>
 

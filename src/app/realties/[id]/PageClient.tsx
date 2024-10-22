@@ -17,7 +17,7 @@ export default function PageClient({id, document} : {id: string, document:any}) 
                 ]}/>
 
                 <TabDetailContainer>
-                    <TabDetail index={0} active={true}>
+                    <TabDetail index={0} defaultTab={1}>
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
                         <CardDataStats title="Reservations" total="30.45K" rate="0.43%" levelUp>
                             <svg
@@ -109,7 +109,7 @@ export default function PageClient({id, document} : {id: string, document:any}) 
                     </div>
                     </TabDetail>
 
-                    <TabDetail index={1}>
+                    <TabDetail index={1}  defaultTab={1}>
                             <DetailsTab document={document} />
                     </TabDetail>
 

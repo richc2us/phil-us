@@ -1,6 +1,9 @@
+import { useSearchParams } from "next/navigation"
 
-export default function TabDetail({children, index = 0, active = false} : {children: any, index : number, active?: boolean}) {
-    const finalActive = active
+export default function TabDetail({children, index = 0, defaultTab = 0} : {children: any, index : number, active?: boolean, defaultTab?: number}) {
+    const searchParams = useSearchParams()
+    const tabDefault = searchParams.get('tab')?? defaultTab
+    const finalActive = index == tabDefault
     const isActive = finalActive ? {"data-twe-tab-active" : "true" } :  {}
     
     return (<div

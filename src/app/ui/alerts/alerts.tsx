@@ -1,7 +1,7 @@
 import SvgSuccess from "@/components/common/svg/svg-success"
 
 
-export const AlertSuccess = ({message = "", description = ""}) => {
+export const AlertSuccess = ({message = "", description = ""} : any) => {
     return <>
         <div className="flex w-full border-l-6 border-[#34D399] bg-[#34D399] bg-opacity-[15%] px-3 py-4 shadow-md dark:bg-[#1B1B24] dark:bg-opacity-30 mb-5">
             <div className="mr-5 flex h-9 w-full max-w-[36px] items-center justify-center rounded-lg bg-[#34D399]">

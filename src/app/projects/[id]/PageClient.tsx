@@ -8,6 +8,7 @@ import TabPost from "./(tab-posts)/TabPost";
 import TabDocuments from "./(tab-documents)/TabDocuments";
 import { TabOverview } from "./(tab-overview)/TabOverview";
 import { IDContextProvider } from "@/context/IDContextProvider";
+import TabBlock2 from "./(tab-blocks2)/TabBlock2";
 
 
 export default function PageClient({projectID} : { projectID : string}) {
@@ -19,6 +20,7 @@ return (<div className="p-4">
                             items={[
                                 "Overview",
                                 "Details",
+                                // "Blocks/Lots",
                                 "Blocks/Lots",
                                 "Buyers",
                                 "Documents and Geographical",
@@ -36,8 +38,12 @@ return (<div className="p-4">
                             <TabInfo />
                         </TabDetail>
 
-                        <TabDetail index={2}>
+                        {/* <TabDetail index={2}>
                             <TabBlock/>
+                        </TabDetail> */}
+
+                        <TabDetail index={2}>
+                            <TabBlock2/>
                         </TabDetail>
 
                         <TabDetail index={3}>

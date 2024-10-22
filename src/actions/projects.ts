@@ -3,6 +3,8 @@ import dbConnect from "@/lib/mongodb";
 import  Project  from "@/models/projects"
 import { revalidatePath } from "next/cache";
 import { ServerActionResponse } from "@/types/server-action-reply";
+import { auth } from "@/lib/nextAuthOptions";
+import { ADMINS_USER_IDS } from "./const";
 
 export const getProjects = async() => {
     await dbConnect()

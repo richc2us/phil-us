@@ -42,7 +42,7 @@ const getProjectSingleApi = async(id:any,callback:any)  => {
 // Multiple Collections
 
 const getBuyerAmortizationsApi = async(id:any, callback:any) => {
-    await requestApi("/api/amortizations/" + id,  callback )
+    await requestApi("/api/amortizations-buyer/" + id,  callback )
 }
 
 const getProjectBlocksApi = async(id:any,callback:any)  => {

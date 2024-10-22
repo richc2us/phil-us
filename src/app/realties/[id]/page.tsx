@@ -1,11 +1,14 @@
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
-import PageClient from "./PageClient"
+
 import { Metadata } from "next"
 import { getRealty } from "@/actions/realties"
+import dynamic from "next/dynamic"
 
 const entity = "Realty"
 const entities = "Realties"
+
+const PageClient = dynamic(() => import('./PageClient'),{ssr:false})
 
 export const metadata: Metadata = {
     title: "View " + entities ,

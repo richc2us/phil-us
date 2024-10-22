@@ -124,6 +124,7 @@ export const updateLotAction = async(state:any) => {
             document.area = state.area
             document.block_id = state.block_id
             document.price_per_sqm = state.price_per_sqm
+            document.remark = state.remark
             document.save()
         }
         revalidatePath("/")

@@ -55,7 +55,8 @@ export const  initialStateRealty = {
     commission_percent: 10,
     contact_number: "",
     lead_id:null,
-    leads: []
+    leads: [],
+    active: true
 }
 
 export const initialStateUser = {
@@ -160,5 +161,6 @@ export const initialStateLot = {
     project_id:"",
     block_id: "",
     price_per_sqm:0,
-    status:"available"
+    status:"available",
+    remark: "regular",
 }

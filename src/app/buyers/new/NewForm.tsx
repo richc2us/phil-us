@@ -15,7 +15,7 @@ export default function NewForm() {
 
     const updateForm = (value : any) =>  setForm( (prev: any) =>  { return {...prev, ...value} }  )
 
-    const [form, setForm] = useState({...initialStateBuyer, spouse: {...initialStateBuyer.spouse, civil_status : "Married"} })
+    const [form, setForm] = useState({...initialStateBuyer, spouse: {...initialStateBuyer.spouse, civil_status : "Single"} })
     const [addressDropdown, setAddressDropdown] = useState({
         regions: [],
         provinces: [],

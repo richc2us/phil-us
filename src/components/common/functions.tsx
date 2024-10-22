@@ -1,5 +1,9 @@
 import Image from "next/image"
 
+export function updateState(state:any, callback:any) : any  {
+  return callback((prev:any) => {  return {  ...prev, ...state}})
+}
+
 export function requestApi(url:any,callback:any) {
     return fetch(url,{cache:"no-cache"}).then(res => res.json()).then(res => callback(res))
 }

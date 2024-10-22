@@ -9,7 +9,7 @@ const GET = async(
 ) => {
     await dbConnect()
     let amortization_ids :any = []
-    const amortizations = await Amortization.find({project_id: params.id})
+    const amortizations = await Amortization.find({project_id: params.id}).select("_id")
     amortizations.map((amort:any) => amortization_ids.push(amort._id.toString()))
     let borrowers = await AmortizationBorrower.find({amortization_id : { $in : amortization_ids}}).distinct("user_id")
     return NextResponse.json( await User.find({_id:{ $in : borrowers }}) )

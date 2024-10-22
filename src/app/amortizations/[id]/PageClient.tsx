@@ -5,7 +5,6 @@ import TabOverview from "./TabOverview";
 import TabSchedules from "./TabSchedules";
 import TablDetails from "./TabDetails";
 import TabPayments from "./TabPayments";
-import { useSearchParams } from "next/navigation";
 
 
 export default function PageClient({ id, document } : {id: string, document:any}) {
@@ -13,23 +12,16 @@ export default function PageClient({ id, document } : {id: string, document:any}
     return(
         <IDContextProvider id={id}>
             <Tab>
-                <TabItemContainer >
-                    <TabItem index={0}>
-                        Overview
-                    </TabItem>
-                    <TabItem index={1} >
-                        Details
-                    </TabItem>
-                    <TabItem index={2}>
-                        Schedules
-                    </TabItem>
-                    <TabItem index={3}>
-                        Payment
-                    </TabItem>
+                <TabItemContainer items={[
+                    "Overview",
+                    "Details",
+                    "Schedules",
+                    "Payment"
+                ]} >
                 </TabItemContainer>
 
                 <TabDetailContainer>
-                    <TabDetail index={0}  >
+                    <TabDetail index={0} active={true} >
                         {/* <div className="grid"> */}
                             <TabOverview document={document}/>
                         {/* </div> */}

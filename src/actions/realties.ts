@@ -29,6 +29,7 @@ export async function updateRealtyAction(form: any) {
             document.contact_number = form.contact_number
             document.tin = form.tin
             document.commission_percent = form.commission_percent
+            document.active = form.active
             document.save()
             revalidatePath("/")
             return {success: true, message: document.name + ' updated', document : { id: document?._id.toString() }}

@@ -2,6 +2,7 @@
 import { updateRealtyAction } from "@/actions/realties"
 import { initialStateRealty } from "@/actions/state"
 import { getTeamLeadsIndexApi } from "@/components/common/api"
+import { updateState } from "@/components/common/functions"
 import SvgAgent from "@/components/common/svg/svg-agent"
 import NormalButton from "@/components/FormElements/Buttons/NormalButton"
 import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton"
@@ -10,6 +11,7 @@ import InputTextField from "@/components/FormElements/Fields/InputTextField"
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel"
 import { usePageID } from "@/context/IDContext"
 import { useEffect, useState } from "react"
+import AsyncSelect from "react-select/async"
 
 export default function DetailsTab({document} : any) {
     const id = usePageID()
@@ -17,12 +19,11 @@ export default function DetailsTab({document} : any) {
     const [form, setForm] = useState({...initialStateRealty, ...document, edit: false, _id: id, id})
 
     function updateForm(value : any) {
-      return setForm((prev: any) => {
-          return { ...prev, ...value };
-      });
+        updateState(value, setForm)
     }
 
     useEffect(()=> {
+        console.dir(form)
         getTeamLeadsIndexApi((res:any) => updateForm({leads: res}))
     }, [])
 
@@ -181,15 +182,15 @@ export default function DetailsTab({document} : any) {
                                                     icon={<SvgAgent/>}
                                                     className={`disabled:cursor-default disabled:bg-whiter relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-12 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${ form.lead_id && form.lead_id > 0 ? "text-black  dark:text-white" : "" }`}
                                                 >
-                                                    <option value=""  className="text-body dark:text-bodydark">
+                                                    <option value=""  className="text-body dark:text-bodydark" key="-1">
                                                         Select Team Lead
                                                     </option>
                                                     {
-                                                        form.leads && form.leads.map( (doc:any, key:any) => <>
-                                                            <option value={doc._id} className="text-body dark:text-bodydark" disabled={!doc.active}>
+                                                        form.leads && form.leads.map( (doc:any, key:any) => 
+                                                            <option key={key} value={doc._id} className="text-body dark:text-bodydark" disabled={!doc.active}>
                                                                 {doc.first_name} {doc.middle_name} {doc.last_name} - {doc.email} { !doc.active ? " - inactive " : "" }
                                                             </option>
-                                                        </>)
+                                                        )
                                                     }
                                                 </InputSelectField>
                                     </div>
@@ -215,21 +216,43 @@ export default function DetailsTab({document} : any) {
 
                             <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                                 <div className="w-full sm:w-1/1">
-                                <InputTextLabel htmlFor="description" >
-                                    Description
-                                </InputTextLabel>
-                                <textarea
-                                    rows={6}
-                                    name="description"
-                                    id="description"
-                                    placeholder="Type your message"
-                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                    value={form.description}
-                                    disabled={!form.edit}
-                                    onChange={(e) => updateForm({ description: e.target.value })}
-                                ></textarea>
+                                    <InputTextLabel htmlFor="description" >
+                                        Description
+                                    </InputTextLabel>
+                                    <textarea
+                                        rows={6}
+                                        name="description"
+                                        id="description"
+                                        placeholder="Type your message"
+                                        className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                        value={form.description}
+                                        disabled={!form.edit}
+                                        onChange={(e) => updateForm({ description: e.target.value })}
+                                    ></textarea>
                                 </div>
                             </div>
+                                <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                                    <div className="w-full sm:w-1/1">
+                                            <InputTextLabel htmlFor="commission_percent" >
+                                                Active
+                                            </InputTextLabel>
+                                            <AsyncSelect
+                                                id="active"
+                                                styles={{ control: (baseStyles, state) => state.isDisabled ? {...baseStyles, backgroundColor: "#f5f7fd" } : {...baseStyles} }}
+                                                isDisabled={!form.edit}
+                                                value={{value:form.active, label : form.active ? "Active" : "Inactive"}}
+                                                defaultOptions={ [
+                                                    {value: true,label : "Active"},
+                                                    {value: false,label : "Inactivate"}
+                                                ]}
+                                                onChange={
+                                                    ({data, label , value} : any, b : any) => {
+                                                        updateForm({ active: value })
+                                                    }
+                                                }
+                                            />
+                                    </div>
+                                </div>
                     </div>
                 </div>
                 </form>

@@ -11,6 +11,8 @@ import SvgRealty from "@/components/common/svg/svg-realty"
 import InputSelectField from "@/components/FormElements/Fields/inputSelectField"
 import AsyncSelect from 'react-select/async'
 import { getRealtiesApi } from "@/components/common/api"
+import Select from "react-select"
+import { getBarangays, getCities, getProvinces, getRegions, getZipCode } from "@/actions/addresses"
 
 
 export default function NewForm() {
@@ -18,6 +20,43 @@ export default function NewForm() {
     const updateForm = (value : any) =>  setForm( (prev: any) =>  { return {...prev, ...value} }  )
 
     const [form, setForm] = useState(initialStateAgent)
+    const [addressDropdown, setAddressDropdown] = useState({
+        regions: [],
+        provinces: [],
+        cities: [],
+        barangays:  [],
+        regionsSpouse: [],
+        provincesSpouse: [],
+        citiesSpouse: [],
+        barangaysSpouse:  [],
+    })
+
+    const [addressData, setAddressData] = useState({
+        region_code: "",
+        province_code : "",
+        city_code: "",
+        barangay_code: "",
+        region_code_spouse: "",
+        province_code_spouse : "",
+        city_code_spouse: "",
+        barangay_code_spouse: ""
+    })
+
+    const [request, setRequest] = useState({
+        regionRequest: false,
+        provinceRequest:false,
+        cityRequest:false,
+        barangayRequest:false,
+        zipCodeRequest: false,
+        emailBuyerExists : false,
+        emailSpouseExists : false,
+        regionRequestSpouse: false,
+        provinceRequestSpouse:false,
+        cityRequestSpouse:false,
+        barangayRequestSpouse:false,
+
+    })
+
     const [emailExists, setEmailExists] = useState(false)
     const [emailCheckAgent, setEmailCheckAgent] = useState<ServerActionResponse>()
     const [resp, setResp] = useState<ServerActionResponse>()
@@ -26,6 +65,70 @@ export default function NewForm() {
         const checker = await checkEmailExists(email)
         setEmailCheckAgent(checker)
         setEmailExists(checker.success)
+    }
+
+    useEffect(()=> {
+        setRequest({...request, regionRequest : true})
+        const getRegionAction = async () => {
+            const resp = await getRegions()
+            let tempRegions = resp.map( ( region:any, key:any) => {
+                return {
+                    value: region.region_code,
+                    label: region.region_name,
+                    data: region
+                }
+            })
+            setRequest({...request, regionRequest : false})
+            setAddressDropdown( {...addressDropdown, regions: tempRegions, regionsSpouse: tempRegions})
+        }
+        getRegionAction()
+    },[])
+
+    const getRegionProvinces = async(region_code:any) => {
+        const resp = await getProvinces(region_code)
+            let tempProvinces = resp.map( ( province:any, key:any) => {
+                return {
+                    value: province.province_code,
+                    label: province.province_name,
+                    data: province
+                }
+            })
+        return tempProvinces
+    }
+
+    const getProvinceCities = async(province_code:any) => {
+        setRequest({...request, cityRequest: true})
+        const resp = await getCities(province_code)
+            let tempCities = resp.map( ( city:any, key:any) => {
+                return {
+                    value: city.city_code,
+                    label: city.city_name,
+                    data: city
+                }
+            })
+        setRequest({...request, cityRequest: false})
+        return tempCities
+    }
+
+    const getCityBarangays = async(city_code:any) => {
+        setRequest({...request, barangayRequest: true})
+        const resp = await getBarangays(city_code)
+            let tempBarangay = resp.map( ( city:any, key:any) => {
+                return {
+                    value: city.brgy_code,
+                    label: city.brgy_name,
+                    data: city
+                }
+            })
+        setRequest({...request, barangayRequest: false})
+        return tempBarangay
+    }
+
+    const getBarangayZipCode = async(city_name:any) => {
+        setRequest({...request, zipCodeRequest: true})
+        const resp = await getZipCode(city_name)
+        setRequest({...request, zipCodeRequest: false})
+        return resp
     }
 
     useEffect(()=> {
@@ -195,12 +298,21 @@ export default function NewForm() {
                                 <InputTextLabel htmlFor="region">
                                     Region
                                 </InputTextLabel>
-                                <InputTextField
-                                    id="region"
-                                    value={form.region}
-                                    autoComplete="off"
-                                    placeholder="Region"
-                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+
+                                <Select
+                                id="region"
+                                isLoading={request.regionRequest}
+                                options={addressDropdown.regions}
+                                placeholder="Region"
+                                onChange={
+                                    async({ data ,label , value} : any, b : any) => {
+                                        setRequest({...request, provinceRequest: true})
+                                        updateForm({ region: label, province: "", city: "", barangay : ""})
+                                        setAddressData({...addressData, region_code : data.region_code})
+                                        setAddressDropdown( {...addressDropdown, provinces: await getRegionProvinces(value) })
+                                        setRequest({...request, provinceRequest: false})
+                                    }
+                                }
                                 />
                     </div>
 
@@ -208,12 +320,21 @@ export default function NewForm() {
                                 <InputTextLabel htmlFor="province">
                                     Province
                                 </InputTextLabel>
-                                <InputTextField
-                                    id="province"
-                                    value={form.province}
-                                    autoComplete="off"
-                                    placeholder="Province"
-                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+
+                                <Select
+                                id="province"
+                                options={addressDropdown.provinces}
+                                isLoading={request.provinceRequest}
+                                placeholder="Province"
+                                onChange={
+                                    async({ data,label , value} : any, b : any) => {
+                                        setRequest({...request, cityRequest: true})
+                                        updateForm({ province: label, city: ""})
+                                        setAddressData({...addressData, province_code : data.province_code})
+                                        setAddressDropdown( {...addressDropdown, cities: await getProvinceCities(value) })
+                                        setRequest({...request, cityRequest: false})
+                                    }
+                                }
                                 />
                     </div>
 
@@ -221,12 +342,21 @@ export default function NewForm() {
                                 <InputTextLabel htmlFor="city">
                                     City
                                 </InputTextLabel>
-                                <InputTextField
-                                    id="city"
-                                    value={form.city}
-                                    autoComplete="off"
-                                    placeholder="City"
-                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+                                <Select
+                                id="city"
+                                options={addressDropdown.cities}
+                                isLoading={request.cityRequest}
+                                placeholder="City"
+                                onChange={
+                                    async({ data,label , value} : any, b : any) => {
+                                        setRequest({...request, barangayRequest: true})
+                                        updateForm({ city: label, barangay: ""})
+                                        setAddressData({...addressData, city_code : data.city_code})
+                                        setAddressDropdown( {...addressDropdown, barangays: await getCityBarangays(value) })
+                                        updateForm({zip: await getBarangayZipCode(label)})
+                                        setRequest({...request, barangayRequest: false})
+                                    }
+                                }
                                 />
                     </div>
 
@@ -234,12 +364,19 @@ export default function NewForm() {
                                 <InputTextLabel htmlFor="barangay">
                                     Barangay
                                 </InputTextLabel>
-                                <InputTextField
-                                    id="barangay"
-                                    value={form.barangay}
-                                    autoComplete="off"
-                                    placeholder="Barangay"
-                                    onChange={(e) => updateForm({ [e.target.name]: e.target.value })}
+
+                                <Select
+                                id="barangay"
+                                options={addressDropdown.barangays}
+                                isLoading={request.barangayRequest}
+                                className="z-999"
+                                placeholder="Barangay"
+                                onChange={
+                                    async({ data,label , value} : any, b : any) => {
+                                        updateForm({ barangay: label})
+                                        setAddressData({...addressData, barangay_code : data.barangay_code})
+                                    }
+                                }
                                 />
                     </div>
 
@@ -315,7 +452,7 @@ export default function NewForm() {
                                             }
                                         }
                                         icon={<SvgRealty/>}
-                                        className={`disabled:cursor-default disabled:bg-whiter relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-12 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${ form.realty_id && form.realty_id > 0 ? "text-black  dark:text-white" : "" }`}
+                                        className={`disabled:cursor-default disabled:bg-whiter relative z-1 w-full appearance-none rounded border border-stroke bg-transparent px-12 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${ form.realty_id && form.realty_id > 0 ? "text-black  dark:text-white" : "" }`}
                                     >
                                         <option value=""  className="text-body dark:text-bodydark">
                                             Select Realty

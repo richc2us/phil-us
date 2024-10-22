@@ -198,7 +198,7 @@ export default function NewForm(){
                     </div>
                     <div className="p-7">
                         {
-                            reply?.success && <AlertSuccess message={reply?.message}/>
+                            reply?.success && <AlertSuccess message={reply?.message} description={<Link href={"/amortizations/" + reply.document?.id}>View</Link>} />
                         }
                         {
                             !reply?.success && reply?.message && <AlertError message={reply?.message} description={reply?.errors}/>
@@ -219,10 +219,11 @@ export default function NewForm(){
 
                         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                             <div className="w-full sm:w-1/1">
-                                <InputTextLabel htmlFor="name" >
+                                <InputTextLabel htmlFor="buyers_id" >
                                     Buyer Name
                                 </InputTextLabel>
                                 <AsyncSelect
+                                    id="buyers_id"
                                     loadOptions={asyncBuyerOptions}
                                     autoFocus
                                     isLoading={requesting}
@@ -455,6 +456,7 @@ export default function NewForm(){
                                     {
                                         labels.project_label.length == 0 &&
                                         <AsyncSelect
+                                        id="project_id"
                                         loadOptions={asyncProjectOptions}
                                         isLoading={projectRequesting}
                                         defaultOptions={form.projects}
@@ -485,6 +487,7 @@ export default function NewForm(){
                                     }
                                     { labels.block_label.length == 0 &&
                                             <AsyncSelect
+                                            id="block_id"
                                             loadOptions={asyncProjectOptions}
                                             isLoading={blockRequesting}
                                             defaultOptions={form.blocks}
@@ -518,6 +521,7 @@ export default function NewForm(){
                                             id="lot_id"
                                             defaultOptions={form.lots}
                                             className="border-b"
+                                            isLoading={lotRequesting}
                                             styles={{
                                                 control: (baseStyles, state) => ({
                                                     ...baseStyles,
@@ -526,7 +530,7 @@ export default function NewForm(){
                                             }}
                                             onChange={
                                                 ({data, label , value} : any, b : any) => {
-                                                    updateForm({ lot_id: value, area: data.area })
+                                                    updateForm({ lot_id: value, area: data.area, price_per_sqm: data.price_per_sqm })
                                                     setLabels({ ...labels, lot_label : label, area_label : data.area + ""  })
                                                 }
                                             }
@@ -744,6 +748,7 @@ export default function NewForm(){
                                             Realty
                                         </InputTextLabel>
                                         <AsyncSelect
+                                            id="realty_id"
                                             isLoading={form.realties.length == 0}
                                             defaultOptions={form.realties}
                                             className="border-b"
@@ -773,6 +778,7 @@ export default function NewForm(){
                                             Agent
                                         </InputTextLabel>
                                         <AsyncSelect
+                                            id="agent_id"
                                             required
                                             className="border-b"
                                             styles={{

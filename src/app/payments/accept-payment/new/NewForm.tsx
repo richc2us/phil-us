@@ -23,24 +23,25 @@ export default function NewForm() {
     }
 
     const searchBuyerCallback = async(inputValue: string) => {
-        return await searchBuyer(inputValue)
+        return await searchBuyer(inputValue,true)
     }
 
-    const getBuyerAmortizations = async() => {
-        if(form.buyer_id) {
+    const getBuyerAmortizations = async(id:any) => {
             setRequesting(true)
             getBuyerAmortizationsApi(
-                form.buyer_id,
+                id,
                 (res:any) =>  {
                     updateForm({amortizations : res})
                     setRequesting(false) 
                 })
-        }
     }
 
-    useEffect(() => {
-        getBuyerAmortizations()
-    },[form.buyer_id])
+    // useEffect(() => {
+    //     if(form.buyer_id > 0) {
+    //     console.dir(form.buyer_id)
+    //         getBuyerAmortizations(form.buyer_id)
+    //     }
+    // },[form.buyer_id])
 
     const asyncBuyerOptions = (
         inputValue: string,
@@ -75,6 +76,7 @@ export default function NewForm() {
                         onChange={
                                 async({data, label , value} : any, b : any) => {
                                     updateForm({ buyer_id: value})
+                                    getBuyerAmortizations(value)
                                 }
                         }
                     />

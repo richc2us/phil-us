@@ -32,7 +32,8 @@ export interface Lot extends Document {
     transfer_tax?: Number,
     buyer_seller_pay_tax?: Number,
     transfer_date?: Date,
-    active?:boolean
+    active?:boolean,
+    remark?: String,
 }
 
 const lotSchema = new Schema<Lot>({
@@ -67,7 +68,8 @@ const lotSchema = new Schema<Lot>({
     transfer_tax: {type: Number},
     buyer_seller_pay_tax: {type: Number},
     transfer_date: {type: Date},
-    active: {type: Boolean, default: true}
+    active: {type: Boolean, default: true},
+    remark: {type: String,  default: "regular" }
 }, {
     timestamps : true
 })

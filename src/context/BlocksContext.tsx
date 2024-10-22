@@ -19,7 +19,8 @@ const initialLot = {
     price_per_sqm: 0,
     status: "available",
     active: false,
-    agentName: ""
+    agentName: "",
+    remark: "regular"
 }
 const initialBlocks = {
     currentBlock:initialBlock,
