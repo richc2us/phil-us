@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext"
 import { saveLotAction } from "@/actions/blocks";
 import { initialStateLot } from "@/actions/state";
+import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton";
 
 export default function ProjectDetailTabBlockNewLot() {
     const { blocks, currentLot, projectID } = useBlocks()
@@ -17,9 +18,10 @@ export default function ProjectDetailTabBlockNewLot() {
 
     return (
         <form 
-        className="col-span-4 xl:col-span-2"
+        className="col-span-4 xl:col-span-2  fixed w-[25%]"
         action={
-            async() => {
+            async(e:any) => {
+                console.dir(e)
                 await saveLotAction({...lot, project_id:projectID, block_id: currentLot.block_id})
                 setLot({...initialStateLot})
                 dispatch({type:""})
@@ -225,12 +227,13 @@ export default function ProjectDetailTabBlockNewLot() {
 
 
                 <div className="flex justify-end gap-4.5">
-                    <button
+                    <PrimarySaveButton/>
+                    {/* <button
                         className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
                         type="submit"
                         >
                         Save
-                    </button>
+                    </button> */}
                 </div>
                 </div>
             </div>

@@ -24,6 +24,9 @@ type defaultFilterState = {
     onhold: boolean
 }
 export default function BlockDetail({ loading = false } : any) {
+
+
+  
     const {blocks} = useBlocks()
     const dispatch = useBlocksDispatchContext()
     const [state, setState] = useState<defaultState>({
@@ -33,6 +36,13 @@ export default function BlockDetail({ loading = false } : any) {
         isEditingLot: false,
         isHoldingLot: false
     })
+    const [counter, setCounter] = useState({
+      availableCounter:0,
+      soldCounter:0,
+      onHoldCounter: 0
+    })
+
+  
     function updateState(prev:any) { return setState({ ...state, ...prev})}
     function toggle(selector:any = "isAddingLot", force: boolean = false) {
         let t = !state[selector as keyof defaultState]
@@ -89,7 +99,7 @@ export default function BlockDetail({ loading = false } : any) {
               </span>
             </div>
           </div>
-          Available
+          Available {counter.availableCounter}
         </label>
 
         <label
@@ -129,7 +139,7 @@ export default function BlockDetail({ loading = false } : any) {
               </span>
             </div>
           </div>
-          Sold
+          Sold {counter.soldCounter}
         </label>
 
         <label
@@ -169,7 +179,7 @@ export default function BlockDetail({ loading = false } : any) {
               </span>
             </div>
           </div>
-          On Hold
+          On Hold {counter.onHoldCounter}
         </label>
           <button
               className="flex justify-center rounded border bg-white border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
@@ -186,8 +196,8 @@ export default function BlockDetail({ loading = false } : any) {
                               <div id="accordionBlock">
                                 <div className="rounded-lg border border-neutral-200 bg-white dark:border-neutral-600 dark:bg-body-dark mb-2 pb-4 pt-4">
                                   {
-                                      blocks.map((block:any, index:any) => {
-                                          return (
+                                      blocks.map((block:any, index:any) => 
+                                          (
                                                   <div
                                                   id={"collapse" + index}
                                                   // className={"!visible " + ((index == 0 ) ? "" : "hidden")}
@@ -206,7 +216,7 @@ export default function BlockDetail({ loading = false } : any) {
                                                                   }
                                                               }
                                                               >
-                                                              {block.name} {block.description && "[ " + block.description + " ]" }
+                                                              {block.name} {block.description && " " + block.description }
                                                               {!block.active && " [ inactive ]"}
                                                           </button>
                                                           <button
@@ -224,7 +234,7 @@ export default function BlockDetail({ loading = false } : any) {
                                                       <div className="grid grid-cols-1 mb-4">
                                                           <table className="h-full w-full table-auto">
                                                             <thead>
-                                                              <th>Block Name</th>
+                                                              {/* <th>Block Name</th> */}
                                                               <th>Lot Name</th>
                                                               <th>Area</th>
                                                               <th>Price Per sqm</th>
@@ -244,7 +254,7 @@ export default function BlockDetail({ loading = false } : any) {
                                                                                         dispatch({type:'setCurrentLot', currentLot : {...lot, id: lot._id.toString()} })
                                                                           }}
                                                                           className={"cursor-pointer rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark " + lotClass}>
-                                                                            <td className="text-center">{block.name}</td>
+                                                                            {/* <td className="text-center">{block.name}</td> */}
                                                                             <td className="text-center">{lot.name}</td>
                                                                             <td className="text-center">{lot.area} sqm</td>
                                                                             <td className="text-center">{formatDecimal(lot.price_per_sqm)}</td>
@@ -252,7 +262,7 @@ export default function BlockDetail({ loading = false } : any) {
                                                                             <td className="text-center">{lot.remark}</td>
                                                                           </tr>
                                                                     )
-                                                                    }
+                                                                  }
                                                                 )
                                                             }
                                                             </tbody>
@@ -262,7 +272,7 @@ export default function BlockDetail({ loading = false } : any) {
                                                   </div>
                                                   </div>
                                           )
-                                      })
+                                    )
                                   }
                                   </div>
                               </div>
@@ -270,7 +280,7 @@ export default function BlockDetail({ loading = false } : any) {
                       </div>
                   }
           </div>
-          <div className="col-span-2">
+          <div className="col-span-2 w-full">
             {state.isAddingBlock && <ProjectDetailTabBlockNewBlock  />}
             {state.isAddingLot && <ProjectDetailTabBlockNewLot  />}
             {state.isEditingBlock && <ProjectDetailTabBlockUpdateBlock/>}

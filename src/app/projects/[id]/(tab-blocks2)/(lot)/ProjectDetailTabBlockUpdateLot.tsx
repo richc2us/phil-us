@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { initialLot, useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext"
 import { updateLotAction } from "@/actions/blocks";
 import ActivateButton from "./ActivateButton";
+import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton";
 
 export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) {
     const { blocks, currentLot, projectID } = useBlocks()
@@ -21,7 +22,7 @@ export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) 
 
     return (
         <form 
-        className="col-span-4 xl:col-span-2"
+        className="col-span-4 xl:col-span-2 fixed w-[25%]"
         action={
             async() => {
                 await updateLotAction({...lot,
@@ -259,12 +260,13 @@ export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) 
                     }
                     
                     <ActivateButton/>
-                    <button
+                    <PrimarySaveButton/>
+                    {/* <button
                         className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
                         type="submit"
                         >
                         Update Lot
-                    </button>
+                    </button> */}
                 </div>
                 </div>
             </div>
