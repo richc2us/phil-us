@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext"
 import { saveLotAction } from "@/actions/blocks";
 import { initialStateLot } from "@/actions/state";
@@ -11,7 +11,7 @@ export default function ProjectDetailTabBlockNewLot() {
     const [selectedOption, setSelectedOption] = useState<string>(currentLot.block_id);
     const [lot, setLot] = useState({...initialStateLot, project_id:projectID, block_id: currentLot.block_id});
     const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
-  
+    const lotRef = useRef<HTMLInputElement | null>(null)
     const changeTextColor = () => {
       setIsOptionSelected(true);
     };
@@ -25,6 +25,9 @@ export default function ProjectDetailTabBlockNewLot() {
                 await saveLotAction({...lot, project_id:projectID, block_id: currentLot.block_id})
                 setLot({...initialStateLot})
                 dispatch({type:""})
+                if(lotRef.current) {
+                    lotRef.current?.focus()
+                }
             }
         }>
         <div className="">
@@ -130,6 +133,7 @@ export default function ProjectDetailTabBlockNewLot() {
                             placeholder="Lot Name"
                             autoComplete="off"
                             value={lot.name}
+                            ref={lotRef}
                             onChange={(e) => {
                                 setLot({...lot, name: e.target.value})
                             }}

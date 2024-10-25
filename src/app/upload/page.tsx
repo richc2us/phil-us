@@ -1,3 +1,7 @@
+"use server"
+
+import NewForm from "./NewForm"
+
 // import Uppy from '@uppy/core';
 // import Dashboard from '@uppy/dashboard';
 // import Tus from '@uppy/tus';
@@ -14,6 +18,7 @@
 // import {Upload} from "tus-js-client"
 
 export default async function() {
+    return <NewForm/>
     // const path = process.cwd() + '/README.md'
     // const file = await fs.createReadStream(path)
     // const options = {
@@ -38,4 +43,6 @@ export default async function() {
     
     // const upload = new Upload(file, options)
     // upload.start()
+
+    
 }

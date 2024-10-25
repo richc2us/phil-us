@@ -36,4 +36,28 @@ blockSchema.virtual('blockLots',{
     foreignField:"block_id"
 })
 
+blockSchema.virtual('availableCounter',{
+    ref:"Lot",
+    localField:"_id",
+    foreignField:"block_id",
+    count: true,
+    match: {status: "available"}
+})
+
+blockSchema.virtual('soldCounter',{
+    ref:"Lot",
+    localField:"_id",
+    foreignField:"block_id",
+    count: true,
+    match: {status: "sold"}
+})
+
+blockSchema.virtual('onholdCounter',{
+    ref:"Lot",
+    localField:"_id",
+    foreignField:"block_id",
+    count: true,
+    match: {status: "onhold"}
+})
+
 export default mongoose.models?.Block || mongoose.model<Block>("Block", blockSchema )

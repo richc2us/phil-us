@@ -158,7 +158,7 @@ export function TabOverview({projectID}:any) {
             <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-5">
                {series.length > 0 && <ChartThree series={series}/>}
             </div>
-            <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-7">
+            <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-7 max-h-96 overflow-y-scroll">
                 <h5 className="text-xl font-semibold text-black dark:text-white mb-4">{stat.availableCounter} Available Lots </h5>
                 <table className="h-full w-full table-auto">
                     <thead>

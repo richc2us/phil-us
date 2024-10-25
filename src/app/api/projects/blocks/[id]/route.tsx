@@ -9,7 +9,7 @@ const getBlocks = async(
     await dbConnect()
     await Lot.findOne({})
     return NextResponse.json(
-        await Block.find({project_id : params.id}).populate('blockLots')
+        await Block.find({project_id : params.id}).populate('blockLots').populate('availableCounter').populate("soldCounter").populate("onholdCounter")
     )
 }
 

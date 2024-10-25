@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ProjectDetailTabBlockNewBlock from "./(block)/ProjectDetailTabBlockNewBlock"
 import ProjectDetailTabBlockNewLot from "./(lot)/ProjectDetailTabBlockNewLot"
 import ProjectDetailTabBlockUpdateBlock from "./(block)/ProjectDetailTabBlockUpdateBlock"
@@ -23,10 +23,8 @@ type defaultFilterState = {
     sold: boolean,
     onhold: boolean
 }
+
 export default function BlockDetail({ loading = false } : any) {
-
-
-  
     const {blocks} = useBlocks()
     const dispatch = useBlocksDispatchContext()
     const [state, setState] = useState<defaultState>({
@@ -57,7 +55,17 @@ export default function BlockDetail({ loading = false } : any) {
         onhold: true
     })
     const filterStatus =  () => Object.keys(filter).filter( (status:any) => filter[status as keyof defaultFilterState] )
-
+    useEffect(()=>{
+      let availableCounter =0
+      let soldCounter = 0
+      let onHoldCounter = 0
+      blocks.map((block:any, index:any) => {
+          availableCounter += block.availableCounter
+          soldCounter += block.soldCounter
+          onHoldCounter += block.onholdCounter
+      })
+      setCounter({availableCounter,soldCounter,onHoldCounter})
+    },[blocks])
     return (
         <div className="grid grid-cols-6 gap-8">
           <div className="col-span-8 xl:col-span-4">
@@ -196,7 +204,7 @@ export default function BlockDetail({ loading = false } : any) {
                               <div id="accordionBlock">
                                 <div className="rounded-lg border border-neutral-200 bg-white dark:border-neutral-600 dark:bg-body-dark mb-2 pb-4 pt-4">
                                   {
-                                      blocks.map((block:any, index:any) => 
+                                      blocks.map((block:any, index:any) =>
                                           (
                                                   <div
                                                   id={"collapse" + index}
@@ -204,7 +212,9 @@ export default function BlockDetail({ loading = false } : any) {
                                                   className={"!visible"}
                                                   data-twe-collapse-item
                                                   aria-labelledby={"heading" + index}
-                                                  data-twe-parent="#accordionBlock">
+                                                  data-twe-parent="#accordionBlock"
+                                                  key={index}
+                                                  >
                                                   <div className="px-5">
                                                       <div className="flex justify-end gap-4.5 mb-4">
                                                           <button
@@ -234,12 +244,14 @@ export default function BlockDetail({ loading = false } : any) {
                                                       <div className="grid grid-cols-1 mb-4">
                                                           <table className="h-full w-full table-auto">
                                                             <thead>
-                                                              {/* <th>Block Name</th> */}
-                                                              <th>Lot Name</th>
-                                                              <th>Area</th>
-                                                              <th>Price Per sqm</th>
-                                                              <th>TCP</th>
-                                                              <th>Remark</th>
+                                                              <tr>
+                                                                {/* <th>Block Name</th> */}
+                                                                <th>Lot Name</th>
+                                                                <th>Area</th>
+                                                                <th>Price Per sqm</th>
+                                                                <th>TCP</th>
+                                                                <th>Remark</th>
+                                                              </tr>
                                                             </thead>
                                                             <tbody>
                                                             {
@@ -249,6 +261,7 @@ export default function BlockDetail({ loading = false } : any) {
                                                                     return (
                                                                       showLot && 
                                                                           <tr
+                                                                          key={key}
                                                                           onClick={(e) => {
                                                                                         toggle('isEditingLot', true)
                                                                                         dispatch({type:'setCurrentLot', currentLot : {...lot, id: lot._id.toString()} })
