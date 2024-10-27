@@ -104,13 +104,29 @@ export const initialStateAmortizationSchedule = {
     paid: false
 }
 
+export const initialStateAmortizationEquity = {
+    amortization_id : null,
+    payment_id: null,
+    due_date : "",
+    amount: 0,
+    paid: false
+}
+
 export const initialStateReservation = {
     borrowers:[
         {...initialStateBuyer}
     ],
+    equity: [{
+        ...initialStateAmortizationEquity
+    }],
     schedules : [
         {...initialStateAmortizationSchedule}
     ],
+    comissions: {
+        teamleads:[{...initialStateUser}],
+        agents: [{...initialStateUser}],
+        realty: "",
+    },
     project_id : null,
     block_id: null,
     lot_id : null,

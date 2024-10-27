@@ -2,6 +2,8 @@
 import dbConnect from "@/lib/mongodb";
 import  User  from "@/models/users"
 import  Project  from "@/models/projects"
+import  Realty  from "@/models/realties"
+
 
 export const searchBuyer = async(text: string, all_type : boolean = false) => {
     await dbConnect()
@@ -42,6 +44,147 @@ export const searchUsers = async(text: string="", exclude:string = "0") => {
         isDisabled: !i.active
     }))
     return users
+}
+
+function searchAggregateBuilder(columns:any = [], q:string) : [{
+    autocomplete: {
+        query:string,
+        path:string
+    }
+}] {
+    let should : any = []
+
+    columns.forEach( (column:any) => {
+        should.push({
+            autocomplete : {
+                query : q,
+                path: column
+            }
+        })
+    } )
+
+    return should
+}
+
+export const searchUserAtlas = async(query: string = "") => {
+    await dbConnect()
+    let aggregate = [{
+        $search :  {
+            index: "default",
+            compound: {
+                should: searchAggregateBuilder(['first_name','last_name','middle_name','email'],query),
+                minimumShouldMatch: 1
+            }
+        }
+    }]
+    // let aggregate =
+    // [
+    //     {
+    //         $search: {
+    //             index: "default",
+    //             compound: {
+    //                 should: [
+    //                     {
+    //                         autocomplete: {
+    //                             'query': query,
+    //                             'path': 'first_name'
+    //                         }
+    //                     },
+    //                     {
+    //                         autocomplete: {
+    //                             'query': query,
+    //                             'path': 'last_name'
+    //                         }
+    //                     },
+    //                     {
+    //                         autocomplete: {
+    //                             'query': query,
+    //                             'path': 'middle_name'
+    //                         }
+    //                     },
+    //                     {
+    //                         autocomplete: {
+    //                             'query': query,
+    //                             'path': 'email'
+    //                         }
+    //                     }
+    //                 ],
+    //                 minimumShouldMatch: 1
+    //             }
+    //         }
+    //     }
+    // ]
+    return User.aggregate(aggregate)
+}
+
+export const searchProjectAtlas = async(query: string = "") => {
+    await dbConnect()
+    let aggregate = [{
+        $search :  {
+            index: "projects",
+            compound: {
+                should: searchAggregateBuilder(['name','address1','address2','barangay','city','province','region','zip'],query),
+                minimumShouldMatch: 1
+            }
+        }
+    }]
+    return Project.aggregate(aggregate)
+}
+
+export const searchRealtiesAtlas = async(query: string = "") => {
+    await dbConnect()
+    let aggregate = [{
+        $search :  {
+            index: "realties",
+            compound: {
+                should: searchAggregateBuilder(['name','address','address2','contact_number','description'],query),
+                minimumShouldMatch: 1
+            }
+        }
+    }]
+    return Realty.aggregate(aggregate)
+}
+
+export const searchBarAtlas = async(query: string = "") => {
+    const users = await searchUserAtlas(query)
+    const projects = await searchProjectAtlas(query)
+    const realties = await searchRealtiesAtlas(query)
+    let results = []
+
+    if(users.length) {
+        results.push({
+            label: "Users",
+            options : users.map( (user) => ({
+                value:user._id,
+                label: user.first_name + " " + user.middle_name + " " + user.last_name,
+                type: "users"
+            }) )
+        })
+    }
+
+    if(projects.length) {
+        results.push({
+            label: "Projects",
+            options : projects.map( (project) => ({
+                value: project._id,
+                label: project.name,
+                type:"projects"
+            }))
+        })
+    }
+
+    if(realties.length) {
+        results.push({
+            label: "Realties",
+            options : realties.map( (realty:any) => ({
+                value: realty._id,
+                label: realty.name,
+                type: "realties"
+            }))
+        })
+    }
+
+    return results
 }
 
 export const searchProject = async(text: string = "") => {

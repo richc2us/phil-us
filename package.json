@@ -35,7 +35,8 @@
     "react-dom": "^18",
     "react-select": "^5.8.1",
     "tw-elements": "^2.0.0",
-    "tw-elements-react": "^1.0.0-alpha-end"
+    "tw-elements-react": "^1.0.0-alpha-end",
+    "xlsx-js-style": "^1.2.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

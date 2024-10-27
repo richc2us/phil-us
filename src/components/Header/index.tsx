@@ -5,12 +5,29 @@ import Link from "next/link";
 // import DropdownNotification from "./DropdownNotification";
 import DropdownUser from "./DropdownUser";
 import Image from "next/image";
+import AsyncSelect from "react-select/async";
+import { useState } from "react";
+import { searchBarAtlas } from "@/actions/search";
+import { useRouter } from "next/navigation";
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   user: any,
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
+  const [searchBarRequesting, setSearchBarRequesting] = useState(false)
+  const router = useRouter()
+  const asyncSearchBarOptions =  (
+    inputValue: string,
+    callback: (options: any[]) => void
+) => {
+  setSearchBarRequesting(true)
+    setTimeout( async() => {
+        callback(await searchBarAtlas(inputValue))
+        setSearchBarRequesting(false)
+    }, 500)
+}
+
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
       <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
@@ -18,6 +35,7 @@ const Header = (props: {
           {/* <!-- Hamburger Toggle BTN --> */}
           <button
             aria-controls="sidebar"
+            aria-label="sidebar"
             onClick={(e) => {
               e.stopPropagation();
               props.setSidebarOpen(!props.sidebarOpen);
@@ -95,12 +113,29 @@ const Header = (props: {
                 </svg>
               </button>
 
-              <input
-                type="text"
+              <AsyncSelect
+                loadOptions={asyncSearchBarOptions}
                 name="global-search"
                 id="global-search"
-                placeholder="Type to search..."
-                className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
+                isLoading={searchBarRequesting}
+                placeholder="Type to search entire system..."
+                className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125 border-0"
+                noOptionsMessage={ () => "No Result Found"}
+                styles={{
+                  control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      border: 'none'
+                  }),
+                  indicatorsContainer: (baseStyles) => ({
+                    ...baseStyles,
+                    display: "none"
+                  })
+                }}
+                onChange={
+                  async({value, label, type}) => {
+                    router.push("/"+type + "/" + value)
+                  }
+                }
               />
             </div>
           </form>

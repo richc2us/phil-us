@@ -8,7 +8,7 @@ import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButt
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel";
 import InputTextField from "@/components/FormElements/Fields/InputTextField";
 import NormalButton from "@/components/FormElements/Buttons/NormalButton";
-import {  initialStateAmortizationSchedule, initialStateReservation } from "@/actions/state";
+import {  initialStateAmortizationEquity, initialStateAmortizationSchedule, initialStateReservation } from "@/actions/state";
 import AsyncSelect from 'react-select/async';
 import { searchBuyer, searchProject } from "@/actions/search";
 import { initTWE, Collapse } from "tw-elements";
@@ -16,6 +16,7 @@ import { getAgents } from "@/actions/agents";
 import { saveAmortizationAction } from "@/actions/amortizations";
 import DatePicker from "react-datepicker";
 import { getProjectBlocksApi,  getProjectsSearchApi } from "@/components/common/api";
+import { SidebarIcon } from "@/components/common/functions";
 
 
 export default function NewForm(){
@@ -25,6 +26,13 @@ export default function NewForm(){
     const [projectRequesting, setProjectRequesting] = useState(false)
     const [blockRequesting, setBlockRequesting] = useState(false)
     const [lotRequesting, setLotRequesting] = useState(false)
+    const [comissionCheck, setComissionCheck] = useState({
+        team_lead_one: false,
+        team_lead_two: false,
+        realty : false,
+        agent_one: false,
+        agent_two: false
+    })
     const [reply, setReply] = useState<ServerActionResponse>()
     const [labels, setLabels] = useState({
         project_label: "",
@@ -182,14 +190,47 @@ export default function NewForm(){
         updateForm({schedules: schedules})
     }
 
+    function adjustEquityDate(monthly = 0, start : Date  = new Date()) {
+        let equity : any  = form.equity
+        let date = start
+        date.setMonth(date.getMonth() + 1)
+        Array.from({length: form.terms}).map((i:any, key:any) => {
+            let sched_date = new Date(date.valueOf())
+            let month = (sched_date.getMonth() +  1) > 9 ? sched_date.getMonth() +  1 :  "0"+ (sched_date.getMonth() +  1)
+            let due_date =  month +"/"+ sched_date.getDate() + "/" + sched_date.getFullYear()
+            let temp = equity[key] && equity[key].amount > 0 ? {...equity[key] , due_date} : {}
+            equity[key] = {
+                ...initialStateAmortizationEquity,
+                due_date: due_date,
+                ...temp,
+                amount : monthly
+            }
+            date.setDate(  date.getDate() + 30 )
+        })
+        equity = form.equity.slice(0, form.terms)
+        updateForm({equity: equity})
+    }
+
     function canSubmitAmortization() {
         return (form.borrowers.length == 1 && form.borrowers[0].first_name.length == 0 ) ||   form.monthly <= 0 || form.price_per_sqm <= 0 || form.borrowers.length == 0 || !form.lot_id || form.terms <= 0 || !form.agent_id
     }
 
     return (
-  
-        <div className="grid grid-cols-6 gap-8">
-            <div className="col-span-3 xl:col-span-3">
+        <form 
+        action={ async() => {
+            setRequesting(true)
+            const {realties, projects, blocks, lots, agents, ...rest } = form
+            let response  =  await saveAmortizationAction( {...rest} )
+            setReply(response)
+            if(response.success) {
+                setForm(initialStateReservation)
+            }
+            setRequesting(false)
+        }
+    }
+        >
+        <div className="grid grid-cols-12 gap-8">
+            <div className="col-span-12">
                 <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                     <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
                         <h3 className="font-medium text-black dark:text-white">
@@ -203,19 +244,7 @@ export default function NewForm(){
                         {
                             !reply?.success && reply?.message && <AlertError message={reply?.message} description={reply?.errors}/>
                         }
-                    <form 
-                        action={ async() => {
-                            setRequesting(true)
-                            const {realties, projects, blocks, lots, agents, ...rest } = form
-                            let response  =  await saveAmortizationAction( {...rest} )
-                            setReply(response)
-                            if(response.success) {
-                                setForm(initialStateReservation)
-                            }
-                            setRequesting(false)
-                        }
-                    }
-                        >
+
 
                         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                             <div className="w-full sm:w-1/1">
@@ -641,7 +670,9 @@ export default function NewForm(){
                                         value={form.down_payment}
                                         onChange={
                                             (e) => {
-                                                updateForm({ [e.target.name]: parseFloat(e.target.value) })
+                                                let equity = form.equity
+                                                equity[0].amount = parseFloat(e.target.value)
+                                                updateForm({ [e.target.name]: parseFloat(e.target.value), equity:[...equity] })
                                             }
                                         }
                                         />
@@ -799,22 +830,93 @@ export default function NewForm(){
                         </div>
                             
 
-                        <div className="mb-4 flex items-center gap-3">
-                            <div className="flex justify-end gap-4.5">
-                                <Link
-                                href="/reservations">
-                                    <NormalButton>
-                                        Cancel
-                                    </NormalButton>
-                                </Link>
-                                <PrimarySaveButton disabled={canSubmitAmortization()}/>
-                            </div>
-                        </div>
-                        </form>
+                       
                     </div>
                 </div>
             </div>
-            <div className="col-span-3 xl:col-span-3">
+
+            <div className="col-span-12 xl:col-span-12">
+                <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+                    <div className="border-b border-stroke px-7 py-4 dark:border-strokedark overflow-hidden">
+                        <div className="float-left flex">
+                            <h3 className="font-medium text-black dark:text-white inline mr-2">
+                                    Equity Builder
+                            </h3>
+                            <span onClick={ (e:any) => {
+                                updateForm({
+                                    equity: [
+                                        ...form.equity,
+                                        {...initialStateAmortizationEquity}
+                                    ]
+                                })
+                            }}>
+                            { SidebarIcon('plus-black', { className : "cursor-pointer"} ) }
+                            </span>
+                        </div>
+                    </div>
+                    <div className="p-7">
+                        <table className="w-full">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Amount</th>
+                                    <th>Due Date</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-center">
+                                {
+                                        form.equity.length > 0 && form.equity.map( (i:any,k:any) => {
+                                                return <tr key={k}>
+                                                    <td>
+                                                        <p> {k+1}</p>
+                                                    </td>
+                                                    <td>
+                                                        <InputTextField
+                                                            id={"equity_amount_"+k}
+                                                            value={form.equity[k].amount}
+                                                            className="w-full rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary max-w-94"
+                                                            />
+                                                    </td>
+                                                    <td>
+                                                        <div className="flex justify-center">
+                                                            <DatePicker
+                                                            id={"equity_date_"+k}
+                                                            dateFormat="MM/dd/yyyy"
+                                                            value={form.schedules[k].due_date ? form.schedules[k].due_date : ""}
+                                                            onChange={(date) => {
+                                                                let s = form.equity
+                                                                s[k].due_date =  (date?.getMonth() ? date?.getMonth() + 1 : "" ) + "/" + date?.getDate() +  "/" + date?.getFullYear()
+                                                                // if(k == 0) {
+                                                                //     adjustEquityDate(form.monthly, date ? date : new Date() )
+                                                                // }
+                                                                updateForm({
+                                                                    equity : s
+                                                                })
+                                                            }} />
+                                                            { k > 0 &&
+                                                            <span className="cursor-pointer" onClick={(e:any) => {
+                                                                let equity = form.equity
+                                                                equity.splice(k,1)
+                                                                updateForm({
+                                                                    equity
+                                                                })
+                                                            }}>
+                                                                {SidebarIcon('delete')}
+                                                            </span>
+                                                            }
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        )
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div className="col-span-12 xl:col-span-12">
                 <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                     <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
                         <h3 className="font-medium text-black dark:text-white">
@@ -828,16 +930,11 @@ export default function NewForm(){
                                     <th>MA#</th>
                                     <th>Amount</th>
                                     <th>Due Date</th>
-                                    {/* <th>Date Paid</th> */}
-                                    {/* <th>Sales Invoice #</th> */}
-                                    {/* <th>Amount Paid</th> */}
-                                    {/* <th>Running Balance</th> */}
                                 </tr>
                             </thead>
                             <tbody className="text-center">
                                 {
                                         form.terms > 0 && form.monthly > 0 && form.schedules.map( (i:any,k:any) => {
-                                            let date = new Date()
                                                 return <tr key={k}>
                                                     <td>
                                                         <p> {k+1}</p>
@@ -847,11 +944,12 @@ export default function NewForm(){
                                                     </td>
                                                     <td>
                                                         <DatePicker
+                                                        id={"equity_date_"+k}
                                                         dateFormat="MM/dd/yyyy"
                                                         value={form.schedules[k].due_date ? form.schedules[k].due_date : ""}
                                                         onChange={(date) => {
                                                             let s = form.schedules
-                                                            s[k].due_date =  date?.getMonth() + "/" + date?.getDate() +  "/" + date?.getFullYear()
+                                                            s[k].due_date =  (date?.getMonth() ? date?.getMonth() + 1 : "" ) + "/" + date?.getDate() +  "/" + date?.getFullYear()
                                                             if(k == 0) {
                                                                 adjustAmortizationDate(form.monthly, date ? date : new Date() )
                                                             }
@@ -869,6 +967,397 @@ export default function NewForm(){
                     </div>
                 </div>
             </div>
+
+            <div className="col-span-12 xl:col-span-12">
+                <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+                    <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
+                        <h3 className="font-medium text-black dark:text-white">
+                            Commission Rating
+                        </h3>
+                    </div>
+                    <div className="p-7">
+                        <table className="w-full">
+                            <thead>
+                                <tr>
+                                    <th className="text-start">Position</th>
+                                    <th className="text-start">Name</th>
+                                    <th className="text-start pl-8">Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr className="w-full item-center">
+                                    <td>
+                                        <label
+                                            htmlFor="comission_team_lead_one"
+                                            className="flex cursor-pointer select-none items-center"
+                                        >
+                                            <div className="relative">
+                                            <input
+                                                type="checkbox"
+                                                id="comission_team_lead_one"
+                                                className="sr-only"
+                                                onChange={() => {
+                                                    setComissionCheck({...comissionCheck, team_lead_one : !comissionCheck.team_lead_one})
+                                                }}
+                                            />
+                                            <div
+                                                className={`mr-4 flex h-5 w-5 items-center justify-center rounded border ${
+                                                    comissionCheck.team_lead_one && "border-primary bg-gray dark:bg-transparent"
+                                                }`}
+                                            >
+                                                <span className={`opacity-0 ${comissionCheck.team_lead_one && "!opacity-100"}`}>
+                                                <svg
+                                                    width="11"
+                                                    height="8"
+                                                    viewBox="0 0 11 8"
+                                                    fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                    d="M10.0915 0.951972L10.0867 0.946075L10.0813 0.940568C9.90076 0.753564 9.61034 0.753146 9.42927 0.939309L4.16201 6.22962L1.58507 3.63469C1.40401 3.44841 1.11351 3.44879 0.932892 3.63584C0.755703 3.81933 0.755703 4.10875 0.932892 4.29224L0.932878 4.29225L0.934851 4.29424L3.58046 6.95832C3.73676 7.11955 3.94983 7.2 4.1473 7.2C4.36196 7.2 4.55963 7.11773 4.71406 6.9584L10.0468 1.60234C10.2436 1.4199 10.2421 1.1339 10.0915 0.951972ZM4.2327 6.30081L4.2317 6.2998C4.23206 6.30015 4.23237 6.30049 4.23269 6.30082L4.2327 6.30081Z"
+                                                    fill="#3056D3"
+                                                    stroke="#3056D3"
+                                                    strokeWidth="0.4"
+                                                    ></path>
+                                                </svg>
+                                                </span>
+                                            </div>
+                                            </div>
+                                            Team Lead One
+                                        </label>
+                                    </td>
+                                    <td>
+                                    <AsyncSelect
+                                        id="comission_team_lead_one_user"
+                                        loadOptions={asyncProjectOptions}
+                                        isLoading={projectRequesting}
+                                        defaultOptions={form.projects}
+                                        className="border-b z-999"
+                                        styles={{
+                                            control: (baseStyles, state) => ({
+                                                ...baseStyles,
+                                                border: 'none'
+                                            })
+                                        }}
+                                        onChange={
+                                                ({data, label , value} : any, b : any) => {
+                                                    updateForm({ project_id: value})
+                                                    setLabels({ ...labels, project_label : label})
+                                                }
+                                            }
+                                        />
+                                    </td>
+                                    <td className="pl-8">
+                                        <InputTextField
+                                            id="comission_team_lead_one_percent"
+                                            type="number"
+                                            max={10}
+                                            className="rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary w-90"
+                                        />
+                                    </td>
+                                </tr>
+                                <tr className="w-full item-center">
+                                    <td>
+                                        <label
+                                            htmlFor="comission_team_lead_two"
+                                            className="flex cursor-pointer select-none items-center"
+                                        >
+                                            <div className="relative">
+                                            <input
+                                                type="checkbox"
+                                                id="comission_team_lead_two"
+                                                className="sr-only"
+                                                onChange={() => {
+                                                    setComissionCheck({...comissionCheck, team_lead_two : !comissionCheck.team_lead_two})
+                                                }}
+                                            />
+                                            <div
+                                                className={`mr-4 flex h-5 w-5 items-center justify-center rounded border ${
+                                                    comissionCheck.team_lead_two && "border-primary bg-gray dark:bg-transparent"
+                                                }`}
+                                            >
+                                                <span className={`opacity-0 ${comissionCheck.team_lead_two && "!opacity-100"}`}>
+                                                <svg
+                                                    width="11"
+                                                    height="8"
+                                                    viewBox="0 0 11 8"
+                                                    fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                    d="M10.0915 0.951972L10.0867 0.946075L10.0813 0.940568C9.90076 0.753564 9.61034 0.753146 9.42927 0.939309L4.16201 6.22962L1.58507 3.63469C1.40401 3.44841 1.11351 3.44879 0.932892 3.63584C0.755703 3.81933 0.755703 4.10875 0.932892 4.29224L0.932878 4.29225L0.934851 4.29424L3.58046 6.95832C3.73676 7.11955 3.94983 7.2 4.1473 7.2C4.36196 7.2 4.55963 7.11773 4.71406 6.9584L10.0468 1.60234C10.2436 1.4199 10.2421 1.1339 10.0915 0.951972ZM4.2327 6.30081L4.2317 6.2998C4.23206 6.30015 4.23237 6.30049 4.23269 6.30082L4.2327 6.30081Z"
+                                                    fill="#3056D3"
+                                                    stroke="#3056D3"
+                                                    strokeWidth="0.4"
+                                                    ></path>
+                                                </svg>
+                                                </span>
+                                            </div>
+                                            </div>
+                                            Team Lead Two
+                                        </label>
+                                    </td>
+                                    <td>
+                                    <AsyncSelect
+                                        id="comission_team_lead_two_user"
+                                        loadOptions={asyncProjectOptions}
+                                        isLoading={projectRequesting}
+                                        defaultOptions={form.projects}
+                                        className="border-b z-999"
+                                        styles={{
+                                            control: (baseStyles, state) => ({
+                                                ...baseStyles,
+                                                border: 'none'
+                                            })
+                                        }}
+                                        onChange={
+                                                ({data, label , value} : any, b : any) => {
+                                                    updateForm({ project_id: value})
+                                                    setLabels({ ...labels, project_label : label})
+                                                }
+                                            }
+                                        />
+                                    </td>
+                                    <td className="pl-8">
+                                        <InputTextField
+                                        id="comission_team_lead_two_percent"
+                                        type="number"
+                                        max={10}
+                                        className="rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary w-90"
+                                        />
+                                    </td>
+                                </tr>
+                                <tr className="w-full item-center">
+                                    <td>
+                                        <label
+                                            htmlFor="comission_realty"
+                                            className="flex cursor-pointer select-none items-center"
+                                        >
+                                            <div className="relative">
+                                            <input
+                                                type="checkbox"
+                                                id="comission_realty"
+                                                className="sr-only"
+                                                onChange={() => {
+                                                    setComissionCheck({...comissionCheck, team_lead_one : !comissionCheck.team_lead_one})
+                                                }}
+                                            />
+                                            <div
+                                                className={`mr-4 flex h-5 w-5 items-center justify-center rounded border ${
+                                                    comissionCheck.team_lead_one && "border-primary bg-gray dark:bg-transparent"
+                                                }`}
+                                            >
+                                                <span className={`opacity-0 ${comissionCheck.team_lead_one && "!opacity-100"}`}>
+                                                <svg
+                                                    width="11"
+                                                    height="8"
+                                                    viewBox="0 0 11 8"
+                                                    fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                    d="M10.0915 0.951972L10.0867 0.946075L10.0813 0.940568C9.90076 0.753564 9.61034 0.753146 9.42927 0.939309L4.16201 6.22962L1.58507 3.63469C1.40401 3.44841 1.11351 3.44879 0.932892 3.63584C0.755703 3.81933 0.755703 4.10875 0.932892 4.29224L0.932878 4.29225L0.934851 4.29424L3.58046 6.95832C3.73676 7.11955 3.94983 7.2 4.1473 7.2C4.36196 7.2 4.55963 7.11773 4.71406 6.9584L10.0468 1.60234C10.2436 1.4199 10.2421 1.1339 10.0915 0.951972ZM4.2327 6.30081L4.2317 6.2998C4.23206 6.30015 4.23237 6.30049 4.23269 6.30082L4.2327 6.30081Z"
+                                                    fill="#3056D3"
+                                                    stroke="#3056D3"
+                                                    strokeWidth="0.4"
+                                                    ></path>
+                                                </svg>
+                                                </span>
+                                            </div>
+                                            </div>
+                                            Realty
+                                        </label>
+                                    </td>
+                                    <td>
+                                    <AsyncSelect
+                                        id="comission_realty_user"
+                                        loadOptions={asyncProjectOptions}
+                                        isLoading={projectRequesting}
+                                        defaultOptions={form.projects}
+                                        className="border-b z-999"
+                                        styles={{
+                                            control: (baseStyles, state) => ({
+                                                ...baseStyles,
+                                                border: 'none'
+                                            })
+                                        }}
+                                        onChange={
+                                                ({data, label , value} : any, b : any) => {
+                                                    updateForm({ project_id: value})
+                                                    setLabels({ ...labels, project_label : label})
+                                                }
+                                            }
+                                        />
+                                    </td>
+                                    <td className="pl-8">
+                                    <InputTextField
+                                        id="comission_realty_percent"
+                                        type="number"
+                                        max={10}
+                                        className="rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary w-90"
+                                        />
+                                    </td>
+                                </tr>
+                                <tr className="w-full item-center">
+                                    <td>
+                                        <label
+                                            htmlFor="comission_agent_one"
+                                            className="flex cursor-pointer select-none items-center"
+                                        >
+                                            <div className="relative">
+                                            <input
+                                                type="checkbox"
+                                                id="comission_agent_one"
+                                                className="sr-only"
+                                                onChange={() => {
+                                                    setComissionCheck({...comissionCheck, team_lead_one : !comissionCheck.team_lead_one})
+                                                }}
+                                            />
+                                            <div
+                                                className={`mr-4 flex h-5 w-5 items-center justify-center rounded border ${
+                                                    comissionCheck.team_lead_one && "border-primary bg-gray dark:bg-transparent"
+                                                }`}
+                                            >
+                                                <span className={`opacity-0 ${comissionCheck.team_lead_one && "!opacity-100"}`}>
+                                                <svg
+                                                    width="11"
+                                                    height="8"
+                                                    viewBox="0 0 11 8"
+                                                    fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                    d="M10.0915 0.951972L10.0867 0.946075L10.0813 0.940568C9.90076 0.753564 9.61034 0.753146 9.42927 0.939309L4.16201 6.22962L1.58507 3.63469C1.40401 3.44841 1.11351 3.44879 0.932892 3.63584C0.755703 3.81933 0.755703 4.10875 0.932892 4.29224L0.932878 4.29225L0.934851 4.29424L3.58046 6.95832C3.73676 7.11955 3.94983 7.2 4.1473 7.2C4.36196 7.2 4.55963 7.11773 4.71406 6.9584L10.0468 1.60234C10.2436 1.4199 10.2421 1.1339 10.0915 0.951972ZM4.2327 6.30081L4.2317 6.2998C4.23206 6.30015 4.23237 6.30049 4.23269 6.30082L4.2327 6.30081Z"
+                                                    fill="#3056D3"
+                                                    stroke="#3056D3"
+                                                    strokeWidth="0.4"
+                                                    ></path>
+                                                </svg>
+                                                </span>
+                                            </div>
+                                            </div>
+                                            Agent One
+                                        </label>
+                                    </td>
+                                    <td>
+                                    <AsyncSelect
+                                        id="comission_agent_one_user"
+                                        loadOptions={asyncProjectOptions}
+                                        isLoading={projectRequesting}
+                                        defaultOptions={form.projects}
+                                        className="border-b z-999"
+                                        styles={{
+                                            control: (baseStyles, state) => ({
+                                                ...baseStyles,
+                                                border: 'none'
+                                            })
+                                        }}
+                                        onChange={
+                                                ({data, label , value} : any, b : any) => {
+                                                    updateForm({ project_id: value})
+                                                    setLabels({ ...labels, project_label : label})
+                                                }
+                                            }
+                                        />
+                                    </td>
+                                    <td className="pl-8">
+                                    <InputTextField
+                                        id="comission_agent_one_percent"
+                                        type="number"
+                                        max={10}
+                                        className="rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary w-90"
+                                        />
+                                    </td>
+                                </tr>
+                                <tr className="w-full item-center">
+                                    <td>
+                                        <label
+                                            htmlFor="commission_agent_two"
+                                            className="flex cursor-pointer select-none items-center"
+                                        >
+                                            <div className="relative">
+                                            <input
+                                                type="checkbox"
+                                                id="commission_agent_two"
+                                                className="sr-only"
+                                                onChange={() => {
+                                                    setComissionCheck({...comissionCheck, team_lead_one : !comissionCheck.team_lead_one})
+                                                }}
+                                            />
+                                            <div
+                                                className={`mr-4 flex h-5 w-5 items-center justify-center rounded border ${
+                                                    comissionCheck.team_lead_one && "border-primary bg-gray dark:bg-transparent"
+                                                }`}
+                                            >
+                                                <span className={`opacity-0 ${comissionCheck.team_lead_one && "!opacity-100"}`}>
+                                                <svg
+                                                    width="11"
+                                                    height="8"
+                                                    viewBox="0 0 11 8"
+                                                    fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                    d="M10.0915 0.951972L10.0867 0.946075L10.0813 0.940568C9.90076 0.753564 9.61034 0.753146 9.42927 0.939309L4.16201 6.22962L1.58507 3.63469C1.40401 3.44841 1.11351 3.44879 0.932892 3.63584C0.755703 3.81933 0.755703 4.10875 0.932892 4.29224L0.932878 4.29225L0.934851 4.29424L3.58046 6.95832C3.73676 7.11955 3.94983 7.2 4.1473 7.2C4.36196 7.2 4.55963 7.11773 4.71406 6.9584L10.0468 1.60234C10.2436 1.4199 10.2421 1.1339 10.0915 0.951972ZM4.2327 6.30081L4.2317 6.2998C4.23206 6.30015 4.23237 6.30049 4.23269 6.30082L4.2327 6.30081Z"
+                                                    fill="#3056D3"
+                                                    stroke="#3056D3"
+                                                    strokeWidth="0.4"
+                                                    ></path>
+                                                </svg>
+                                                </span>
+                                            </div>
+                                            </div>
+                                            Agent Two
+                                        </label>
+                                    </td>
+                                    <td>
+                                    <AsyncSelect
+                                        id="commission_agent_two_user"
+                                        loadOptions={asyncProjectOptions}
+                                        isLoading={projectRequesting}
+                                        defaultOptions={form.projects}
+                                        className="border-b z-999"
+                                        styles={{
+                                            control: (baseStyles, state) => ({
+                                                ...baseStyles,
+                                                border: 'none'
+                                            })
+                                        }}
+                                        onChange={
+                                                ({data, label , value} : any, b : any) => {
+                                                    updateForm({ project_id: value})
+                                                    setLabels({ ...labels, project_label : label})
+                                                }
+                                            }
+                                        />
+                                    </td>
+                                    <td className="pl-8">
+                                    <InputTextField
+                                        id="commission_agent_two_percent"
+                                        type="number"
+                                        max={10}
+                                        className="rounded border-b border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary w-90"
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div className="mb-4 flex items-center gap-3">
+                            <div className="flex justify-end gap-4.5">
+                                <Link
+                                href="/reservations">
+                                    <NormalButton>
+                                        Cancel
+                                    </NormalButton>
+                                </Link>
+                                <PrimarySaveButton disabled={canSubmitAmortization()}/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
+        </form>
       );
 };
