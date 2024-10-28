@@ -1,3 +1,4 @@
+import { initialStateLot } from "@/actions/state";
 import { createContext, useContext } from "react";
 
 const initialBlock = {
@@ -8,23 +9,9 @@ const initialBlock = {
     _id: "",
     active: false
 }
-const initialLot = {
-    id:"",
-    _id:"",
-    block_id:"",
-    agent_id:"",
-    projectID:"",
-    name:"",
-    area:0,
-    price_per_sqm: 0,
-    status: "available",
-    active: false,
-    agentName: "",
-    remark: "regular"
-}
 const initialBlocks = {
     currentBlock:initialBlock,
-    currentLot: initialLot,
+    currentLot: initialStateLot,
     projectID: "",
     blocks:[]
 }
@@ -44,4 +31,4 @@ function useBlocksDispatchContext() {
     return dispatch
 }
 
-export {initialBlocks, initialLot, BlocksContext, BlocksDispatchContext, useBlocks, useBlocksDispatchContext }
+export {initialBlocks, initialStateLot, BlocksContext, BlocksDispatchContext, useBlocks, useBlocksDispatchContext }

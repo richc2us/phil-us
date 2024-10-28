@@ -1,5 +1,4 @@
 "use client"
-import TabBlock from "./(tab-blocks)/TabBlock";
 import TabInfo from "./(tab-details)/TabInfo";
 import TabMedia from "./(tab-media)/TabMedia";
 import {Tab, TabDetail, TabDetailContainer, TabItemContainer} from "@/components/Tabs/index";
@@ -8,7 +7,7 @@ import TabPost from "./(tab-posts)/TabPost";
 import TabDocuments from "./(tab-documents)/TabDocuments";
 import { TabOverview } from "./(tab-overview)/TabOverview";
 import { IDContextProvider } from "@/context/IDContextProvider";
-import TabBlock2 from "./(tab-blocks2)/TabBlock2";
+import TabBlock from "./(tab-blocks)/TabBlock";
 
 
 export default function PageClient({projectID} : { projectID : string}) {
@@ -43,7 +42,7 @@ return (<div className="p-4">
                         </TabDetail> */}
 
                         <TabDetail index={2}>
-                            <TabBlock2/>
+                            <TabBlock/>
                         </TabDetail>
 
                         <TabDetail index={3}>

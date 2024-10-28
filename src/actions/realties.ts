@@ -7,7 +7,7 @@ import { ServerActionResponse } from "@/types/server-action-reply";
 export const getRealties = async() => {
     await dbConnect()
     revalidatePath('/')
-    return await Realty.find({})
+    return await Realty.find()
 }
 
 export const getRealty = async(id: string) => {

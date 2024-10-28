@@ -1,5 +1,5 @@
 import { DEFAULT_COMPANY } from "@/actions/const";
-import mongoose, { Schema, Document, SchemaTypeOptions } from "mongoose"
+import mongoose, { Schema, Document } from "mongoose"
 
 
 export interface Amortization extends Document {
@@ -21,6 +21,10 @@ export interface Amortization extends Document {
     lot_condition: String,
     balance:Number,
     monthly:Number,
+    equityMonthly:Number,
+    commission_sharing: [],
+    overall_commission_percent?: Number,
+    overall_commission_amount?: Number,
     terms:Number,
     years: Number,
     active?: Boolean
@@ -45,6 +49,10 @@ const amortSchema = new Schema<Amortization>({
     lot_condition: {type: String},
     balance: {type: Number},
     monthly: {type: Number},
+    equityMonthly: {type: Number},
+    commission_sharing: [{type: {} }],
+    overall_commission_percent:  {type: Number} ,
+    overall_commission_amount:  {type: Number},
     terms: {type: Number},
     years: {type: Number},
     active: {type: Boolean, default: true}
@@ -57,5 +65,5 @@ amortSchema.virtual('borrowers',{
     localField:"_id",
     foreignField:"amortization_id"
 })
-// amortSchema.index({'email' : 'text','first_name': 'text','middle_name' : 'text', 'last_name' : 'text'})
+
 export default mongoose.models?.Amortization || mongoose.model<Amortization>("Amortization",amortSchema)

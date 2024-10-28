@@ -10,6 +10,7 @@ export interface Lot extends Document {
     block_id : Schema.Types.ObjectId,
     buyer_id?: Schema.Types.ObjectId,
     agent_id?: Schema.Types.ObjectId,
+    amortization_id?: Schema.Types.ObjectId,
     transfer_by?: Schema.Types.ObjectId,
     legend?: Schema.Types.ObjectId,
     name: string,
@@ -42,6 +43,7 @@ const lotSchema = new Schema<Lot>({
     block_id : { type : Schema.Types.ObjectId, ref: "Block",  required: true },
     buyer_id : { type : Schema.Types.ObjectId, ref: "User", default:null },
     agent_id : { type : Schema.Types.ObjectId, ref: "User", default:null },
+    amortization_id : { type : Schema.Types.ObjectId, ref: "Amortization", default:null },
     transfer_by: { type : Schema.Types.ObjectId, ref: "User", default:null },
     legend: {type: Schema.Types.ObjectId, ref : "ProjectLegend"},
     name : {

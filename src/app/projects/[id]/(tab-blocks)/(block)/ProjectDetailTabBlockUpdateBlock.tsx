@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext";
 import { updateBlockAction } from "@/actions/blocks";
 import ActivateButton from "./ActivateButton";
+import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton";
 
 export default function ProjectDetailTabBlockUpdateBlock() {
     const {currentBlock} = useBlocks()
@@ -10,7 +11,7 @@ export default function ProjectDetailTabBlockUpdateBlock() {
 
     return (
         <form
-            className="col-span-4 xl:col-span-2"
+            className="col-span-4 xl:col-span-2  fixed w-[25%]"
             action={ async(e) => {
                     await updateBlockAction(block)
                     dispatch({type:"refresh"})
@@ -77,17 +78,20 @@ export default function ProjectDetailTabBlockUpdateBlock() {
                 
                 <div className="flex justify-end gap-4.5">
                     <ActivateButton/>
-                    <button
-                        className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
-                        type="submit"
+                    <PrimarySaveButton
                         onClick={
                             async() => {
                                 await dispatch({type:"setCurrentBlock", currentBlock: { ...currentBlock, ...block} })
                             }
                         }
+                    />
+                    {/* <button
+                        className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
+                        type="submit"
+                        onClick=
                         >
                         Update
-                    </button>
+                    </button> */}
                 </div>
 
                 </div>

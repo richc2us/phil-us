@@ -46,13 +46,10 @@ const realSchema = new Schema<Realty>({
 
 }, {
     timestamps : true,
-    collection:"realties"
+    collection:"realties",
+    toJSON: {
+        virtuals: true
+    }
 })
-
-// blockSchema.virtual('blockLots',{
-//     ref:"Lot",
-//     localField:"_id",
-//     foreignField:"block_id"
-// })
 
 export default mongoose.models?.Realty || mongoose.model<Realty>("Realty", realSchema )

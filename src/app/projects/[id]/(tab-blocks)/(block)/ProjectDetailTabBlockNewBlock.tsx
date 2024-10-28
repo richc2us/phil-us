@@ -3,6 +3,7 @@
 import { saveBlockAction } from "@/actions/blocks"
 import { useState } from "react"
 import { useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext"
+import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton"
 
 export default function ProjectDetailTabBlockNewBlock() {
 
@@ -22,7 +23,7 @@ export default function ProjectDetailTabBlockNewBlock() {
 
     return (
         <form
-        className="col-span-4 xl:col-span-2"
+        className="col-span-4 xl:col-span-2  fixed w-[25%]"
         action={ async()  => {
                 await saveBlockAction(block)
                 await dispatch({type:'refresh'})
@@ -84,12 +85,13 @@ export default function ProjectDetailTabBlockNewBlock() {
                     </div>
 
                     <div className="flex justify-end gap-4.5">
-                        <button
+                        <PrimarySaveButton/>
+                        {/* <button
                             className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
                             type="submit"
                             >
                             Save
-                        </button>
+                        </button> */}
                     </div>
 
                 </div>

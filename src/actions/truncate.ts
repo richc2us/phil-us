@@ -12,6 +12,7 @@ import Block from "@/models/blocks"
 import Lot from "@/models/lots"
 import Realty from "@/models/realties"
 import User from "@/models/users"
+import EquitySchedule from "@/models/equity_schedules"
 
 async function isAdmin(){
     let user = await auth()
@@ -41,6 +42,7 @@ export const truncateAmortizations = async() => {
         await Amortization.deleteMany({})
         await AmortizationBorrower.deleteMany({})
         await AmortizationSchedule.deleteMany({})
+        await EquitySchedule.deleteMany({})
     }
 }
 

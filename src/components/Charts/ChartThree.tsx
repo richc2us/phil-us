@@ -1,6 +1,7 @@
 import { ApexOptions } from "apexcharts";
 import React from "react";
 import ReactApexChart from "react-apexcharts";
+import { formatDecimal } from "../common/functions";
 
 // interface ChartThreeState {
 //   series: number[];
@@ -109,7 +110,7 @@ const ChartThree = ( {series = [1,1,3,5]} : {series?: number[]} ) => {
               <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-sold"></span>
               <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
                 <span> Sold </span>
-                <span> {series[0] > 0 ? ( (series[0]/series[3]) * 100 ) : 0 }%</span>
+                <span> {series[0] > 0 ? formatDecimal( (series[0]/series[3]) * 100, false ) : 0 }%</span>
               </p>
             </div>
           </div>
@@ -118,7 +119,7 @@ const ChartThree = ( {series = [1,1,3,5]} : {series?: number[]} ) => {
               <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-onhold"></span>
               <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
                 <span> On Hold </span>
-                <span> {series[1] > 0 ? ( (series[1]/series[3]) * 100 ) : 0 }%</span>
+                <span> {series[1] > 0 ? formatDecimal( (series[1]/series[3]) * 100, false ) : 0 }%</span>
               </p>
             </div>
           </div>
@@ -127,7 +128,7 @@ const ChartThree = ( {series = [1,1,3,5]} : {series?: number[]} ) => {
               <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-gray"></span>
               <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
                 <span> Available </span>
-                <span> {series[2] > 0 ? ( (series[2]/series[3]) * 100 ) : 0 }%</span>
+                <span> {series[2] > 0 ? formatDecimal( (series[2]/series[3]) * 100, false ) : 0 }%</span>
               </p>
             </div>
           </div>

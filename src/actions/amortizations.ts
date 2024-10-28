@@ -10,6 +10,8 @@ import Block from "@/models/blocks";
 import Lot from "@/models/lots";
 import Realty from "@/models/realties";
 import User from "@/models/users";
+import EquitySchedule from "@/models/equity_schedules";
+import { Session } from "inspector/promises";
 
 export const getAmortizations = async() => {
     await dbConnect()
@@ -120,11 +122,15 @@ export async function updateAmortizationAction(form: any) {
 }
 
 export async function saveAmortizationAction(state: any) {
-    await dbConnect()
+    const db = await dbConnect()
+    const session = await db.startSession()
+    session.startTransaction()
+
     try {
         const newDocument = await Amortization.create( {...state } )
         if(newDocument) {
-            await Lot.updateOne({_id: state.lot_id},{status: "sold"})
+            await Lot.updateOne({_id: state.lot_id},{status: "sold", price_per_sqm: state.price_per_sqm, amortization_id: newDocument._id })
+
             state.borrowers.map( async(borrower:any) => {
                 const {_id ,...rest} = borrower
                 await AmortizationBorrower.create({
@@ -140,11 +146,21 @@ export async function saveAmortizationAction(state: any) {
                     amortization_id : newDocument._id,
                 })
             })
+
+            state.equity.map( async(e:any) => {
+                await EquitySchedule.create({
+                    ...e,
+                    amortization_id : newDocument._id,
+                })
+            })
+            session.commitTransaction()
+            session.endSession()
         }
 
         revalidatePath("/")
         return {success: newDocument ? true : false, message: newDocument ? 'Amortization created' : "Error", document : {id: newDocument._id.toString()}}
     } catch (e: any) {
+        session.abortTransaction()
         let errors = []
         for(let field in e.errors) {
             errors.push(e.errors[field].message)
@@ -153,6 +169,21 @@ export async function saveAmortizationAction(state: any) {
         return {success: false, message: 'Error creating', document: null, errors : errors}
     }
 }
+
+
+// export const cancelAmortization = async(id: any) => {
+//     await dbConnect()
+//     try {
+//         await Lot.updateOne({_id: id}, {amortization_id: null,status:"available"})
+//     } catch (e:any) {
+//         let errors = []
+//         console.dir(e);
+//         for(let field in e.errors) {
+//             errors.push(e.errors[field].message)
+//         }
+//         return {success: false, message: 'Error in deleting', document: null, errors: errors}
+//     }
+// }
 
 export const deleteAmortizationAction = async(id: any, isActive:boolean = false) : Promise <ServerActionResponse> => {
     await dbConnect()

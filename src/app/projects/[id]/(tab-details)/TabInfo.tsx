@@ -340,10 +340,12 @@ export default function TabInfo() {
 
                                                     <InputTextField
                                                         type="number"
+                                                        step="0.01"
                                                         name="total_area"
                                                         id="total_area"
                                                         placeholder="Total Area"
                                                         autoComplete="off"
+                                                        disabled={!form.edit}
                                                         min="1"
                                                         value={form.total_area}
                                                         required

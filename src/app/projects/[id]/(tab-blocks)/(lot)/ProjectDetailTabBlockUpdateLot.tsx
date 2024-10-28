@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
-import { initialLot, useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext"
+import { initialStateLot, useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext"
 import { updateLotAction } from "@/actions/blocks";
 import ActivateButton from "./ActivateButton";
+import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton";
+import NormalButton from "@/components/FormElements/Buttons/NormalButton";
+import Link from "next/link";
+import { cancelAmortization } from "@/actions/amortizations";
 
 export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) {
     const { blocks, currentLot, projectID } = useBlocks()
@@ -21,7 +25,7 @@ export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) 
 
     return (
         <form 
-        className="col-span-4 xl:col-span-2"
+        className="col-span-4 xl:col-span-2 fixed w-[25%]"
         action={
             async() => {
                 await updateLotAction({...lot,
@@ -29,7 +33,7 @@ export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) 
                     block_id: selectedOption,
                     id: lot._id
                 })
-                setLot(initialLot)
+                setLot(initialStateLot)
                 dispatch({type:""})
             }
         }>
@@ -118,7 +122,7 @@ export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) 
                     </div>
                 </div>
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                    <div className="w-full sm:w-1/1">
+                    <div className="w-full sm:w-1/2">
                         <label
                             className="mb-3 block text-sm font-medium text-black dark:text-white"
                             htmlFor="lot_name"
@@ -143,10 +147,7 @@ export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) 
                             />
                         </div>
                     </div>
-                </div>
-                
-                <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                    <div className="w-full sm:w-1/1">
+                    <div className="w-full sm:w-1/2">
                         <label
                             className="mb-3 block text-sm font-medium text-black dark:text-white"
                             htmlFor="lot_area"
@@ -154,28 +155,27 @@ export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) 
                             Lot Area
                         </label>
                         <div className="relative">
-                            {/* <span className="absolute left-4.5 top-4">
-                            </span> */}
                             <input
                             className="w-full rounded border border-stroke py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="number"
                             min="10"
+                            step="0.01"
                             name="lot_area"
                             id="lot_area"
                             placeholder="Lot Area sqm"
                             autoComplete="off"
                             value={lot.area}
                             onChange={(e) => {
-                                setLot({...lot, area: parseInt( e.target.value )})
+                                setLot({...lot, area: parseFloat( e.target.value )})
                             }}
                             required
                             />
                         </div>
                     </div>
                 </div>
-
+                
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                    <div className="w-full sm:w-1/1">
+                    <div className="w-full sm:w-1/2">
                         <label
                             className="mb-3 block text-sm font-medium text-black dark:text-white"
                             htmlFor="price_per_sqm"
@@ -183,25 +183,67 @@ export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) 
                             Price Per sqm
                         </label>
                         <div className="relative">
-                            {/* <span className="absolute left-4.5 top-4">
-                            </span> */}
                             <input
                             className="w-full rounded border border-stroke py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="number"
-                            min="10"
                             name="price_per_sqm"
                             id="price_per_sqm"
-                            placeholder="Lot Area sqm"
+                            step="0.01"
+                            placeholder="Price Per sqm"
                             autoComplete="off"
                             value={lot.price_per_sqm}
                             onChange={(e) => {
-                                setLot({...lot, price_per_sqm: parseInt( e.target.value )})
+                                setLot({...lot, price_per_sqm: parseFloat( e.target.value )})
+                            }}
+                            required
+                            />
+                        </div>
+                    </div>
+                    <div className="w-full sm:w-1/2">
+                        <label
+                            className="mb-3 block text-sm font-medium text-black dark:text-white"
+                            htmlFor="remark"
+                        >
+                            Remark
+                        </label>
+                        <div className="relative">
+                            <input
+                            className="w-full rounded border border-stroke py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            type="text"
+                            name="remark"
+                            id="remark"
+                            placeholder="Remark"
+                            autoComplete="off"
+                            value={lot.remark}
+                            onChange={(e) => {
+                                setLot({...lot, remark: e.target.value.toUpperCase() })
                             }}
                             required
                             />
                         </div>
                     </div>
                 </div>
+                {lot.status == "sold" && lot.amortization_id?.length > 0  && <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                    <div className="w-full sm:w-1/1">
+                            <NormalButton className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white w-full">
+                                <Link href={"/amortizations/" + lot.amortization_id}>View Amortization</Link>
+                            </NormalButton>
+                    </div>
+                </div>}
+
+                {/* {lot.status == "sold" && lot.amortization_id == null && <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                    <div className="w-full sm:w-1/1">
+                        <form action={
+                            async() => {
+                                await cancelAmortization(lot._id)
+                            }
+                        }>
+                            <PrimarySaveButton className="flex justify-center rounded border border-stroke px-6 py-1 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white w-full">
+                                Cancel Amortization
+                            </PrimarySaveButton>
+                        </form>
+                    </div>
+                </div>} */}
 
                 <div className="flex justify-end gap-4.5">
                     {
@@ -229,20 +271,12 @@ export default function ProjectDetailTabBlockUpdateLot({onHoldCallback} : any ) 
                             Cancel Hold
                         </button>
                     }
-                    
                     <ActivateButton/>
-                    <button
-                        className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
-                        type="submit"
-                        >
-                        Update Lot
-                    </button>
+                    <PrimarySaveButton/>
                 </div>
                 </div>
             </div>
         </div>
-
-            
         </form>
     )
 }

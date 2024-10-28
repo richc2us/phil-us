@@ -1,6 +1,6 @@
 "use client"
 
-import { truncateCompanies, truncateProject, truncateRealties, truncateUsers } from "@/actions/truncate"
+import { truncateAmortizations, truncateCompanies, truncateProject, truncateRealties, truncateUsers } from "@/actions/truncate"
 import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton"
 
 export default function() {
@@ -58,6 +58,18 @@ export default function() {
                     <td className="text-center">
                         <form className="inline-block" action={
                             async() => await truncateUsers()
+                        }>
+                            <PrimarySaveButton>Truncate</PrimarySaveButton>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td className="text-center">
+                        Amortizations
+                    </td>
+                    <td className="text-center">
+                        <form className="inline-block" action={
+                        async() => await truncateAmortizations()
                         }>
                             <PrimarySaveButton>Truncate</PrimarySaveButton>
                         </form>

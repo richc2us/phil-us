@@ -112,6 +112,13 @@ export const initialStateAmortizationEquity = {
     paid: false
 }
 
+export const initialStateAmortizationCommissionSharing = {
+    entity_id: "",
+    type: "",
+    percent: 0,
+    active: true
+}
+
 export const initialStateReservation = {
     borrowers:[
         {...initialStateBuyer}
@@ -122,11 +129,13 @@ export const initialStateReservation = {
     schedules : [
         {...initialStateAmortizationSchedule}
     ],
-    comissions: {
-        teamleads:[{...initialStateUser}],
-        agents: [{...initialStateUser}],
-        realty: "",
-    },
+    commission_sharing: [
+        {...initialStateAmortizationCommissionSharing, percent: 2},
+        {...initialStateAmortizationCommissionSharing},
+        {...initialStateAmortizationCommissionSharing, percent: 8},
+        {...initialStateAmortizationCommissionSharing},
+        {...initialStateAmortizationCommissionSharing}
+    ],
     project_id : null,
     block_id: null,
     lot_id : null,
@@ -147,9 +156,12 @@ export const initialStateReservation = {
     lot_condition:"",
     balance:0,
     monthly:0,
-    terms:12,
-    years: 1,
-    active: 1
+    equityMonthly: 0,
+    overall_commission_percent: 0,
+    overall_commission_amount: 0,
+    terms:60,
+    years: 5,
+    active: true
 }
 
 export const initialAcceptablePayment = {
@@ -172,11 +184,18 @@ export const dataTableOptions = {
 }
 
 export const initialStateLot = {
+    id:"",
+    _id:"",
     name: "",
     area: 0,
     project_id:"",
     block_id: "",
     price_per_sqm:0,
     status:"available",
-    remark: "regular",
+    remark: "REGULAR LOT",
+    amortization_id: "",
+    projectID:"",
+    active: true,
+    agentName: "",
+    agent_id: ""
 }

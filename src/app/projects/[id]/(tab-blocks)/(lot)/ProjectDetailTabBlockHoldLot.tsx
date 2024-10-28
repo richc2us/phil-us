@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { initialLot, useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext"
+import { initialStateLot, useBlocks, useBlocksDispatchContext } from "../../../../../context/BlocksContext"
 import { onHoldLotAction } from "@/actions/blocks";
 import { SidebarIcon } from "@/components/common/functions";
 import Select from 'react-select';
 import { searchUsers } from "@/actions/search";
 import InputTextLabel from "@/components/FormElements/Fields/InputTextLabel";
+import PrimarySaveButton from "@/components/FormElements/Buttons/PrimarySaveButton";
 
 
 export default function ProjectDetailTabBlockHoldLot() {
@@ -38,8 +39,8 @@ export default function ProjectDetailTabBlockHoldLot() {
 
 
     return (
-        <form  
-        className="col-span-4 xl:col-span-2"
+        <form
+        className="col-span-4 xl:col-span-2 fixed w-[25%]"
         action={
             async() => {
                 await onHoldLotAction({...lot,
@@ -49,7 +50,7 @@ export default function ProjectDetailTabBlockHoldLot() {
                     onhold: lot.status == "available",
                     agent_id: lot.agent_id
                 })
-                setLot(initialLot)
+                setLot(initialStateLot)
                 dispatch({type:""})
             }
         }>
@@ -112,8 +113,6 @@ export default function ProjectDetailTabBlockHoldLot() {
                             Lot Name
                         </label>
                         <div className="relative">
-                            {/* <span className="absolute left-4.5 top-4">
-                            </span> */}
                             <input
                             className="w-full rounded border border-stroke py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="text"
@@ -122,16 +121,11 @@ export default function ProjectDetailTabBlockHoldLot() {
                             placeholder="Lot Name"
                             autoComplete="off"
                             value={lot.name}
-                            onChange={(e) => {
-                                setLot({...lot, name: e.target.value})
-                            }}
-                            required
                             disabled={true}
                             />
                         </div>
                     </div>
                 </div>
-                
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/2">
                         <label
@@ -141,8 +135,6 @@ export default function ProjectDetailTabBlockHoldLot() {
                             Lot Area
                         </label>
                         <div className="relative">
-                            {/* <span className="absolute left-4.5 top-4">
-                            </span> */}
                             <input
                             className="w-full rounded border border-stroke py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="number"
@@ -152,10 +144,6 @@ export default function ProjectDetailTabBlockHoldLot() {
                             placeholder="Lot Area sqm"
                             autoComplete="off"
                             value={lot.area}
-                            onChange={(e) => {
-                                setLot({...lot, area: parseInt( e.target.value )})
-                            }}
-                            required
                             disabled={true}
                             />
                         </div>
@@ -168,21 +156,15 @@ export default function ProjectDetailTabBlockHoldLot() {
                             Price Per sqm
                         </label>
                         <div className="relative">
-                            {/* <span className="absolute left-4.5 top-4">
-                            </span> */}
                             <input
                             className="w-full rounded border border-stroke py-3 pl-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="number"
                             min="10"
                             name="price_per_sqm"
                             id="price_per_sqm"
-                            placeholder="Lot Area sqm"
+                            placeholder="Price Per sqm"
                             autoComplete="off"
                             value={lot.price_per_sqm}
-                            onChange={(e) => {
-                                setLot({...lot, price_per_sqm: parseInt( e.target.value )})
-                            }}
-                            required
                             disabled={true}
                             />
                         </div>
@@ -220,19 +202,15 @@ export default function ProjectDetailTabBlockHoldLot() {
                 </div>
 
                     <div className="flex justify-end gap-4.5">
-                        <button
-                            className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90 disabled:bg-whiter disabled:text-black"
+                        <PrimarySaveButton
                             disabled={lot.status == "available" && lot.agent_id == null}
-                            type="submit"
-                            >
+                        >
                             {lot.status == "available" ? "Hold Lot" : "Cancel Hold"}
-                        </button>
+                        </PrimarySaveButton>
                     </div>
                 </div>
             </div>
         </div>
-
-            
         </form>
     )
 }

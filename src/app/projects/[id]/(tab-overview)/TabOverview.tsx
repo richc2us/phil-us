@@ -1,8 +1,6 @@
 import CardDataStats from "@/components/CardDataStats";
 import { getProjectBlocksApi } from "@/components/common/api";
 import { formatDecimal } from "@/components/common/functions";
-import { useBlocks } from "@/context/BlocksContext";
-import lots from "@/models/lots";
 import dynamic from "next/dynamic";
 import {  useEffect, useState } from "react";
 

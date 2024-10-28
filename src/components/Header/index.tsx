@@ -17,11 +17,12 @@ const Header = (props: {
 }) => {
   const [searchBarRequesting, setSearchBarRequesting] = useState(false)
   const router = useRouter()
+  
   const asyncSearchBarOptions =  (
     inputValue: string,
     callback: (options: any[]) => void
 ) => {
-  setSearchBarRequesting(true)
+    setSearchBarRequesting(true)
     setTimeout( async() => {
         callback(await searchBarAtlas(inputValue))
         setSearchBarRequesting(false)

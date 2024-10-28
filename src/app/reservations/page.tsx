@@ -1,13 +1,10 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb"
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 import Link from "next/link";
-import { getAmortizations } from "@/actions/amortizations";
-// import { ActiveButton } from "./ActiveButton";
 import PageClient from "./PageClient";
 
 export default async function(){
 
-  // const colletions = await getAmortizations()
     return (
         <DefaultLayout>
             <Breadcrumb pageName="Reservations" />
